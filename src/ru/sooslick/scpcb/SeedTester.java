@@ -3,7 +3,7 @@ package ru.sooslick.scpcb;
 public class SeedTester {
 //    private final static String base = "bmu23i0";
 //    private final static String base = "796994829";
-    private final static String base = "s+`";
+    private final static String base = "QZI";
 
     public static void main(String[] args) {
         int total = 0;

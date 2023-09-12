@@ -34,20 +34,25 @@ public class SeedGenerator {
     private static String[][] mapRoom;
 
     public static void main(String[] args) {
+        // found good seeds for further examination
 //        String randomSeed = "qu"; // - Any% good seed
 //        String randomSeed = "QZI"; // - Any% good seed
 //        String randomSeed = "7em"; // - super good start
 
-//        PathFinder pf = scpcbCreateSeed("WWW");
+        // seed printer block
+//        PathFinder pf = scpcbCreateSeed("Albania");
 //        pf.printMaze();
+//        pf.drawMap();
+//        pf.testRouteLength(PathFinder.NO_SCP914_FINDER);
 
-        int routeLengthThreshold = 20;
-        int[] savedState = {77, 0, 77};
+        // seed bruteforcer block
+        int routeLengthThreshold = 21;
+        int[] savedState = {80, 0, 80};
         int savedLength = 3;
-        BruteForce bf = new BruteForce(BruteForce.ASCII_HALF, 2, 15, savedLength, savedState);
+        BruteForce bf = new BruteForce(BruteForce.HUMAN_READABLE, 2, 15, savedLength, savedState);
         while (!bf.isFinished()) {
             PathFinder pf = scpcbCreateSeed(new String(bf.next()));     // severe memory leak
-            int routeLength = pf.testRouteLength();
+            int routeLength = pf.testRouteLength(PathFinder.ANY_PERCENT_ENDGAME);
             if (routeLength < routeLengthThreshold) {
                 pf.printMaze();
                 bf.printState();
