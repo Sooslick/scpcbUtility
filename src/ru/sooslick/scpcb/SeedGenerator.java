@@ -1,19 +1,6 @@
 package ru.sooslick.scpcb;
 
-import jdk.internal.org.objectweb.asm.tree.MultiANewArrayInsnNode;
-
-import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageOutputStream;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import static ru.sooslick.scpcb.BlitzRandom.bbRand;
@@ -40,25 +27,25 @@ public class SeedGenerator {
 //        String randomSeed = "7em"; // - super good start
 
         // seed printer block
-//        PathFinder pf = scpcbCreateSeed("Albania");
-//        pf.printMaze();
-//        pf.drawMap();
+        PathFinder pf = scpcbCreateSeed("6");
+        pf.printMaze();
+        pf.drawMap();
 //        pf.testRouteLength(PathFinder.NO_SCP914_FINDER);
 
         // seed bruteforcer block
-        int routeLengthThreshold = 21;
-        int[] savedState = {80, 0, 80};
-        int savedLength = 3;
-        BruteForce bf = new BruteForce(BruteForce.HUMAN_READABLE, 2, 15, savedLength, savedState);
-        while (!bf.isFinished()) {
-            PathFinder pf = scpcbCreateSeed(new String(bf.next()));     // severe memory leak
-            int routeLength = pf.testRouteLength(PathFinder.ANY_PERCENT_ENDGAME);
-            if (routeLength < routeLengthThreshold) {
-                pf.printMaze();
-                bf.printState();
-                break;
-            }
-        }
+//        int routeLengthThreshold = 21;
+//        int[] savedState = {40, 0, 91};
+//        int savedLength = 3;
+//        BruteForce bf = new BruteForce(BruteForce.ASCII_HALF, 2, 15, savedLength, savedState);
+//        while (!bf.isFinished()) {
+//            PathFinder pf = scpcbCreateSeed(new String(bf.next()));     // severe memory leak
+//            int routeLength = pf.testRouteLength(PathFinder.ANY_PERCENT_ENDGAME);
+//            if (routeLength < routeLengthThreshold) {
+//                pf.printMaze();
+//                bf.printState();
+//                break;
+//            }
+//        }
     }
 
     public static PathFinder scpcbCreateSeed(String randomSeed) {
@@ -169,7 +156,7 @@ public class SeedGenerator {
                     temp = getConnections(mapTemp, x, y);
                     if (mapTemp[x][y] < 255)
                         mapTemp[x][y] = temp;
-                    switch (temp) {
+                    switch (mapTemp[x][y]) {
                         case 1:
                             room1Amount[zone]++;
                             break;
@@ -429,7 +416,7 @@ public class SeedGenerator {
         setRoom("room1archive", ROOM1, (int) (Math.floor(0.5 * room1Amount[0])), minPos, maxPos);
         setRoom("room205", ROOM1, (int) (Math.floor(0.6 * room1Amount[0])), minPos, maxPos);
 
-        mapRoom[ROOM2][0] = "lockroom";
+        mapRoom[ROOM2C][0] = "lockroom";
 
         minPos = 1;
         maxPos = room2Amount[0] - 1;
@@ -502,9 +489,9 @@ public class SeedGenerator {
         mapRoom[ROOM2C][r2c + 1] = "lockroom2";
 
         int r3 = room3Amount[0] + room3Amount[1];
-        mapRoom[ROOM2C][r3 + (int) (Math.floor(0.3 * room3Amount[2]))] = "room3servers";
-        mapRoom[ROOM2C][r3 + (int) (Math.floor(0.7 * room3Amount[2]))] = "room3servers2";
-        mapRoom[ROOM2C][r3 + (int) (Math.floor(0.5 * room3Amount[2]))] = "room3offices";
+        mapRoom[ROOM3][r3 + (int) (Math.floor(0.3 * room3Amount[2]))] = "room3servers";
+        mapRoom[ROOM3][r3 + (int) (Math.floor(0.7 * room3Amount[2]))] = "room3servers2";
+        mapRoom[ROOM3][r3 + (int) (Math.floor(0.5 * room3Amount[2]))] = "room3offices";
 
         // luodaan kartta // creating a map
 
@@ -523,13 +510,14 @@ public class SeedGenerator {
                 zone = 1;
 
             for (x = 1; x <= MAP_WIDTH - 2; x++) {
+                temp = getConnections(mapTemp, x, y);
                 if (mapTemp[x][y] == 255) {
+                    int type = temp == 2 ? ROOM2 : ROOM1;
                     if (y > MAP_HEIGHT / 2)     // zone = 2
-                        r = createRoom(zone, ROOM2, x * 8, 0, y * 8, "checkpoint1");
+                        r = createRoom(zone, type, x * 8, 0, y * 8, "checkpoint1");
                     else    // zone = 3
-                        r = createRoom(zone, ROOM2, x * 8, 0, y * 8, "checkpoint2");
+                        r = createRoom(zone, type, x * 8, 0, y * 8, "checkpoint2");
                 } else if (mapTemp[x][y] > 0) {
-                    temp = getConnections(mapTemp, x, y);
                     switch (temp) {
                         case 1:
                             if (mapRoomID[ROOM1] < maxRooms && mapName[x][y] == null) {
@@ -625,7 +613,7 @@ public class SeedGenerator {
         // gate a skipped (no rnd calls)
         mapRoomID[ROOM1]++;
 
-        r = createRoom(0, ROOM1, (MAP_WIDTH - 1) * 8, 0, (MAP_HEIGHT - 1) * 8, "pocketdimension");
+        createRoom(0, ROOM1, (MAP_WIDTH - 1) * 8, 0, (MAP_HEIGHT - 1) * 8, "pocketdimension");
         mapRoomID[ROOM1]++;
 
         // intro skipped (although "173" room contains some Rnd calls, intro banned by speedrun rules)
@@ -639,10 +627,6 @@ public class SeedGenerator {
         return new PathFinder(randomSeed, savedRooms);
 
         // todo line 7642
-
-        //printMap(mapTemp);
-        ///drawMap(savedRooms, randomSeed);
-        //System.out.println("seed: " + randomSeed);
     }
 
     private static int getZone(int y) {
@@ -700,6 +684,7 @@ public class SeedGenerator {
 
     private static ScpcbRoom createRoom(int zone, int roomShape, int x, int y, int z, String name) {
         ScpcbRoom r = new ScpcbRoom();
+        r.shape = roomShape;
 
         r.zone = zone;
 
@@ -712,11 +697,11 @@ public class SeedGenerator {
             ScpcbRoomTemplate rt = ScpcbRoomTemplate.findByName(name);
             if (rt != null) {
                 r.roomTemplate = rt;
-                // todo load room mesh - define extents
                 r.fill();
             }
             // add light cones - seems no random here
-            // todo skipped calc room extents. Need more checks
+            r.calcExtents();
+            System.out.println("Room " + r.roomTemplate.name + " at " + x + ", " + z);
             return r;
         }
 
@@ -741,10 +726,10 @@ public class SeedGenerator {
                     temp += rt.commonness;
                     if (randomRoom > temp - rt.commonness && randomRoom <= temp) {
                         r.roomTemplate = rt;
-                        // todo load room mesh - define extents
                         r.fill();
                         // add light cones - seems no random here
-                        // todo skipped calc room extents. Need more checks
+                        r.calcExtents();
+                        System.out.println("Room " + r.roomTemplate.name + " at " + x + ", " + z);
                         return r;
                     }
                 }
