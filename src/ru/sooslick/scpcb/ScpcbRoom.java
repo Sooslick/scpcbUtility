@@ -22,6 +22,8 @@ public class ScpcbRoom {
     private static int room2gw_x;
     private static int room2gw_z;
 
+    private static double ROOM_SCALE = 8d / 2048;
+
     private static final BufferedImage[] hmap = new BufferedImage[ROOM4 + 1];
 
     static {
@@ -42,6 +44,10 @@ public class ScpcbRoom {
     int shape;
 
     ScpcbRoomTemplate roomTemplate;
+
+    double minX, minY, minZ;
+    double maxX, maxY, maxZ;
+    MeshExtents extents;
 
     Map<String, String> rndInfo = new HashMap<>();
 
@@ -94,6 +100,7 @@ public class ScpcbRoom {
                 createDoor(false, 0);
                 createDoor(false, 0);
                 // todo create this door only if "gateaentrance" exist
+                //  since there are some cases where seed contains no gate A
                 createDoor(false, 3);
                 break;
             case "gateaentrance":
@@ -456,7 +463,6 @@ public class ScpcbRoom {
                 createDoor(false, 0);
                 break;
             case "room1archive":
-                // TODO - rnd state diverged!
                 List<String> items = new LinkedList<>();
                 for (int i = 0; i <= 1; i++) {
                     for (int j = 0; j <= 2; j++) {
@@ -602,7 +608,33 @@ public class ScpcbRoom {
     }
 
     public void calcExtents() {
-        // todo calc
+        if (roomTemplate.disableOverlapCheck)
+            return;
+
+        // System.out.println("Room template extents: " + roomTemplate.extents);
+
+        // shrink the extents slightly - we don't care if the overlap is smaller than the thickness of the walls
+        extents = roomTemplate.extents.copyTransform(ROOM_SCALE, angle);
+        minX = extents.minX + 0.05 + x;
+        minZ = extents.minZ + 0.05 + z;
+        maxX = extents.maxX - 0.05 + x;
+        maxZ = extents.maxZ - 0.05 + z;
+
+        // re-implementing BUG from SCP:CB
+        if (minX > maxX) {
+            double a = minX;
+            minX = maxX;
+            maxX = a;
+        }
+        if (minZ > maxZ) {
+            double a = minZ;
+            minZ = maxZ;
+            maxZ = a;
+        }
+
+        System.out.printf("Room %s extents : %s, %s, %s / %s, %s, %s%n", roomTemplate.name,
+                minX, minY, minZ,
+                maxX, maxY, maxZ);
     }
 
     private void genForestGrid() {
@@ -893,5 +925,9 @@ public class ScpcbRoom {
 
     private void createItem() {
         bbRand(1, 360); // just rotation ._.
+    }
+
+    public String toString() {
+        return roomTemplate.name + " at " + x + "," + z;
     }
 }

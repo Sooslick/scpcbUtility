@@ -34,10 +34,11 @@ public class ScpcbRoomTemplate {
     private int large;
     private int disableDecals;
     private int useLightCones;
-    private int disableOverlapCheck;
+    public boolean disableOverlapCheck;
 
     private float minX, minY, minZ;
     private float maxX, maxY, maxZ;
+    public MeshExtents extents;
 
     public int lightsAmount = 0;
 
@@ -48,8 +49,7 @@ public class ScpcbRoomTemplate {
                 return;
 
             String strTemp = vals.get("mesh path");
-
-            ScpcbRoomTemplate rt = createRoomTemplate(k.toLowerCase(), strTemp);
+            ScpcbRoomTemplate rt = createRoomTemplate(k.toLowerCase(), strTemp, getIniBool(k, "disableoverlapcheck"));
 
             strTemp = vals.get("shape");
             if (strTemp != null)
@@ -88,7 +88,6 @@ public class ScpcbRoomTemplate {
             rt.large = getIniInt(k, "large");
             rt.disableDecals = getIniInt(k, "disabledecals");
             rt.useLightCones = getIniInt(k, "usevolumelighting");
-            rt.disableOverlapCheck = getIniInt(k, "disableoverlapcheck");
 
             roomTemplates.add(rt);
         });
@@ -101,11 +100,12 @@ public class ScpcbRoomTemplate {
                 .orElse(null);
     }
 
-    private static ScpcbRoomTemplate createRoomTemplate(String name, String meshpath) {
+    private static ScpcbRoomTemplate createRoomTemplate(String name, String meshpath, boolean disableOverlapCheck) {
         ScpcbRoomTemplate rt = new ScpcbRoomTemplate();
         rt.name = name;
         rt.meshPath = meshpath;
         rt.id = roomTempId;
+        rt.disableOverlapCheck = disableOverlapCheck;
         roomTempId++;
 
         rt.loadRMesh();
@@ -156,8 +156,22 @@ public class ScpcbRoomTemplate {
         }
     }
 
+    private static boolean getIniBool(String sectionName, String key) {
+        Map<String, String> section = roomsIni.get(sectionName);
+        if (section == null)
+            return false;
+        String value = section.get(key);
+        if (value == null)
+            return false;
+        try {
+            return Boolean.parseBoolean(value);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private void loadRMesh() {
-        if (disableOverlapCheck != 0)
+        if (disableOverlapCheck)
             return;
         // read the file
         RMeshReader reader = new RMeshReader(meshPath);
@@ -336,6 +350,9 @@ public class ScpcbRoomTemplate {
                     break;
             }
         }
+
+        if (!disableOverlapCheck)
+            extents = new MeshExtents(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     private void addVertex(float x, float y, float z) {

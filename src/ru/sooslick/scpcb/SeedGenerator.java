@@ -20,6 +20,8 @@ public class SeedGenerator {
 
     private static String[][] mapRoom;
 
+    private static Set<ScpcbRoom> savedRooms;
+
     public static void main(String[] args) {
         // found good seeds for further examination
 //        String randomSeed = "qu"; // - Any% good seed
@@ -495,7 +497,7 @@ public class SeedGenerator {
 
         // luodaan kartta // creating a map
 
-        Set<ScpcbRoom> savedRooms = new LinkedHashSet<>();
+        savedRooms = new LinkedHashSet<>();
 
         temp = 0;
         ScpcbRoom r = null;
@@ -621,8 +623,7 @@ public class SeedGenerator {
         // 1499 skipped (no rnd calls)
         mapRoomID[ROOM1]++;
 
-        // todo for each saved room
-        //  preventRoomOverlap
+        savedRooms.forEach(SeedGenerator::preventRoomOverlap);
 
         return new PathFinder(randomSeed, savedRooms);
 
@@ -737,5 +738,140 @@ public class SeedGenerator {
         }
 
         return null;
+    }
+
+    // todo - floating point math differences probably???
+    private static void preventRoomOverlap(ScpcbRoom r) {
+        if (r.roomTemplate.disableOverlapCheck)
+            return;
+
+        boolean isIntersecting = false;
+
+        // Just skip it when it would try to check for the checkpoints
+        if (r.roomTemplate.name.contains("checkpoint") || r.roomTemplate.name.equalsIgnoreCase("start"))
+            return;
+
+        System.out.println("PreventRoomOverlap: " + r.roomTemplate.name);
+
+        // First, check if the room is actually intersecting at all
+        for (ScpcbRoom r2 : savedRooms) {
+            if (r2 != r && !r2.roomTemplate.disableOverlapCheck) {
+                if (checkRoomOverlap(r, r2)) {
+                    isIntersecting = true;
+                    break;
+                }
+            }
+        }
+
+        // If not, then simply return it as True
+        if (!isIntersecting)
+            return;
+
+        // Room is intersecting: First, check if the given room is a ROOM2, so we could potentially just turn it by 180 degrees
+        isIntersecting = false;
+        if (r.roomTemplate.shape == ROOM2) {
+            // Room is a ROOM2, let's check if turning it 180 degrees fixes the overlapping issue
+            r.angle+= 180;
+            r.calcExtents();
+
+            for (ScpcbRoom r2 : savedRooms) {
+                if (r2 != r && !r2.roomTemplate.disableOverlapCheck) {
+                    if (checkRoomOverlap(r, r2)) {
+                        // didn't work -> rotate the room back and move to the next step
+                        isIntersecting = true;
+                        r.angle -= 180;
+                        r.calcExtents();
+                        break;
+                    }
+                }
+            }
+        } else
+            isIntersecting = true;
+
+        // room is ROOM2 and was able to be turned by 180 degrees
+        if (!isIntersecting) {
+            System.out.println("ROOM2 turning succesful! " + r.roomTemplate.name);
+            return;
+        }
+
+        // Room is either not a ROOM2 or the ROOM2 is still intersecting, now trying to swap the room with another of the same type
+        for (ScpcbRoom r2 : savedRooms) {
+            if (r2 != r && !r2.roomTemplate.disableOverlapCheck) {
+                if (r.roomTemplate.shape == r2.roomTemplate.shape &&
+                        r.zone == r2.zone &&
+                        !r2.roomTemplate.name.contains("checkpoint") &&
+                        !r2.roomTemplate.name.equals("start")) {
+                    int x = r.x / 8;
+                    int y = r.z / 8;
+                    int rot = r.angle;
+
+                    int x2 = r2.x / 8;
+                    int y2 = r2.z / 8;
+                    int rot2 = r2.angle;
+
+                    isIntersecting = false;
+
+                    r.x = x2 * 8;
+                    r.z = y2 * 8;
+                    r.angle = rot2;
+                    r.calcExtents();
+
+                    r2.x = x * 8;
+                    r2.z = y * 8;
+                    r2.angle = rot;
+                    r2.calcExtents();
+
+                    // make sure neither room overlaps with anything after the swap
+                    for (ScpcbRoom r3 : savedRooms) {
+                        if (!r3.roomTemplate.disableOverlapCheck) {
+                            if (r3 != r) {
+                                if (checkRoomOverlap(r, r3)) {
+                                    isIntersecting = true;
+                                    break;
+                                }
+                            }
+                            if (r3 != r2) {
+                                if (checkRoomOverlap(r2, r3)) {
+                                    isIntersecting = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // Either the original room or the "reposition" room is intersecting, reset the position of each room to their original one
+                    if (isIntersecting) {
+                        r.x = x * 8;
+                        r.z = y * 8;
+                        r.angle = rot;
+                        r.calcExtents();
+
+                        r2.x = x2 * 8;
+                        r2.z = y2 * 8;
+                        r2.angle = rot2;
+                        r2.calcExtents();
+
+                        isIntersecting = false;
+                    }
+                }
+            }
+        }
+
+        // room was able to the placed in a different spot
+        if (!isIntersecting) {
+            System.out.println("Room re-placing successful! " + r.roomTemplate.name);
+            return;
+        }
+
+        System.out.println("Couldn't fix overlap issue for room " + r.roomTemplate.name);
+    }
+
+    private static boolean checkRoomOverlap(ScpcbRoom r1, ScpcbRoom r2) {
+        if (r1.maxX	<= r2.minX || r1.maxZ <= r2.minZ)
+            return false;
+        if (r1.minX	>= r2.maxX || r1.minZ >= r2.maxZ)
+            return false;
+        System.out.println("CheckRoomOverlap: " + r1.roomTemplate.name + " / " + r2.roomTemplate.name);
+        return true;
     }
 }
