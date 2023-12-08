@@ -15,10 +15,10 @@ public class PathFinder {
     public static final Function<PathFinder, Integer> NO_SCP914_FINDER = PathFinder::calcNoScp914;
     public static final Function<PathFinder, Integer> ANY_PERCENT_ENDGAME = PathFinder::calcOmniEndgameLength;
 
-    private final String seed;
+    public final String seed;
     private final ScpcbRoom[][] map;
 
-    private XY covid = null;
+    public XY covid = null;
     private XY ai = null;
     private XY cont = null;
     private XY gateA = null;
@@ -33,8 +33,8 @@ public class PathFinder {
         this.seed = seed;
         this.map = new ScpcbRoom[20][20];
         for (ScpcbRoom r : rooms) {
-            int x = (19 - r.x / 8);
-            int y = (r.z / 8);
+            int x = (int) (19 - r.x / 8);
+            int y = (int) (r.z / 8);
             map[x][y] = r;
 
             switch (r.roomTemplate.name) {
@@ -178,8 +178,8 @@ public class PathFinder {
                 ScpcbRoom r = map[i][j];
                 if (r == null)
                     continue;
-                int x = (19 - r.x / 8) * 50;
-                int y = (r.z / 8) * 50;
+                int x = (int) (19 - r.x / 8) * 50;
+                int y = (int) (r.z / 8) * 50;
                 g.setColor(Color.LIGHT_GRAY);
                 g.fillRect(x, y, 50, 50);
                 g.setColor(Color.BLACK);
@@ -195,6 +195,35 @@ public class PathFinder {
             ImageIO.write(img, "jpg", fios);
         } catch (Exception ignored) {
         }
+    }
+
+    public void exportJson() {
+        StringBuilder sb = new StringBuilder("{\"seed\":\"")
+                .append(seed)
+                .append("\",\"rooms\":[");
+        boolean comma = false;
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                ScpcbRoom r = map[i][j];
+                if (r == null)
+                    continue;
+                int x = (int) (19 - r.x / 8);
+                int y = (int) (r.z / 8);
+                if (comma)
+                    sb.append(",");
+                sb.append("{")
+                        .append("\"name\":\"").append(r.roomTemplate.name).append("\",")
+                        .append("\"x\":").append(x).append(",")
+                        .append("\"y\":").append(y).append(",")
+                        .append("\"angle\":").append(r.angle);
+                if (r.rndInfo != null)
+                    sb.append(",\"info\":\"").append(r.rndInfo).append("\"");
+                sb.append("}");
+                comma = true;
+            }
+        }
+        sb.append("]}");
+        System.out.println("\n_____\n\n" + sb);
     }
 
     private static class XY {

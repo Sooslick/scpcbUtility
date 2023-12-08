@@ -3,6 +3,10 @@ package ru.sooslick.scpcb;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import static ru.sooslick.scpcb.BlitzFloatMath.maxXLesserOrEquals;
+import static ru.sooslick.scpcb.BlitzFloatMath.maxZLesserOrEquals;
+import static ru.sooslick.scpcb.BlitzFloatMath.minXBiggerOrEquals;
+import static ru.sooslick.scpcb.BlitzFloatMath.minZBiggerOrEquals;
 import static ru.sooslick.scpcb.BlitzRandom.bbRand;
 import static ru.sooslick.scpcb.BlitzRandom.bbRnd;
 import static ru.sooslick.scpcb.BlitzRandom.bbSeedRnd;
@@ -32,6 +36,7 @@ public class SeedGenerator {
         PathFinder pf = scpcbCreateSeed("6");
         pf.printMaze();
         pf.drawMap();
+//        pf.exportJson();
 //        pf.testRouteLength(PathFinder.NO_SCP914_FINDER);
 
         // seed bruteforcer block
@@ -520,7 +525,7 @@ public class SeedGenerator {
                     else    // zone = 3
                         r = createRoom(zone, type, x * 8, 0, y * 8, "checkpoint2");
                 } else if (mapTemp[x][y] > 0) {
-                    switch (temp) {
+                    switch (temp) {     // number of rooms in adjacement cells
                         case 1:
                             if (mapRoomID[ROOM1] < maxRooms && mapName[x][y] == null) {
                                 if (mapRoom[ROOM1][mapRoomID[ROOM1]] != null)
@@ -545,10 +550,13 @@ public class SeedGenerator {
                                         mapName[x][y] = mapRoom[ROOM2][mapRoomID[ROOM2]];
                                 }
                                 r = createRoom(zone, ROOM2, x * 8, 0, y * 8, mapName[x][y]);
-                                if (bbRand(1, 2) == 1)
+                                if (bbRand(1, 2) == 1) {
+                                    System.out.println(r.roomTemplate.name + " random angle: 90");
                                     r.angle = 90;
-                                else
+                                } else {
+                                    System.out.println(r.roomTemplate.name + " random angle: 270");
                                     r.angle = 270;
+                                }
                                 mapRoomID[ROOM2]++;
                             } else if (getVerticalConnections(mapTemp, x, y) == 2) {
                                 if (mapRoomID[ROOM2] < maxRooms && mapName[x][y] == null) {
@@ -556,10 +564,13 @@ public class SeedGenerator {
                                         mapName[x][y] = mapRoom[ROOM2][mapRoomID[ROOM2]];
                                 }
                                 r = createRoom(zone, ROOM2, x * 8, 0, y * 8, mapName[x][y]);
-                                if (bbRand(1, 2) == 1)
+                                if (bbRand(1, 2) == 1) {
+                                    System.out.println(r.roomTemplate.name + " random angle: 180");
                                     r.angle = 180;
-                                else
+                                } else {
+                                    System.out.println(r.roomTemplate.name + " random angle: 0");
                                     r.angle = 0;
+                                }
                                 mapRoomID[ROOM2]++;
                             } else {
                                 if (mapRoomID[ROOM2C] < maxRooms && mapName[x][y] == null) {
@@ -620,7 +631,7 @@ public class SeedGenerator {
 
         // intro skipped (although "173" room contains some Rnd calls, intro banned by speedrun rules)
 
-        // 1499 skipped (no rnd calls)
+        // 1499 skipped (no rnd calls)  // todo probably??????
         mapRoomID[ROOM1]++;
 
         savedRooms.forEach(SeedGenerator::preventRoomOverlap);
@@ -740,7 +751,7 @@ public class SeedGenerator {
         return null;
     }
 
-    // todo - floating point math differences probably???
+    // todo - floating point math differences
     private static void preventRoomOverlap(ScpcbRoom r) {
         if (r.roomTemplate.disableOverlapCheck)
             return;
@@ -751,6 +762,7 @@ public class SeedGenerator {
         if (r.roomTemplate.name.contains("checkpoint") || r.roomTemplate.name.equalsIgnoreCase("start"))
             return;
 
+        System.out.println("////////////////////");
         System.out.println("PreventRoomOverlap: " + r.roomTemplate.name);
 
         // First, check if the room is actually intersecting at all
@@ -771,7 +783,7 @@ public class SeedGenerator {
         isIntersecting = false;
         if (r.roomTemplate.shape == ROOM2) {
             // Room is a ROOM2, let's check if turning it 180 degrees fixes the overlapping issue
-            r.angle+= 180;
+            r.angle += 180;
             r.calcExtents();
 
             for (ScpcbRoom r2 : savedRooms) {
@@ -801,12 +813,12 @@ public class SeedGenerator {
                         r.zone == r2.zone &&
                         !r2.roomTemplate.name.contains("checkpoint") &&
                         !r2.roomTemplate.name.equals("start")) {
-                    int x = r.x / 8;
-                    int y = r.z / 8;
+                    double x = r.x / 8;
+                    double y = r.z / 8;
                     int rot = r.angle;
 
-                    int x2 = r2.x / 8;
-                    int y2 = r2.z / 8;
+                    double x2 = r2.x / 8;
+                    double y2 = r2.z / 8;
                     int rot2 = r2.angle;
 
                     isIntersecting = false;
@@ -814,11 +826,13 @@ public class SeedGenerator {
                     r.x = x2 * 8;
                     r.z = y2 * 8;
                     r.angle = rot2;
+                    r.swapped = true;
                     r.calcExtents();
 
                     r2.x = x * 8;
                     r2.z = y * 8;
                     r2.angle = rot;
+                    r2.swapped = true;
                     r2.calcExtents();
 
                     // make sure neither room overlaps with anything after the swap
@@ -851,7 +865,7 @@ public class SeedGenerator {
                         r2.angle = rot2;
                         r2.calcExtents();
 
-                        isIntersecting = false;
+                        //isIntersecting = false; // this assignment does nothing but give misleading debug message
                     }
                 }
             }
@@ -867,9 +881,13 @@ public class SeedGenerator {
     }
 
     private static boolean checkRoomOverlap(ScpcbRoom r1, ScpcbRoom r2) {
-        if (r1.maxX	<= r2.minX || r1.maxZ <= r2.minZ)
+//        if (r1.roomTemplate.name.equals("room2testroom2") && r2.roomTemplate.name.equals("roompj"))
+//            System.out.println("breakpoint");
+
+        if (maxXLesserOrEquals(r1, r2) || maxZLesserOrEquals(r1, r2))
             return false;
-        if (r1.minX	>= r2.maxX || r1.minZ >= r2.maxZ)
+
+        if (minXBiggerOrEquals(r1, r2) || minZBiggerOrEquals(r1, r2))
             return false;
         System.out.println("CheckRoomOverlap: " + r1.roomTemplate.name + " / " + r2.roomTemplate.name);
         return true;

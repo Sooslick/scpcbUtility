@@ -2,7 +2,6 @@ package ru.sooslick.scpcb;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,8 +18,8 @@ import static ru.sooslick.scpcb.SeedGenerator.ROOM4;
 
 public class ScpcbRoom {
     private static boolean room2gwBrokenDoor = false;
-    private static int room2gw_x;
-    private static int room2gw_z;
+    private static double room2gw_x;
+    private static double room2gw_z;
 
     private static double ROOM_SCALE = 8d / 2048;
 
@@ -39,7 +38,7 @@ public class ScpcbRoom {
     }
 
     int zone;
-    int x, y, z;    // actually float, but idc
+    double x, y, z;
     int angle;
     int shape;
 
@@ -47,7 +46,9 @@ public class ScpcbRoom {
 
     double minX, minY, minZ;
     double maxX, maxY, maxZ;
+    int extentsAngle;
     MeshExtents extents;
+    boolean swapped = false;        // todo probably unused stuff
 
     Map<String, String> rndInfo = new HashMap<>();
 
@@ -632,9 +633,13 @@ public class ScpcbRoom {
             maxZ = a;
         }
 
-        System.out.printf("Room %s extents : %s, %s, %s / %s, %s, %s%n", roomTemplate.name,
+        // while generating map SCP:CB can rotate room without changing extents
+        // so I have to store this variable to prevent blatant lie in console output
+        extentsAngle = angle;
+        System.out.printf("Room %s extents : %s, %s, %s / %s, %s, %s / %s°%n", roomTemplate.name,
                 minX, minY, minZ,
-                maxX, maxY, maxZ);
+                maxX, maxY, maxZ,
+                angle);
     }
 
     private void genForestGrid() {
@@ -880,7 +885,17 @@ public class ScpcbRoom {
             }
         }
 
-        // todo print map to string and attach to rndInfo
+        StringBuilder sb = new StringBuilder();
+        for (i = 0; i <= gridSize - 1; i++) {
+            for (j = 0; j <= gridSize - 1; j++) {
+                if (grid[(i * gridSize) + j] != 0)
+                    sb.append("█");
+                else
+                    sb.append(" ");
+            }
+            sb.append("\n");
+        }
+        rndInfo.put("forest", sb.toString());
     }
 
     private boolean chance(int prob) {

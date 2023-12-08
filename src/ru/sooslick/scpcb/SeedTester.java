@@ -26,12 +26,11 @@ public class SeedTester {
             if (test == baseSeed) {
 //                System.out.println(new String(seed));                 // print every seed from new line
                 System.out.print(new String(seed) + " ");               // print seeds in columns
-                if (total++ > 24) {
-                    total = 0;
+                if (total++ % 24 == 0)
                     System.out.println();
-                }
             }
         } while (!bf.isFinished());
+        System.out.println("\nTotal seeds found: " + total);
     }
 
     // exact function from SCP:CB

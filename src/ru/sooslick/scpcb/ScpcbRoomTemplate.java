@@ -1,6 +1,5 @@
 package ru.sooslick.scpcb;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -171,8 +170,6 @@ public class ScpcbRoomTemplate {
     }
 
     private void loadRMesh() {
-        if (disableOverlapCheck)
-            return;
         // read the file
         RMeshReader reader = new RMeshReader(meshPath);
 
@@ -351,8 +348,11 @@ public class ScpcbRoomTemplate {
             }
         }
 
-        if (!disableOverlapCheck)
+        if (!disableOverlapCheck) {
             extents = new MeshExtents(minX, minY, minZ, maxX, maxY, maxZ);
+            fixExtents();
+            System.out.println("room template extents: " + name + " " + extents);
+        }
     }
 
     private void addVertex(float x, float y, float z) {
@@ -370,5 +370,136 @@ public class ScpcbRoomTemplate {
             minZ = z;
         else if (z > maxZ)
             maxZ = z;
+    }
+
+    // this method tries to fix some miscalculated extents
+    // probably I shouldn't, I'm not sure is blitz3d rounds up these numbers or just truncates to console output
+    // todo double check this section (class ExtentsVerifier)
+    private void fixExtents() {
+        switch (name) {
+            case "room2testroom2":
+            case "medibay":
+                extents.minX = -1024.0;
+                break;
+            case "room2_3":
+                extents.minX = -416.0;
+                break;
+            case "room3_2":
+                extents.maxZ = 448.0;
+                break;
+            case "room2tesla_lcz":
+            case "room2tesla":
+                extents.minX = -304.0;
+                extents.maxX = 304.0;
+                break;
+            case "room2tesla_hcz":
+            case "room2":
+                extents.maxX = 304.0;
+                break;
+            case "room2scps":
+                extents.minX = -816.0;
+                extents.maxX = 816.0;
+                break;
+            case "room3":
+            case "room2c2":
+            case "room4info":
+            case "room2z3":
+            case "room2nuke":
+                extents.maxZ = 1024.0;
+                break;
+            case "room2servers2":
+                extents.minX = -1081.5;
+                extents.minZ = -1049.0;
+                extents.maxX = 816.0;
+                extents.maxZ = 1024.0;
+                break;
+            case "room2servers":
+                extents.maxX = 224.0;
+                break;
+            case "room1archive":
+                extents.maxZ = 752.0;
+                break;
+            case "room2elevator":
+                extents.minX = -304.0;
+                extents.maxX = 1056.0;
+                extents.maxZ = 1024.0;
+                break;
+            case "room3z2":
+                extents.minX = -1024.0;
+                extents.minZ = -1024.0;
+                extents.maxX = 1024.0;
+                extents.maxZ = 256.0;
+                break;
+            case "room2storage":
+                extents.minX = -1328.0;
+                extents.maxX = 1328.0;
+                break;
+            case "room2sroom":
+            case "checkpoint1":
+            case "room2poffices2":
+            case "room2sl":
+                extents.minZ = -1024.0;
+                extents.maxZ = 1024.0;
+                break;
+            case "room3tunnel":
+                extents.maxZ = 416.0;
+                break;
+            case "room2pipes":
+                extents.minX = -312.095;
+                break;
+            case "room3gw":
+                extents.maxX = 1039.0;
+                extents.maxZ = 547.552;
+                break;
+            case "room2pit":
+                extents.minX = -1024.0;
+                extents.minZ = -1024.0;
+                extents.maxX = 768.0;
+                extents.maxZ = 1024.0;
+                break;
+            case "room1lifts":
+                extents.minZ = -1024.0;
+                extents.maxZ = 105.694;
+                break;
+            case "914":
+                extents.minX = -1024.0;
+                extents.maxX = 1024.0;
+                extents.maxZ = 1024.0;
+                break;
+            case "room2poffices":
+                extents.minZ = -1024.0;
+                extents.maxX = 976.0;
+                extents.maxZ = 1024.0;
+                break;
+            case "room012":
+                extents.maxX = 816.0;
+                break;
+            case "checkpoint2":
+                extents.minZ = -1024.0;
+                break;
+            case "room1162":
+                extents.minZ = -1027.8;
+                extents.maxZ = 320.0;
+                break;
+            case "room2scps2":
+                extents.maxZ = 1026.3;
+                break;
+            case "room2cpit":
+                extents.minX = -568.0;
+                break;
+            case "room3_3":
+                extents.minZ = -1024.07;
+                extents.maxX = 1024.82;
+                extents.maxZ = 416.0;
+                break;
+            case "room2cafeteria":
+                extents.minZ = -1040.0;
+                extents.maxZ = 1024.0;
+                break;
+            case "room2gw_b":
+                extents.minX = -482.0;
+                break;
+            // todo check 860
+        }
     }
 }
