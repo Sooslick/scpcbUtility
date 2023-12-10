@@ -20,6 +20,7 @@ public class IntersectionRules {
 
     static {
         // todo fill incomplete list of intersection rules
+        //  and double check them
         rules.add(new IntersectionRules("roompj", 90)
                 .addConflict("room2testroom2", 270, Direction.LEFT)
                 .addConflict("room2tesla_lcz", 270, Direction.LEFT)
@@ -72,6 +73,7 @@ public class IntersectionRules {
                 .addConflict("room513", 90, Direction.RIGHT)
                 .addConflict("room3tunnel", 90, Direction.RIGHT)
                 .addConflict("room3pit", 90, Direction.RIGHT)
+                .addConflict("room106", 90, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room2tesla_lcz", 90)
                 .addConflict("room2testroom2", 270, Direction.LEFT)
@@ -165,14 +167,21 @@ public class IntersectionRules {
         rules.add(new IntersectionRules("008", 90)
                 .addConflict("room3_3", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
+                .addConflict("room3_2", 0, Direction.LEFT)
+                .addConflict("room4pit", 0, Direction.LEFT)
+                .addConflict("room4tunnels", 0, Direction.LEFT)
         );
         rules.add(new IntersectionRules("room035", 90)
                 .addConflict("room3_3", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
+                .addConflict("room3_2", 0, Direction.LEFT)
+                .addConflict("room4pit", 0, Direction.LEFT)
         );
         rules.add(new IntersectionRules("coffin", 90)
                 .addConflict("room3_3", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
+                .addConflict("room3_2", 0, Direction.LEFT)
+                .addConflict("room4pit", 0, Direction.LEFT)
         );
         rules.add(new IntersectionRules("room3tunnel", 270)
                 .addConflict("testroom", 0, Direction.BOTTOM)
@@ -202,10 +211,10 @@ public class IntersectionRules {
                 .addConflict("room513", 90, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room3z3", 90)
+                .addConflict("room2offices", 180, Direction.BOTTOM)
                 .addConflict("tunnel", 90, Direction.LEFT)
                 .addConflict("endroom", 180, Direction.TOP)
                 .addConflict("room1lifts", 180, Direction.TOP)
-                .addConflict("room2offices", 180, Direction.BOTTOM)
         );
         rules.add(new IntersectionRules("room2poffices", 270)
                 .addConflict("room106", 90, Direction.LEFT)
@@ -214,22 +223,28 @@ public class IntersectionRules {
                 .addConflict("room2pit", 90, Direction.LEFT)
                 .addConflict("room2gw_b", 90, Direction.LEFT)
                 .addConflict("room2sroom", 90, Direction.LEFT)
+                .addConflict("room2z3_2", 90, Direction.LEFT)
         );
         rules.add(new IntersectionRules("room2offices", 0)
+                .addConflict("lockroom2", 270, Direction.BOTTOM)
                 .addConflict("tunnel", 90, Direction.LEFT)
                 .addConflict("room2z3", 90, Direction.LEFT)
                 .addConflict("room3z3", 180, Direction.TOP)
         );
         rules.add(new IntersectionRules("room2cafeteria", 0)
                 .addConflict("room2servers2", 180, Direction.BOTTOM)
+                .addConflict("lockroom2", 270, Direction.BOTTOM)
+                .addConflict("room2cz3", 270, Direction.BOTTOM)
         );
         rules.add(new IntersectionRules("room3servers", 0)
                 .addConflict("room2z3", 90, Direction.LEFT)
                 .addConflict("endroom", 180, Direction.TOP)
                 .addConflict("room860", 90, Direction.RIGHT)
+                .addConflict("room2ccont", 90, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room3offices", 0)
                 .addConflict("room2z3", 90, Direction.LEFT)
+                .addConflict("room2ccont", 90, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room2sroom", 270)
                 .addConflict("room3offices", 180, Direction.RIGHT)
@@ -242,12 +257,18 @@ public class IntersectionRules {
                 .addConflict("room2_3", 270, Direction.LEFT)
                 .addConflict("room1123", 270, Direction.LEFT)
                 .addConflict("room2tesla_hcz", 270, Direction.LEFT)
+                .addConflict("room4info", 0, Direction.LEFT)
+                .addConflict("room3_2", 0, Direction.LEFT)
+                .addConflict("room4pit", 0, Direction.LEFT)
         );
         rules.add(new IntersectionRules("endroom", 180)
                 .addConflict("room3servers2", 0, Direction.BOTTOM)
                 .addConflict("medibay", 90, Direction.BOTTOM)
                 .addConflict("room2offices2", 90, Direction.BOTTOM)
                 .addConflict("room3z3", 0, Direction.BOTTOM)
+                .addConflict("room2offices", 360, Direction.BOTTOM)
+                .addConflict("room2offices4", 0, Direction.BOTTOM)
+                .addConflict("room2cz3", 0, Direction.BOTTOM)
         );
         rules.add(new IntersectionRules("room2offices4", 90)
                 .addConflict("room3_3", 0, Direction.LEFT)
@@ -257,30 +278,42 @@ public class IntersectionRules {
                 .addConflict("room2_3", 270, Direction.LEFT)
                 .addConflict("room1123", 270, Direction.LEFT)
                 .addConflict("room2tesla_hcz", 270, Direction.LEFT)
+                .addConflict("room4info", 0, Direction.LEFT)
+                .addConflict("room3_2", 0, Direction.LEFT)
+                .addConflict("room4pit", 0, Direction.LEFT)
                 .addConflict("room3z3", 0, Direction.RIGHT)
                 .addConflict("room2tesla", 270, Direction.RIGHT)
+                .addConflict("room2z3", 270, Direction.RIGHT)
+                .addConflict("room2cz3", 0, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room2z3", 0)
+                .addConflict("lockroom2", 270, Direction.BOTTOM)
                 .addConflict("room3z3", 180, Direction.TOP)
         );
         rules.add(new IntersectionRules("room2tesla", 0)
+                .addConflict("lockroom2", 270, Direction.BOTTOM)
                 .addConflict("room3z3", 180, Direction.TOP)
         );
         rules.add(new IntersectionRules("room3z3", 0)
                 .addConflict("room2z3", 90, Direction.LEFT)
                 .addConflict("room860", 90, Direction.RIGHT)
+                .addConflict("room2ccont", 90, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room3z3", 180)
                 .addConflict("room2offices", 360, Direction.BOTTOM)
                 .addConflict("room2offices4", 0, Direction.BOTTOM)
+                .addConflict("room2offices4", 360, Direction.BOTTOM)
         );
         rules.add(new IntersectionRules("room860", 90)
                 .addConflict("room4z3", 0, Direction.LEFT)
                 .addConflict("room3servers2", 0, Direction.LEFT)
                 .addConflict("room3gw", 0, Direction.LEFT)
+                .addConflict("room2cz3", 0, Direction.RIGHT)
+                .addConflict("room2z3", 270, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room860", 270)
                 .addConflict("room513", 90, Direction.LEFT)
+                .addConflict("medibay", 90, Direction.LEFT)
                 .addConflict("room3z3", 90, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room2poffices", 90)
@@ -291,13 +324,18 @@ public class IntersectionRules {
                 .addConflict("room3_3", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
                 .addConflict("room3tunnel", 270, Direction.LEFT)
+                .addConflict("room4info", 0, Direction.LEFT)
         );
         rules.add(new IntersectionRules("room2cafeteria", 90)
                 .addConflict("room2offices", 360, Direction.RIGHT)
                 .addConflict("room2tesla", 270, Direction.RIGHT)
+                .addConflict("room2z3", 270, Direction.RIGHT)
+                .addConflict("room2cz3", 0, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room2tesla", 90)
                 .addConflict("room4z3", 0, Direction.LEFT)
+                .addConflict("room2cz3", 0, Direction.RIGHT)
+                .addConflict("room2z3", 270, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room2z3", 90)
                 .addConflict("room4z3", 0, Direction.LEFT)
@@ -305,6 +343,7 @@ public class IntersectionRules {
                 .addConflict("room2tesla", 270, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room2offices", 90)
+                .addConflict("room2servers2", 180, Direction.BOTTOM)
                 .addConflict("room4z3", 0, Direction.LEFT)
                 .addConflict("room2_3", 270, Direction.LEFT)
                 .addConflict("room1123", 270, Direction.LEFT)
@@ -312,7 +351,9 @@ public class IntersectionRules {
                 .addConflict("room3_3", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
                 .addConflict("room3tunnel", 270, Direction.LEFT)
+                .addConflict("room4info", 0, Direction.LEFT)
                 .addConflict("room2tesla", 270, Direction.RIGHT)
+                .addConflict("room2cz3", 0, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room2poffices2", 90)
                 .addConflict("room4z3", 0, Direction.LEFT)
@@ -322,7 +363,12 @@ public class IntersectionRules {
                 .addConflict("room3_3", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
                 .addConflict("room3tunnel", 270, Direction.LEFT)
+                .addConflict("room2closets", 270, Direction.LEFT)
+                .addConflict("room4info", 0, Direction.LEFT)
+                .addConflict("room3_2", 0, Direction.LEFT)
+                .addConflict("room4pit", 0, Direction.LEFT)
                 .addConflict("room2tesla", 270, Direction.RIGHT)
+                .addConflict("room2cz3", 0, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room2toilets", 90)
                 .addConflict("room4z3", 0, Direction.LEFT)
@@ -336,23 +382,28 @@ public class IntersectionRules {
                 .addConflict("room3_3", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
                 .addConflict("room3tunnel", 270, Direction.LEFT)
+                .addConflict("room4info", 0, Direction.LEFT)
+                .addConflict("room2z3", 270, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room3servers2", 180)
                 .addConflict("room2offices", 360, Direction.BOTTOM)
                 .addConflict("room2offices4", 0, Direction.BOTTOM)
         );
         rules.add(new IntersectionRules("medibay", 270)
-                .addConflict("room2z3", 90, Direction.LEFT)
                 .addConflict("room2offices", 360, Direction.BOTTOM)
                 .addConflict("room2offices4", 0, Direction.BOTTOM)
                 .addConflict("checkpoint2", 0, Direction.BOTTOM)
+                .addConflict("room2z3", 90, Direction.LEFT)
         );
         rules.add(new IntersectionRules("room2offices2", 270)
                 .addConflict("room2offices", 360, Direction.BOTTOM)
                 .addConflict("room2offices4", 0, Direction.BOTTOM)
+                .addConflict("checkpoint2", 0, Direction.BOTTOM)
         );
         rules.add(new IntersectionRules("room2servers2", 90)
                 .addConflict("room2tesla", 270, Direction.RIGHT)
+                .addConflict("room2z3", 270, Direction.RIGHT)
+                .addConflict("room2cz3", 0, Direction.RIGHT)
         );
         rules.add(new IntersectionRules("room3servers", 180)
                 .addConflict("room2offices", 360, Direction.BOTTOM)
@@ -360,6 +411,64 @@ public class IntersectionRules {
         );
         rules.add(new IntersectionRules("room1lifts", 180)
                 .addConflict("room3servers2", 0, Direction.BOTTOM)
+                .addConflict("room2offices", 360, Direction.BOTTOM)
+                .addConflict("room2offices4", 0, Direction.BOTTOM)
+                .addConflict("room2cz3", 0, Direction.BOTTOM)
+                .addConflict("room2offices4", 180, Direction.TOP)
+                .addConflict("room2poffices2", 180, Direction.TOP)
+                .addConflict("room2offices2", 180, Direction.TOP)
+        );
+        rules.add(new IntersectionRules("room106", 90)
+                .addConflict("room4pit", 0, Direction.LEFT)
+        );
+        rules.add(new IntersectionRules("lockroom2", 90)
+                .addConflict("room3", 0, Direction.LEFT)
+                .addConflict("room3z3", 0, Direction.LEFT)
+        );
+        rules.add(new IntersectionRules("room2cz3", 90)
+                .addConflict("room3", 0, Direction.LEFT)
+                .addConflict("room3z3", 0, Direction.LEFT)
+        );
+        rules.add(new IntersectionRules("room3gw", 0)
+                .addConflict("room2ccont", 90, Direction.RIGHT)
+        );
+        rules.add(new IntersectionRules("room3servers2", 0)
+                .addConflict("room2ccont", 90, Direction.RIGHT)
+        );
+        rules.add(new IntersectionRules("lockroom2", 270)
+                .addConflict("room2z3_2", 0, Direction.TOP)
+                .addConflict("room2sroom", 0, Direction.TOP)
+                .addConflict("room2servers2", 0, Direction.TOP)
+                .addConflict("room2offices4", 0, Direction.TOP)
+                .addConflict("room860", 0, Direction.TOP)
+                .addConflict("medibay", 0, Direction.TOP)
+                .addConflict("room2poffices2", 0, Direction.TOP)
+                .addConflict("room2offices2", 0, Direction.TOP)
+        );
+        rules.add(new IntersectionRules("room2cz3", 270)
+                .addConflict("room2z3_2", 0, Direction.TOP)
+                .addConflict("room2sroom", 0, Direction.TOP)
+        );
+        rules.add(new IntersectionRules("medibay", 0)
+                .addConflict("room2ccont", 90, Direction.RIGHT)
+        );
+        rules.add(new IntersectionRules("room2offices2", 0)
+                .addConflict("room3z3", 180, Direction.TOP)
+                .addConflict("room2ccont", 90, Direction.RIGHT)
+        );
+        rules.add(new IntersectionRules("room2offices4", 180)
+                .addConflict("room2z3_2", 0, Direction.BOTTOM)
+                .addConflict("room2sroom", 0, Direction.BOTTOM)
+        );
+        rules.add(new IntersectionRules("room2poffices2", 180)
+                .addConflict("room2z3_2", 0, Direction.BOTTOM)
+        );
+        rules.add(new IntersectionRules("room2offices2", 180)
+                .addConflict("room2z3_2", 0, Direction.BOTTOM)
+        );
+        rules.add(new IntersectionRules("medibay", 90)
+                .addConflict("room2cz3", 0, Direction.RIGHT)
+                .addConflict("room2z3", 270, Direction.RIGHT)
         );
     }
 

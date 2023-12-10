@@ -631,10 +631,12 @@ public class SeedGenerator {
 
         // intro skipped (although "173" room contains some Rnd calls, intro banned by speedrun rules)
 
-        // 1499 skipped (no rnd calls)  // todo probably??????
+        r = createRoom(0, ROOM1, 8, 800, 0, "dimension1499");
+        savedRooms.add(r);
         mapRoomID[ROOM1]++;
 
         savedRooms.forEach(SeedGenerator::preventRoomOverlap);
+        savedRooms.remove(r);
 
         return new PathFinder(randomSeed, savedRooms);
 
@@ -865,7 +867,11 @@ public class SeedGenerator {
                         r2.angle = rot2;
                         r2.calcExtents();
 
-                        //isIntersecting = false; // this assignment does nothing but give misleading debug message
+                        isIntersecting = false; // this assignment does nothing but give misleading debug message
+                    }
+                    // my personal stuff to work around SCP:CB bug
+                    else {
+                        System.out.println("ACTUAL successful room replacement");
                     }
                 }
             }
@@ -874,22 +880,17 @@ public class SeedGenerator {
         // room was able to the placed in a different spot
         if (!isIntersecting) {
             System.out.println("Room re-placing successful! " + r.roomTemplate.name);
-            return;
         }
-
-        System.out.println("Couldn't fix overlap issue for room " + r.roomTemplate.name);
     }
 
     private static boolean checkRoomOverlap(ScpcbRoom r1, ScpcbRoom r2) {
-//        if (r1.roomTemplate.name.equals("room2testroom2") && r2.roomTemplate.name.equals("roompj"))
-//            System.out.println("breakpoint");
-
         if (maxXLesserOrEquals(r1, r2) || maxZLesserOrEquals(r1, r2))
             return false;
 
         if (minXBiggerOrEquals(r1, r2) || minZBiggerOrEquals(r1, r2))
             return false;
-        System.out.println("CheckRoomOverlap: " + r1.roomTemplate.name + " / " + r2.roomTemplate.name);
+
+        System.out.println("CheckRoomOverlap: " + r1.roomTemplate.name + " / " + r2.roomTemplate.name + "\n...");
         return true;
     }
 }

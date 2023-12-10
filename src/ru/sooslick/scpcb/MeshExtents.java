@@ -13,7 +13,8 @@ public class MeshExtents {
         this.maxZ = maxZ;
     }
 
-    public MeshExtents rotate(double angle) {
+    public MeshExtents rotate(int angle) {
+        angle%= 360;
         double rads = Math.toRadians(angle);
 
         double xr = minX * Math.cos(rads) - minZ * Math.sin(rads);
@@ -52,7 +53,7 @@ public class MeshExtents {
         return this;
     }
 
-    public MeshExtents copyTransform(double scale, double angle) {
+    public MeshExtents copyTransform(double scale, int angle) {
         return new MeshExtents(minX, minY, minZ, maxX, maxY, maxZ)
                 .scale(scale)
                 .rotate(angle);
