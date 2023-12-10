@@ -499,7 +499,6 @@ public class ScpcbRoomTemplate {
             case "room2gw_b":
                 extents.minX = -482.0;
                 break;
-            // todo check 860
         }
     }
 }
