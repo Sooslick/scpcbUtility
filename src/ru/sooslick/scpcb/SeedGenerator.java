@@ -36,8 +36,8 @@ public class SeedGenerator {
         PathFinder pf = scpcbCreateSeed("6");
         pf.printMaze();
         pf.drawMap();
-//        pf.exportJson();
-//        pf.testRouteLength(PathFinder.NO_SCP914_FINDER);
+        pf.exportJson();
+        System.out.println(pf.testRouteLength(PathFinder.ANY_PERCENT));
 
         // seed bruteforcer block
 //        int routeLengthThreshold = 21;

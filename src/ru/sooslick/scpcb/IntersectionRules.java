@@ -1437,6 +1437,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
 
     // grab floating point problems from scp:cb console output
     public static void main(String[] args) throws IOException {
+        // todo test some well-learnt seeds before generating even more rules
         String logFilePath = "genlog";
         Pattern pattern = Pattern.compile(".*problem for rooms (.*) =[0-9.]* (\\d*) / (.*) =[0-9.]* (\\d*) /.*");
 

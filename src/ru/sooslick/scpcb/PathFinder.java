@@ -13,23 +13,32 @@ import java.util.function.Function;
 
 public class PathFinder {
     public static final Function<PathFinder, Integer> NO_SCP914_FINDER = PathFinder::calcNoScp914;
-    public static final Function<PathFinder, Integer> ANY_PERCENT_ENDGAME = PathFinder::calcOmniEndgameLength;
+    public static final Function<PathFinder, Integer> ANY_PERCENT = PathFinder::calcAnyPercentLength;
 
-    public final String seed;
+    public final Object seed;
     private final ScpcbRoom[][] map;
 
-    public XY covid = null;
-    private XY ai = null;
+    // common endgame
+    public XY room008 = null;
+    private XY room079 = null;
     private XY cont = null;
     private XY gateA = null;
     private XY gateB = null;
 
+    // common start
+    private XY start = null;
+    private XY closets = null;
+    private XY testroom2 = null;
+    private XY room914 = null;
+    private XY sl = null;
+
+    // intended%
     private XY shaft = null;
     private XY tunnel = null;
     private XY room106 = null;
     private XY room049 = null;
 
-    public PathFinder(String seed, Set<ScpcbRoom> rooms) {
+    public PathFinder(Object seed, Set<ScpcbRoom> rooms) {
         this.seed = seed;
         this.map = new ScpcbRoom[20][20];
         for (ScpcbRoom r : rooms) {
@@ -39,10 +48,10 @@ public class PathFinder {
 
             switch (r.roomTemplate.name) {
                 case "008":
-                    covid = new XY(x, y);
+                    room008 = new XY(x, y);
                     break;
                 case "room079":
-                    ai = new XY(x, y);
+                    room079 = new XY(x, y);
                     break;
                 case "room2ccont":
                     cont = new XY(x, y);
@@ -52,6 +61,21 @@ public class PathFinder {
                     break;
                 case "gateaentrance":
                     gateA = new XY(x, y);
+                    break;
+                case "start":
+                    start= new XY(x, y);
+                    break;
+                case "room2closets":
+                    closets = new XY(x, y);
+                    break;
+                case "room2testroom2":
+                    testroom2 = new XY(x, y);
+                    break;
+                case "914":
+                    room914 = new XY(x, y);
+                    break;
+                case "room2sl":
+                    sl = new XY(x, y);
                     break;
                 case "room2shaft":
                     shaft = new XY(x, y);
@@ -102,11 +126,19 @@ public class PathFinder {
         return method.apply(this);
     }
 
-    private int calcOmniEndgameLength() {
-        if (cont == null || covid == null)
+    private int calcAnyPercentLength() {
+        if (cont == null)
             return 9999;
-
-        return pathFind(covid, cont) + pathFind(cont, ai) * 2 + Math.min(pathFind(cont, gateA), pathFind(cont, gateB));
+        int slToContLength = room008 == null ?
+                pathFind(sl, cont) :
+                pathFind(sl, room008) + pathFind(room008, cont);
+        return pathFind(start, closets) +
+                pathFind(closets, testroom2) +
+                pathFind(testroom2, room914) +
+                pathFind(room914, sl) +
+                slToContLength +
+                pathFind(cont, room079) * 2 +
+                Math.min(pathFind(cont, gateA), pathFind(cont, gateB));
     }
 
     private int calcNoScp914() {
@@ -122,20 +154,20 @@ public class PathFinder {
                                 initValue = 5;
                             }
 
-                            int covidFirstLength = pathFind(start, covid) +
-                                    pathFind(covid, room049) +
+                            int covidFirstLength = pathFind(start, room008) +
+                                    pathFind(room008, room049) +
                                     pathFind(room049, room106) +
                                     pathFind(room106, cont);
 
                             int covidSecondLength = pathFind(start, room049) +
-                                    pathFind(room049, covid) +
-                                    pathFind(covid, room106) +
+                                    pathFind(room049, room008) +
+                                    pathFind(room008, room106) +
                                     pathFind(room106, cont);
 
                             int covidLastLength = pathFind(start, room049) +
                                     pathFind(room049, room106) +
-                                    pathFind(room106, covid) +
-                                    pathFind(covid, cont);
+                                    pathFind(room106, room008) +
+                                    pathFind(room008, cont);
 
                             if (covidFirstLength < covidSecondLength && covidFirstLength < covidLastLength) {
                                 System.out.println("Covid first: " + covidFirstLength);
@@ -150,7 +182,7 @@ public class PathFinder {
                         }
                 ).min()
                 .orElse(9999);
-        return toContLength + pathFind(cont, ai) * 2 + Math.min(pathFind(ai, gateA), pathFind(ai, gateB));
+        return toContLength + pathFind(cont, room079) * 2 + Math.min(pathFind(room079, gateA), pathFind(room079, gateB));
     }
 
     public void printMaze() {
@@ -216,7 +248,7 @@ public class PathFinder {
                         .append("\"x\":").append(x).append(",")
                         .append("\"y\":").append(y).append(",")
                         .append("\"angle\":").append(r.angle);
-                if (r.rndInfo != null)
+                if (r.rndInfo != null && r.rndInfo.size() > 0)
                     sb.append(",\"info\":\"").append(r.rndInfo).append("\"");
                 sb.append("}");
                 comma = true;
