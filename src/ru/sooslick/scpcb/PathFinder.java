@@ -16,7 +16,7 @@ public class PathFinder {
     public static final Function<PathFinder, Integer> ANY_PERCENT = PathFinder::calcAnyPercentLength;
 
     public final Object seed;
-    private final ScpcbRoom[][] map;
+    public final ScpcbRoom[][] map;
 
     // common endgame
     public XY room008 = null;

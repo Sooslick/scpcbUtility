@@ -375,6 +375,8 @@ public class ScpcbRoomTemplate {
     // this method tries to fix some miscalculated extents
     // probably I shouldn't, I'm not sure is blitz3d rounds up these numbers or just truncates to console output
     // todo double check this section (class ExtentsVerifier)
+    // todo Too much sneaky 1024s with 4e-15 trails, probably I should replace this section to simple rounding
+    //       (check comment above)
     private void fixExtents() {
         switch (name) {
             case "room2testroom2":
@@ -414,7 +416,9 @@ public class ScpcbRoomTemplate {
                 extents.maxZ = 1024.0;
                 break;
             case "room2servers":
+                extents.minZ = -1024.0;
                 extents.maxX = 224.0;
+                extents.maxZ = 1024.0;
                 break;
             case "room1archive":
                 extents.maxZ = 752.0;
@@ -499,6 +503,11 @@ public class ScpcbRoomTemplate {
             case "room2gw_b":
                 extents.minX = -482.0;
                 break;
+            case "room4pit":
+                extents.minX = -1024.0;
+                extents.minZ = -1024.0;
+                extents.maxX = 1024.0;
+                extents.maxZ = 1024.0;
         }
     }
 }
