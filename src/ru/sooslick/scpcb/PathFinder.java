@@ -215,7 +215,7 @@ public class PathFinder {
                 g.setColor(Color.LIGHT_GRAY);
                 g.fillRect(x, y, 50, 50);
                 g.setColor(Color.BLACK);
-                String name = r.roomTemplate.name;
+                String name = r.roomTemplate.name.replaceAll("room", "");
                 //name = name.substring(0, Math.min(name.length(), 8));
                 g.drawString(name, x - 1, y + yOff * 10);
                 if (++yOff > 5)

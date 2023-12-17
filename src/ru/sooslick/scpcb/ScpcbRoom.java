@@ -742,7 +742,7 @@ public class ScpcbRoom {
                 }
                 // create a branch at this spot
                 // determine if on left or on right
-                branchPos = 2 & bbRand(0, 1);
+                branchPos = 2 * bbRand(0, 1);
                 // get leftmost or rightmost path in this row
                 int leftMost = gridSize;
                 int rightMost = 0;
@@ -750,7 +750,7 @@ public class ScpcbRoom {
                     if (grid[((gridSize - 1 - newy) * gridSize) + i] == 1) {
                         if (i < leftMost)
                             leftMost = i;
-                        if (i < rightMost)
+                        if (i > rightMost)
                             rightMost = i;
                     }
                 }
