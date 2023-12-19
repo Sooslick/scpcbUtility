@@ -442,6 +442,7 @@ public class ScpcbRoomTemplate {
             case "checkpoint1":
             case "room2poffices2":
             case "room2sl":
+            case "room2toilets":
                 extents.minZ = -1024.0;
                 extents.maxZ = 1024.0;
                 break;
@@ -508,6 +509,7 @@ public class ScpcbRoomTemplate {
                 extents.minZ = -1024.0;
                 extents.maxX = 1024.0;
                 extents.maxZ = 1024.0;
+                break;
         }
     }
 }

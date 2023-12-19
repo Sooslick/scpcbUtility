@@ -33,8 +33,8 @@ public class BlitzFloatMath {
         if (r1.x - 8.0 == r2.x) {
             if (IntersectionRules.hasRule(r1.roomTemplate.name, r1.extentsAngle,
                     r2.roomTemplate.name, r2.extentsAngle,
-                    IntersectionRules.Direction.RIGHT)) {
-                System.out.println("r1.minX >= r2.maxX Floating point numbers problem for rooms " + r1.roomTemplate.name + " / " + r2.roomTemplate.name);
+                    IntersectionRules.Direction.RIGHT, r1.x)) {
+                System.out.println("r1.minX >= r2.maxX Floating point numbers problem for rooms " + r1.roomTemplate.name + " / " + r2.roomTemplate.name + " " + r2.angle);
                 return true;
             }
         }
@@ -45,8 +45,8 @@ public class BlitzFloatMath {
         if (r1.x + 8.0 == r2.x) {
             if (IntersectionRules.hasRule(r1.roomTemplate.name, r1.extentsAngle,
                     r2.roomTemplate.name, r2.extentsAngle,
-                    IntersectionRules.Direction.LEFT)) {
-                System.out.println("r1.maxX <= r2.minX Floating point numbers problem for rooms " + r1.roomTemplate.name + " / " + r2.roomTemplate.name);
+                    IntersectionRules.Direction.LEFT, r1.x)) {
+                System.out.println("r1.maxX <= r2.minX Floating point numbers problem for rooms " + r1.roomTemplate.name + " / " + r2.roomTemplate.name + " " + r2.angle);
                 return true;
             }
         }
@@ -57,8 +57,8 @@ public class BlitzFloatMath {
         if (r1.z - 8.0 == r2.z) {
             if (IntersectionRules.hasRule(r1.roomTemplate.name, r1.extentsAngle,
                     r2.roomTemplate.name, r2.extentsAngle,
-                    IntersectionRules.Direction.TOP)) {
-                System.out.println("r1.minZ >= r2.maxZ Floating point numbers problem for rooms " + r1.roomTemplate.name + " / " + r2.roomTemplate.name);
+                    IntersectionRules.Direction.TOP, r1.z)) {
+                System.out.println("r1.minZ >= r2.maxZ Floating point numbers problem for rooms " + r1.roomTemplate.name + " / " + r2.roomTemplate.name + " " + r2.angle);
                 return true;
             }
         }
@@ -69,8 +69,8 @@ public class BlitzFloatMath {
         if (r1.z + 8.0 == r2.z) {
             if (IntersectionRules.hasRule(r1.roomTemplate.name, r1.extentsAngle,
                     r2.roomTemplate.name, r2.extentsAngle,
-                    IntersectionRules.Direction.BOTTOM)) {
-                System.out.println("r1.maxZ <= r2.minZ Floating point numbers problem for rooms " + r1.roomTemplate.name + " / " + r2.roomTemplate.name);
+                    IntersectionRules.Direction.BOTTOM, r1.z)) {
+                System.out.println("r1.maxZ <= r2.minZ Floating point numbers problem for rooms " + r1.roomTemplate.name + " / " + r2.roomTemplate.name + " " + r2.angle);
                 return true;
             }
         }

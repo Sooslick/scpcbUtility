@@ -9,9 +9,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * BLITZ3D AND SCP:CB ARE CURSED AF
+ * I DESTROYED MY PC TRYING IMPLEMENT PreventRoomOverlap
+ * without implementing my own floating-point math
+ */
 public class IntersectionRules implements Comparable<IntersectionRules> {
     private final static List<IntersectionRules> rules = new LinkedList<>();
 
@@ -43,6 +49,8 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
         rules.add(new IntersectionRules("008", 270)
                 .addConflict("room513", 90, Direction.RIGHT));
         rules.add(new IntersectionRules("914", 90)
+                .addConflict("room2closets", 270, Direction.LEFT)
+                .addConflict("room3", 180, Direction.RIGHT)
                 .addConflict("room4info", 0, Direction.LEFT));
         rules.add(new IntersectionRules("914", 180)
                 .addConflict("room2_2", 90, Direction.RIGHT)
@@ -71,9 +79,11 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2closets", 270, Direction.LEFT)
                 .addConflict("room2pit", 270, Direction.LEFT)
                 .addConflict("room2testroom2", 270, Direction.LEFT)
+                .addConflict("room2toilets", 270, Direction.LEFT)
                 .addConflict("room2z3_2", 270, Direction.LEFT)
                 .addConflict("room3", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
+                .addConflict("room3pit", 90, Direction.LEFT)
                 .addConflict("room3servers", 0, Direction.LEFT)
                 .addConflict("room3tunnel", 0, Direction.LEFT)
                 .addConflict("room3z2", 180, Direction.LEFT)
@@ -99,20 +109,29 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2poffices2", 0, Direction.BOTTOM)
                 .addConflict("room2poffices2", 360, Direction.BOTTOM)
                 .addConflict("room2tesla", 360, Direction.BOTTOM)
+                .addConflict("room2tesla", 90, Direction.BOTTOM)
+                .addConflict("room2toilets", 270, Direction.BOTTOM)
                 .addConflict("room2z3_2", 0, Direction.BOTTOM)
                 .addConflict("room3_3", 0, Direction.BOTTOM)
                 .addConflict("room3servers2", 0, Direction.BOTTOM)
+                .addConflict("room3servers2", 180, Direction.BOTTOM)
                 .addConflict("room3servers2", 90, Direction.BOTTOM)
                 .addConflict("room3z3", 0, Direction.BOTTOM)
+                .addConflict("room3z3", 180, Direction.BOTTOM)
+                .addConflict("room3z3", 270, Direction.BOTTOM)
+                .addConflict("room3z3", 90, Direction.BOTTOM)
+                .addConflict("room4z3", 0, Direction.BOTTOM)
                 .addConflict("room860", 0, Direction.BOTTOM)
                 .addConflict("room860", 360, Direction.BOTTOM));
         rules.add(new IntersectionRules("lockroom", 90)
                 .addConflict("room3", 0, Direction.LEFT));
         rules.add(new IntersectionRules("lockroom2", 90)
+                .addConflict("008", 270, Direction.LEFT)
                 .addConflict("914", 180, Direction.LEFT)
                 .addConflict("room012", 0, Direction.LEFT)
                 .addConflict("room1123", 270, Direction.LEFT)
                 .addConflict("room2poffices", 180, Direction.BOTTOM)
+                .addConflict("room2tesla_lcz", 270, Direction.LEFT)
                 .addConflict("room3", 0, Direction.LEFT)
                 .addConflict("room3_2", 0, Direction.LEFT)
                 .addConflict("room3_2", 180, Direction.LEFT)
@@ -122,6 +141,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2offices", 360, Direction.TOP)
                 .addConflict("room2offices2", 0, Direction.TOP)
                 .addConflict("room2offices4", 0, Direction.TOP)
+                .addConflict("room2offices4", 360, Direction.TOP)
                 .addConflict("room2poffices", 0, Direction.TOP)
                 .addConflict("room2poffices2", 0, Direction.TOP)
                 .addConflict("room2servers2", 0, Direction.TOP)
@@ -129,7 +149,8 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2tesla", 360, Direction.TOP)
                 .addConflict("room2toilets", 0, Direction.TOP)
                 .addConflict("room2z3_2", 0, Direction.TOP)
-                .addConflict("room860", 0, Direction.TOP));
+                .addConflict("room860", 0, Direction.TOP)
+                .addConflict("room860", 360, Direction.TOP));
         rules.add(new IntersectionRules("medibay", 0)
                 .addConflict("endroom", 90, Direction.RIGHT)
                 .addConflict("room2ccont", 90, Direction.RIGHT)
@@ -137,6 +158,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2sroom", 180, Direction.BOTTOM)
                 .addConflict("room2tesla_hcz", 90, Direction.RIGHT)
                 .addConflict("room2z3", 180, Direction.BOTTOM)
+                .addConflict("room3offices", 180, Direction.RIGHT)
                 .addConflict("room3offices", 270, Direction.BOTTOM));
         rules.add(new IntersectionRules("medibay", 90)
                 .addConflict("room2ccont", 0, Direction.RIGHT)
@@ -157,6 +179,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("checkpoint2", 0, Direction.BOTTOM)
                 .addConflict("endroom", 0, Direction.BOTTOM)
                 .addConflict("room1lifts", 180, Direction.BOTTOM)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2nuke", 90, Direction.LEFT)
                 .addConflict("room2offices", 0, Direction.BOTTOM)
                 .addConflict("room2offices", 360, Direction.BOTTOM)
@@ -167,6 +190,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2poffices", 0, Direction.BOTTOM)
                 .addConflict("room2poffices", 360, Direction.BOTTOM)
                 .addConflict("room2poffices2", 0, Direction.BOTTOM)
+                .addConflict("room2poffices2", 180, Direction.BOTTOM)
                 .addConflict("room2poffices2", 360, Direction.BOTTOM)
                 .addConflict("room2sroom", 0, Direction.BOTTOM)
                 .addConflict("room2tesla", 0, Direction.BOTTOM)
@@ -180,10 +204,12 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
         rules.add(new IntersectionRules("medibay", 360)
                 .addConflict("room2ccont", 90, Direction.RIGHT));
         rules.add(new IntersectionRules("room012", 90)
+                .addConflict("914", 180, Direction.LEFT)
                 .addConflict("room1162", 0, Direction.RIGHT)
                 .addConflict("room2_3", 270, Direction.LEFT)
                 .addConflict("room2scps", 270, Direction.LEFT)
                 .addConflict("room2scps2", 270, Direction.LEFT)
+                .addConflict("room3", 0, Direction.LEFT)
                 .addConflict("room860", 270, Direction.RIGHT));
         rules.add(new IntersectionRules("room012", 180)
                 .addConflict("room2testroom2", 450, Direction.BOTTOM)
@@ -229,12 +255,14 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
         rules.add(new IntersectionRules("room106", 270)
                 .addConflict("room513", 90, Direction.RIGHT));
         rules.add(new IntersectionRules("room1123", 90)
+                .addConflict("914", 180, Direction.LEFT)
                 .addConflict("room012", 360, Direction.LEFT)
                 .addConflict("room1162", 0, Direction.RIGHT)
                 .addConflict("room2_3", 270, Direction.LEFT)
                 .addConflict("room2scps", 270, Direction.LEFT)
                 .addConflict("room2servers2", 270, Direction.RIGHT)
                 .addConflict("room2sl", 270, Direction.LEFT)
+                .addConflict("room3", 0, Direction.LEFT)
                 .addConflict("room3", 0, Direction.RIGHT)
                 .addConflict("room3_2", 0, Direction.LEFT)
                 .addConflict("room4info", 0, Direction.LEFT)
@@ -255,6 +283,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room1123", 270, Direction.LEFT)
                 .addConflict("room2testroom2", 270, Direction.LEFT)
                 .addConflict("room3", 0, Direction.LEFT)
+                .addConflict("room3pit", 90, Direction.LEFT)
                 .addConflict("room3tunnel", 0, Direction.LEFT)
                 .addConflict("room3z3", 0, Direction.LEFT)
                 .addConflict("room513", 0, Direction.LEFT));
@@ -272,6 +301,8 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room3offices", 0, Direction.BOTTOM)
                 .addConflict("room3servers2", 0, Direction.BOTTOM)
                 .addConflict("room3servers2", 90, Direction.BOTTOM)
+                .addConflict("room3z3", 0, Direction.BOTTOM)
+                .addConflict("room4z3", 0, Direction.BOTTOM)
                 .addConflict("room860", 0, Direction.BOTTOM));
         rules.add(new IntersectionRules("room2", 90)
                 .addConflict("room1162", 0, Direction.RIGHT)
@@ -288,6 +319,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
         rules.add(new IntersectionRules("room2_2", 90)
                 .addConflict("room3", 0, Direction.LEFT));
         rules.add(new IntersectionRules("room2_2", 180)
+                .addConflict("room2testroom2", 90, Direction.BOTTOM)
                 .addConflict("room3_3", 0, Direction.BOTTOM));
         rules.add(new IntersectionRules("room2_3", 90)
                 .addConflict("room1162", 0, Direction.RIGHT));
@@ -316,11 +348,12 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2tesla", 270, Direction.RIGHT)
                 .addConflict("room2z3", 270, Direction.RIGHT)
                 .addConflict("room3servers", 0, Direction.RIGHT)
-                .addConflict("room3z3", 0, Direction.RIGHT)
                 .addConflict("room3z3", 180, Direction.RIGHT));
         rules.add(new IntersectionRules("room2cafeteria", 180)
-                .addConflict("room2offices3", 0, Direction.TOP));
+                .addConflict("room2offices3", 0, Direction.TOP)
+                .addConflict("room2toilets", 0, Direction.TOP));
         rules.add(new IntersectionRules("room2cafeteria", 270)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2elevator", 90, Direction.LEFT)
                 .addConflict("room2tesla_hcz", 90, Direction.LEFT)
                 .addConflict("testroom", 90, Direction.LEFT));
@@ -328,10 +361,14 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2pit", 90, Direction.LEFT)
                 .addConflict("room2sroom", 90, Direction.LEFT));
         rules.add(new IntersectionRules("room2closets", 90)
+                .addConflict("914", 180, Direction.LEFT)
                 .addConflict("room1123", 0, Direction.RIGHT)
                 .addConflict("room2_3", 270, Direction.LEFT)
+                .addConflict("room2ccont", 90, Direction.RIGHT)
+                .addConflict("room2servers2", 270, Direction.RIGHT)
                 .addConflict("room2sl", 270, Direction.LEFT)
                 .addConflict("room2testroom2", 270, Direction.LEFT)
+                .addConflict("room2toilets", 270, Direction.RIGHT)
                 .addConflict("room3", 0, Direction.LEFT)
                 .addConflict("room3", 0, Direction.RIGHT));
         rules.add(new IntersectionRules("room2closets", 180)
@@ -362,6 +399,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room012", 180, Direction.BOTTOM)
                 .addConflict("room2_2", 180, Direction.BOTTOM)
                 .addConflict("room2_3", 180, Direction.BOTTOM)
+                .addConflict("room2doors", 180, Direction.BOTTOM)
                 .addConflict("room2gw_b", 180, Direction.BOTTOM)
                 .addConflict("room2sl", 180, Direction.BOTTOM)
                 .addConflict("room2tesla_lcz", 180, Direction.BOTTOM)
@@ -370,9 +408,9 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room1162", 0, Direction.RIGHT)
                 .addConflict("room2_2", 270, Direction.RIGHT)
                 .addConflict("room2_4", 270, Direction.RIGHT)
+                .addConflict("room2ccont", 90, Direction.RIGHT)
                 .addConflict("room2scps", 270, Direction.RIGHT)
                 .addConflict("room2storage", 270, Direction.RIGHT)
-                .addConflict("room2tesla_lcz", 270, Direction.RIGHT)
                 .addConflict("room2z3", 270, Direction.RIGHT)
                 .addConflict("room3", 0, Direction.RIGHT)
                 .addConflict("room3_2", 270, Direction.BOTTOM)
@@ -408,6 +446,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2shaft", 270, Direction.LEFT)
                 .addConflict("room2testroom2", 270, Direction.LEFT)
                 .addConflict("room2tunnel", 270, Direction.LEFT)
+                .addConflict("room3", 0, Direction.LEFT)
                 .addConflict("room3_2", 0, Direction.LEFT)
                 .addConflict("room4pit", 0, Direction.RIGHT)
                 .addConflict("room4tunnels", 0, Direction.RIGHT)
@@ -419,6 +458,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2cafeteria", 90, Direction.LEFT)
                 .addConflict("room2offices", 270, Direction.BOTTOM)
                 .addConflict("room2offices2", 180, Direction.TOP)
+                .addConflict("room2offices4", 180, Direction.TOP)
                 .addConflict("room2pit", 90, Direction.LEFT)
                 .addConflict("room2poffices", 180, Direction.BOTTOM)
                 .addConflict("room2poffices2", 180, Direction.BOTTOM)
@@ -463,6 +503,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room513", 0, Direction.LEFT)
                 .addConflict("tunnel", 270, Direction.LEFT));
         rules.add(new IntersectionRules("room2offices", 180)
+                .addConflict("medibay", 0, Direction.TOP)
                 .addConflict("room2offices", 0, Direction.TOP)
                 .addConflict("room2offices4", 0, Direction.TOP)
                 .addConflict("room2toilets", 0, Direction.TOP)
@@ -472,6 +513,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("medibay", 0, Direction.TOP)
                 .addConflict("medibay", 360, Direction.TOP)
                 .addConflict("room2ccont", 90, Direction.RIGHT)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2nuke", 90, Direction.LEFT)
                 .addConflict("room2offices2", 360, Direction.TOP)
                 .addConflict("room2offices3", 0, Direction.TOP)
@@ -498,7 +540,9 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2offices", 180, Direction.BOTTOM));
         rules.add(new IntersectionRules("room2offices2", 0)
                 .addConflict("medibay", 270, Direction.TOP)
+                .addConflict("room2cafeteria", 180, Direction.BOTTOM)
                 .addConflict("room2ccont", 90, Direction.RIGHT)
+                .addConflict("room2offices", 180, Direction.BOTTOM)
                 .addConflict("room2offices", 270, Direction.BOTTOM)
                 .addConflict("room2poffices2", 180, Direction.TOP)
                 .addConflict("room2servers2", 180, Direction.BOTTOM)
@@ -523,11 +567,15 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room3", 0, Direction.LEFT)
                 .addConflict("room3_2", 0, Direction.LEFT)
                 .addConflict("room3_3", 0, Direction.LEFT)
+                .addConflict("room3gw", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
+                .addConflict("room3pit", 180, Direction.LEFT)
                 .addConflict("room3tunnel", 270, Direction.LEFT)
                 .addConflict("room3z2", 0, Direction.LEFT)
                 .addConflict("room3z2", 270, Direction.LEFT)
                 .addConflict("room3z3", 0, Direction.RIGHT)
+                .addConflict("room3z3", 0, Direction.LEFT)
+                .addConflict("room3z3", 180, Direction.LEFT)
                 .addConflict("room4info", 0, Direction.LEFT)
                 .addConflict("room4pit", 0, Direction.LEFT)
                 .addConflict("room4z3", 0, Direction.LEFT)
@@ -555,8 +603,10 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
         rules.add(new IntersectionRules("room2offices2", 270)
                 .addConflict("checkpoint2", 0, Direction.BOTTOM)
                 .addConflict("endroom", 0, Direction.BOTTOM)
+                .addConflict("endroom", 90, Direction.RIGHT)
                 .addConflict("room1lifts", 180, Direction.BOTTOM)
                 .addConflict("room2ccont", 90, Direction.RIGHT)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2nuke", 90, Direction.LEFT)
                 .addConflict("room2offices", 0, Direction.BOTTOM)
                 .addConflict("room2offices", 360, Direction.BOTTOM)
@@ -631,6 +681,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2offices2", 0, Direction.BOTTOM)
                 .addConflict("room2poffices2", 0, Direction.BOTTOM)
                 .addConflict("room2sroom", 0, Direction.BOTTOM)
+                .addConflict("room2toilets", 0, Direction.BOTTOM)
                 .addConflict("room2z3_2", 0, Direction.BOTTOM)
                 .addConflict("room3offices", 0, Direction.BOTTOM)
                 .addConflict("room3servers", 0, Direction.BOTTOM)
@@ -644,6 +695,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room860", 360, Direction.BOTTOM));
         rules.add(new IntersectionRules("room2offices4", 270)
                 .addConflict("room2ccont", 90, Direction.RIGHT)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2offices", 90, Direction.LEFT));
         rules.add(new IntersectionRules("room2pipes2", 90)
                 .addConflict("room2ccont", 180, Direction.RIGHT)
@@ -653,7 +705,8 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room4tunnels", 0, Direction.RIGHT));
         rules.add(new IntersectionRules("room2pit", 90)
                 .addConflict("914", 180, Direction.LEFT)
-                .addConflict("room2doors", 0, Direction.LEFT));
+                .addConflict("room2doors", 0, Direction.LEFT)
+                .addConflict("room3", 0, Direction.LEFT));
         rules.add(new IntersectionRules("room2pit", 180)
                 .addConflict("room2pipes2", 0, Direction.TOP)
                 .addConflict("room3pit", 90, Direction.TOP)
@@ -680,7 +733,9 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room3", 0, Direction.LEFT)
                 .addConflict("room3_2", 0, Direction.LEFT)
                 .addConflict("room3_3", 0, Direction.LEFT)
+                .addConflict("room3gw", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
+                .addConflict("room3pit", 180, Direction.LEFT)
                 .addConflict("room3tunnel", 270, Direction.LEFT)
                 .addConflict("room3z2", 0, Direction.LEFT)
                 .addConflict("room3z3", 0, Direction.RIGHT)
@@ -708,7 +763,8 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room860", 360, Direction.BOTTOM));
         rules.add(new IntersectionRules("room2poffices", 270)
                 .addConflict("room106", 90, Direction.LEFT)
-                .addConflict("room2ccont", 90, Direction.RIGHT));
+                .addConflict("room2ccont", 90, Direction.RIGHT)
+                .addConflict("room2closets", 90, Direction.LEFT));
         rules.add(new IntersectionRules("room2poffices2", 90)
                 .addConflict("endroom", 180, Direction.TOP)
                 .addConflict("room1123", 270, Direction.LEFT)
@@ -764,11 +820,13 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room860", 360, Direction.BOTTOM));
         rules.add(new IntersectionRules("room2poffices2", 270)
                 .addConflict("room2ccont", 90, Direction.RIGHT)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2nuke", 90, Direction.LEFT)
                 .addConflict("room2offices4", 90, Direction.LEFT));
         rules.add(new IntersectionRules("room2poffices2", 360)
                 .addConflict("room2z3", 180, Direction.BOTTOM));
         rules.add(new IntersectionRules("room2scps", 90)
+                .addConflict("medibay", 0, Direction.LEFT)
                 .addConflict("room012", 270, Direction.RIGHT)
                 .addConflict("room1123", 270, Direction.RIGHT)
                 .addConflict("room1162", 0, Direction.RIGHT)
@@ -795,6 +853,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2_4", 270, Direction.LEFT)
                 .addConflict("room2testroom2", 270, Direction.LEFT)
                 .addConflict("room2tunnel", 270, Direction.LEFT)
+                .addConflict("room3", 0, Direction.LEFT)
                 .addConflict("room3_2", 0, Direction.LEFT)
                 .addConflict("room3_3", 0, Direction.LEFT)
                 .addConflict("room3pit", 0, Direction.LEFT)
@@ -830,6 +889,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room3pit", 270, Direction.BOTTOM)
                 .addConflict("room513", 180, Direction.BOTTOM));
         rules.add(new IntersectionRules("room2sl", 90)
+                .addConflict("914", 180, Direction.LEFT)
                 .addConflict("room012", 270, Direction.LEFT)
                 .addConflict("room1162", 0, Direction.RIGHT)
                 .addConflict("room2_3", 270, Direction.LEFT)
@@ -856,6 +916,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
         rules.add(new IntersectionRules("room2sl", 360)
                 .addConflict("914", 180, Direction.BOTTOM));
         rules.add(new IntersectionRules("room2sroom", 90)
+                .addConflict("914", 180, Direction.LEFT)
                 .addConflict("room1123", 270, Direction.LEFT)
                 .addConflict("room2", 270, Direction.LEFT)
                 .addConflict("room2_3", 270, Direction.LEFT)
@@ -890,16 +951,19 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2offices3", 0, Direction.TOP)
                 .addConflict("room2poffices", 0, Direction.TOP)
                 .addConflict("room2poffices2", 0, Direction.BOTTOM)
+                .addConflict("room2toilets", 0, Direction.TOP)
                 .addConflict("room2z3_2", 0, Direction.BOTTOM)
                 .addConflict("room3servers", 90, Direction.BOTTOM)
                 .addConflict("room860", 0, Direction.BOTTOM)
                 .addConflict("room860", 360, Direction.BOTTOM));
         rules.add(new IntersectionRules("room2sroom", 270)
                 .addConflict("room2ccont", 90, Direction.RIGHT)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2servers2", 90, Direction.LEFT)
                 .addConflict("room2tesla_hcz", 90, Direction.LEFT)
                 .addConflict("room3offices", 180, Direction.RIGHT)
                 .addConflict("room3z3", 180, Direction.RIGHT)
+                .addConflict("room860", 450, Direction.RIGHT)
                 .addConflict("testroom", 90, Direction.LEFT));
         rules.add(new IntersectionRules("room2storage", 90)
                 .addConflict("room1162", 0, Direction.RIGHT)
@@ -914,6 +978,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("endroom", 180, Direction.TOP)
                 .addConflict("lockroom2", 270, Direction.BOTTOM)
                 .addConflict("room2offices", 270, Direction.BOTTOM)
+                .addConflict("room2offices4", 180, Direction.TOP)
                 .addConflict("room2poffices2", 180, Direction.TOP)
                 .addConflict("room3offices", 180, Direction.TOP)
                 .addConflict("room3offices", 270, Direction.BOTTOM)
@@ -926,14 +991,18 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room3z3", 0, Direction.RIGHT)
                 .addConflict("room4z3", 0, Direction.LEFT));
         rules.add(new IntersectionRules("room2tesla", 270)
+                .addConflict("endroom", 90, Direction.RIGHT)
                 .addConflict("room1lifts", 90, Direction.RIGHT)
                 .addConflict("room2ccont", 90, Direction.RIGHT)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2nuke", 90, Direction.LEFT));
         rules.add(new IntersectionRules("room2tesla", 360)
                 .addConflict("room2offices", 270, Direction.BOTTOM)
                 .addConflict("room2poffices2", 180, Direction.TOP)
                 .addConflict("room2toilets", 180, Direction.BOTTOM)
                 .addConflict("room2z3", 180, Direction.BOTTOM));
+        rules.add(new IntersectionRules("room2tesla_hcz", 90)
+                .addConflict("room3", 0, Direction.LEFT));
         rules.add(new IntersectionRules("room2tesla_hcz", 270)
                 .addConflict("room2nuke", 90, Direction.RIGHT)
                 .addConflict("room2pipes2", 90, Direction.LEFT)
@@ -953,6 +1022,8 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room012", 180, Direction.TOP)
                 .addConflict("room1162", 0, Direction.RIGHT)
                 .addConflict("room1archive", 180, Direction.TOP)
+                .addConflict("room2", 180, Direction.TOP)
+                .addConflict("room2", 270, Direction.LEFT)
                 .addConflict("room205", 180, Direction.TOP)
                 .addConflict("room2_3", 270, Direction.LEFT)
                 .addConflict("room2closets", 180, Direction.TOP)
@@ -995,10 +1066,16 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room4z3", 0, Direction.LEFT)
                 .addConflict("room4z3", 0, Direction.RIGHT));
         rules.add(new IntersectionRules("room2toilets", 180)
+                .addConflict("medibay", 0, Direction.TOP)
+                .addConflict("room2offices4", 180, Direction.TOP)
+                .addConflict("room2poffices2", 180, Direction.TOP)
                 .addConflict("room2toilets", 0, Direction.TOP)
-                .addConflict("room2z3_2", 180, Direction.TOP));
+                .addConflict("room2z3", 180, Direction.TOP)
+                .addConflict("room2z3_2", 180, Direction.TOP)
+                .addConflict("room860", 180, Direction.TOP));
         rules.add(new IntersectionRules("room2tunnel", 90)
                 .addConflict("914", 180, Direction.LEFT)
+                .addConflict("room012", 0, Direction.LEFT)
                 .addConflict("room2_2", 270, Direction.LEFT)
                 .addConflict("room2doors", 0, Direction.LEFT)
                 .addConflict("room2pipes2", 270, Direction.RIGHT)
@@ -1006,6 +1083,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2tesla_hcz", 270, Direction.RIGHT)
                 .addConflict("room2testroom2", 270, Direction.LEFT)
                 .addConflict("room3_2", 0, Direction.LEFT)
+                .addConflict("room3_3", 180, Direction.LEFT)
                 .addConflict("room4tunnels", 0, Direction.RIGHT));
         rules.add(new IntersectionRules("room2z3", 0)
                 .addConflict("lockroom2", 270, Direction.BOTTOM)
@@ -1013,6 +1091,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room1lifts", 180, Direction.TOP)
                 .addConflict("room2offices", 270, Direction.BOTTOM)
                 .addConflict("room2offices2", 180, Direction.TOP)
+                .addConflict("room2offices4", 180, Direction.TOP)
                 .addConflict("room3z3", 180, Direction.TOP));
         rules.add(new IntersectionRules("room2z3", 90)
                 .addConflict("room2ccont", 0, Direction.RIGHT)
@@ -1020,7 +1099,9 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room3servers2", 0, Direction.RIGHT)
                 .addConflict("room4z3", 0, Direction.LEFT));
         rules.add(new IntersectionRules("room2z3", 270)
+                .addConflict("endroom", 90, Direction.RIGHT)
                 .addConflict("room2", 90, Direction.LEFT)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2ctunnel", 180, Direction.LEFT)
                 .addConflict("room2doors", 90, Direction.LEFT)
                 .addConflict("room2gw_b", 90, Direction.LEFT)
@@ -1089,6 +1170,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2pipes2", 90, Direction.LEFT));
         rules.add(new IntersectionRules("room3pit", 90)
                 .addConflict("room2closets", 270, Direction.LEFT)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2tesla_hcz", 270, Direction.LEFT));
         rules.add(new IntersectionRules("room3pit", 270)
                 .addConflict("testroom", 0, Direction.BOTTOM)
@@ -1159,8 +1241,11 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("tunnel", 90, Direction.RIGHT)
                 .addConflict("tunnel2", 90, Direction.RIGHT));
         rules.add(new IntersectionRules("room3tunnel", 90)
+                .addConflict("008", 270, Direction.LEFT)
                 .addConflict("room2closets", 270, Direction.LEFT)
-                .addConflict("room2pit", 180, Direction.BOTTOM));
+                .addConflict("room2pit", 180, Direction.BOTTOM)
+                .addConflict("room2tesla_lcz", 270, Direction.LEFT)
+                .addConflict("room2tunnel", 270, Direction.LEFT));
         rules.add(new IntersectionRules("room3tunnel", 180)
                 .addConflict("room2tesla_hcz", 90, Direction.LEFT)
                 .addConflict("tunnel2", 90, Direction.LEFT));
@@ -1278,6 +1363,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("tunnel", 90, Direction.LEFT)
                 .addConflict("tunnel2", 270, Direction.LEFT));
         rules.add(new IntersectionRules("room3z3", 180)
+                .addConflict("medibay", 0, Direction.LEFT)
                 .addConflict("room2offices", 360, Direction.BOTTOM)
                 .addConflict("room2offices", 90, Direction.LEFT)
                 .addConflict("room2offices4", 0, Direction.BOTTOM)
@@ -1304,17 +1390,21 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room2offices", 180, Direction.BOTTOM)
                 .addConflict("room2poffices", 180, Direction.BOTTOM)
                 .addConflict("room2poffices", 180, Direction.TOP)
+                .addConflict("room2poffices2", 180, Direction.BOTTOM)
                 .addConflict("room2poffices2", 90, Direction.LEFT)
                 .addConflict("room2sroom", 180, Direction.BOTTOM)
                 .addConflict("room2sroom", 180, Direction.TOP)
+                .addConflict("room2z3", 180, Direction.BOTTOM)
                 .addConflict("room860", 90, Direction.LEFT)
                 .addConflict("tunnel2", 90, Direction.LEFT));
         rules.add(new IntersectionRules("room513", 0)
                 .addConflict("room2pipes2", 90, Direction.LEFT)
                 .addConflict("room2tunnel", 90, Direction.LEFT)
+                .addConflict("room2tunnel", 90, Direction.RIGHT)
                 .addConflict("tunnel2", 90, Direction.LEFT));
         rules.add(new IntersectionRules("room513", 90)
-                .addConflict("room2closets", 270, Direction.LEFT));
+                .addConflict("room2closets", 270, Direction.LEFT)
+                .addConflict("room2tesla_lcz", 270, Direction.LEFT));
         rules.add(new IntersectionRules("room513", 270)
                 .addConflict("testroom", 0, Direction.BOTTOM)
                 .addConflict("tunnel", 0, Direction.BOTTOM));
@@ -1330,6 +1420,7 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
         rules.add(new IntersectionRules("room860", 270)
                 .addConflict("medibay", 90, Direction.LEFT)
                 .addConflict("room2ccont", 90, Direction.RIGHT)
+                .addConflict("room2closets", 90, Direction.LEFT)
                 .addConflict("room2offices4", 90, Direction.LEFT)
                 .addConflict("room3z2", 180, Direction.LEFT)
                 .addConflict("room3z3", 90, Direction.RIGHT)
@@ -1384,16 +1475,25 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .addConflict("room3z2", 90, Direction.RIGHT)
                 .addConflict("tunnel", 0, Direction.BOTTOM)
                 .addConflict("tunnel", 360, Direction.BOTTOM));
+        rules.add(new IntersectionRules("tunnel", 90)
+                .addConflict("room3", 0, Direction.LEFT));
         rules.add(new IntersectionRules("tunnel", 180)
                 .addConflict("room3z2", 0, Direction.BOTTOM));
+        rules.add(new IntersectionRules("tunnel2", 90)
+                .addConflict("room3", 0, Direction.LEFT));
         rules.add(new IntersectionRules("tunnel2", 270)
                 .addConflict("room2nuke", 90, Direction.RIGHT)
                 .addConflict("room3pit", 90, Direction.RIGHT)
                 .addConflict("room3z2", 90, Direction.RIGHT));
+
+        findRoomRule("endroom", 180).get()
+                .addCurse("room4z3", 0, Direction.BOTTOM, (x) -> x < 20);
+        findRoomRule("room1lifts", 180).get()
+                .addCurse("room3z3", 0, Direction.BOTTOM, (x) -> x < 20)
+                .addCurse("room4z3", 0, Direction.BOTTOM, (x) -> x < 20);
     }
 
-    public static boolean hasRule(String r1, int a1, String r2, int a2, Direction relation) {
-        boolean found;
+    public static boolean hasRule(String r1, int a1, String r2, int a2, Direction relation, double x1) {
         // first, filter conflicts by room1 with angle1 and check them
         Optional<List<RotatedRoom>> conflicts = rules.stream()
                 .filter(rule -> rule.room.name.equals(r1))
@@ -1402,11 +1502,12 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .filter(Objects::nonNull)
                 .findFirst();
         if (conflicts.isPresent()) {
-            found = conflicts.get().stream()
+            Optional<RotatedRoom> pair = conflicts.get().stream()
                     .filter(room -> room.name.equals(r2))
-                    .anyMatch(room -> room.baseAngle == a2);
-            if (found)
-                return true;
+                    .filter(room -> room.baseAngle == a2)
+                    .findFirst();
+            if (pair.isPresent())
+                return pair.get().shouldApplyRule(x1);
         }
 
         // then, mirror relationship and filter conflicts by room2 with angle2
@@ -1417,10 +1518,14 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                 .map(rule -> rule.conflicts.get(mirrored))
                 .filter(Objects::nonNull)
                 .findFirst();
-        return conflicts.map(rotatedRooms -> rotatedRooms.stream()
-                        .filter(room -> room.name.equals(r1))
-                        .anyMatch(room -> room.baseAngle == a1))
-                .orElse(false);
+        if (conflicts.isPresent()) {
+            Optional<RotatedRoom> pair = conflicts.get().stream()
+                    .filter(room -> room.name.equals(r1))
+                    .filter(room -> room.baseAngle == a1)
+                    .findFirst();
+            return pair.isPresent() && pair.get().shouldApplyRule(x1);
+        }
+        return false;
     }
 
     private static void addRule(String r1, int a1, String r2, int a2, Direction direction) {
@@ -1459,6 +1564,15 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
         return this;
     }
 
+    private IntersectionRules addCurse(String room, int angle, Direction relation, Predicate<Double> curse) {
+        conflicts.get(relation).stream()
+                .filter(r -> r.name.equals(room))
+                .filter(r -> r.baseAngle == angle)
+                .findFirst()
+                .ifPresent(r -> r.curse = curse);
+        return this;
+    }
+
     @Override
     public int compareTo(IntersectionRules other) {
         return this.room.compareTo(other.room);
@@ -1468,9 +1582,18 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
         private final String name;
         private final int baseAngle;
 
-        public RotatedRoom(String room, int baseAngle) {
+        // some rules have extra conditions
+        private Predicate<Double> curse = null;
+
+        private RotatedRoom(String room, int baseAngle) {
             this.name = room;
             this.baseAngle = baseAngle;
+        }
+
+        private boolean shouldApplyRule(double x) {
+            if (curse == null || x < 0)
+                return true;
+            return curse.test(x);
         }
 
         @Override
@@ -1502,12 +1625,13 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
 
     // grab floating point problems from scp:cb console output
     public static void main(String[] args) throws IOException {
-        // todo test some well-learnt seeds before generating even more rules
         boolean testResult =
                 new MapJsonVerifier("tests/6.json", "6").test() &&
                 new MapJsonVerifier("tests/446456054.json", "446456054").test() &&
                 new MapJsonVerifier("tests/990066099.json", "990066099").test() &&
-                new MapJsonVerifier("tests/x9mc.json", "x9mc").test();
+                new MapJsonVerifier("tests/bmu23i0.json", "bmu23i0").test() &&
+                new MapJsonVerifier("tests/x9mc.json", "x9mc").test() &&
+                new MapJsonVerifier("tests/2001011999.json", "2001011999").test();
         if (!testResult)
             return;
 
@@ -1524,19 +1648,19 @@ public class IntersectionRules implements Comparable<IntersectionRules> {
                     String r2 = m.group(3);
                     int a2 = Integer.parseInt(m.group(4));
                     if (line.startsWith("r1.minX")) {
-                        if (!hasRule(r1, a1, r2, a2, Direction.RIGHT)) {
+                        if (!hasRule(r1, a1, r2, a2, Direction.RIGHT, -1)) {
                             addRule(r1, a1, r2, a2, Direction.RIGHT);
                         }
                     } else if (line.startsWith("r1.maxX")) {
-                        if (!hasRule(r1, a1, r2, a2, Direction.LEFT)) {
+                        if (!hasRule(r1, a1, r2, a2, Direction.LEFT, -1)) {
                             addRule(r1, a1, r2, a2, Direction.LEFT);
                         }
                     } else if (line.startsWith("r1.minZ")) {
-                        if (!hasRule(r1, a1, r2, a2, Direction.TOP)) {
+                        if (!hasRule(r1, a1, r2, a2, Direction.TOP, -1)) {
                             addRule(r1, a1, r2, a2, Direction.TOP);
                         }
                     } else if (line.startsWith("r1.maxZ")) {
-                        if (!hasRule(r1, a1, r2, a2, Direction.BOTTOM)) {
+                        if (!hasRule(r1, a1, r2, a2, Direction.BOTTOM, -1)) {
                             addRule(r1, a1, r2, a2, Direction.BOTTOM);
                         }
                     }

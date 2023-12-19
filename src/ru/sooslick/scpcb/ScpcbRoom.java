@@ -737,6 +737,7 @@ public class ScpcbRoom {
             if (chance(branchChance)) {
                 branchType = -1;
                 int cobbleChance = 0;   // cobble_chance NOT defined at all!
+                                        // btw, chance(0) hit true on seed 2001011999, I need to doublecheck this
                 if (chance(cobbleChance)) {
                     branchType = -2;
                 }
