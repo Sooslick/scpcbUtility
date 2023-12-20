@@ -356,8 +356,7 @@ public class ScpcbRoom {
                 createItem();
                 createItem();
                 createItem();
-                int drops = bbRand(0, 1);
-                for (int i = 0; i <= drops; i++)
+                for (int i = 0; i <= bbRand(0, 1); i++)
                     createItem();
                 createItem();
                 if (bbRand(1, 2) == 1)
@@ -565,7 +564,7 @@ public class ScpcbRoom {
                     boolean bd_temp = false;
                     if (room2gwBrokenDoor && room2gw_x == x && room2gw_z == z)
                         bd_temp = true;
-                    if ((!room2gwBrokenDoor && bbRand(1, 2) == 1) || bd_temp) {
+                    if ((bbRand(1, 2) == 1 && !room2gwBrokenDoor) || bd_temp) {
                         room2gwBrokenDoor = true;
                         room2gw_x = x;
                         room2gw_z = z;
