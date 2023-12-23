@@ -1,15 +1,18 @@
 package ru.sooslick.scpcb;
 
+import ru.sooslick.scpcb.map.ScpcbRoom;
+import ru.sooslick.scpcb.map.ScpcbRoomTemplate;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static ru.sooslick.scpcb.BlitzFloatMath.maxXLesserOrEquals;
-import static ru.sooslick.scpcb.BlitzFloatMath.maxZLesserOrEquals;
-import static ru.sooslick.scpcb.BlitzFloatMath.minXBiggerOrEquals;
-import static ru.sooslick.scpcb.BlitzFloatMath.minZBiggerOrEquals;
 import static ru.sooslick.scpcb.BlitzRandom.bbRand;
 import static ru.sooslick.scpcb.BlitzRandom.bbRnd;
 import static ru.sooslick.scpcb.BlitzRandom.bbSeedRnd;
+import static ru.sooslick.scpcb.map.BlitzFloatMath.maxXLesserOrEquals;
+import static ru.sooslick.scpcb.map.BlitzFloatMath.maxZLesserOrEquals;
+import static ru.sooslick.scpcb.map.BlitzFloatMath.minXBiggerOrEquals;
+import static ru.sooslick.scpcb.map.BlitzFloatMath.minZBiggerOrEquals;
 
 public class SeedGenerator {
     public static final int ROOM1 = 1;
@@ -703,7 +706,6 @@ public class SeedGenerator {
         r.zone = zone;
 
         r.x = x;
-        r.y = y;
         r.z = z;
 
         if (name != null && name.length() > 0) {
@@ -753,7 +755,6 @@ public class SeedGenerator {
         return null;
     }
 
-    // todo - floating point math differences
     private static void preventRoomOverlap(ScpcbRoom r) {
         if (r.roomTemplate.disableOverlapCheck)
             return;
@@ -828,13 +829,11 @@ public class SeedGenerator {
                     r.x = x2 * 8;
                     r.z = y2 * 8;
                     r.angle = rot2;
-                    r.swapped = true;
                     r.calcExtents();
 
                     r2.x = x * 8;
                     r2.z = y * 8;
                     r2.angle = rot;
-                    r2.swapped = true;
                     r2.calcExtents();
 
                     // make sure neither room overlaps with anything after the swap

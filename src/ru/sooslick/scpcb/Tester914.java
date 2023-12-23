@@ -2,7 +2,6 @@ package ru.sooslick.scpcb;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class Tester914 {
     private static final int ACHVS_CURR = 27;
@@ -13,14 +12,14 @@ public class Tester914 {
     private static final int COMP_TIME_LIMIT_MS = 1000;
 
     public static void main(String[] args) {
-        Random random = new Random();
+        BlitzRandom.bbSeedRnd((int) System.currentTimeMillis());
         Map<Integer, Integer> results = new HashMap<>();
         int range = (ACHVS_MAX - 1) * DIFFICULTY_FACTOR - (ACHVS_CURR - 1) * 3;
         System.out.println("Setup:");
         System.out.println("Range: " + range + ". Random(range) should be 0 for omni spawn");
         System.out.println("Achievements: " + ACHVS_CURR + " / " + ACHVS_MAX);
         System.out.println("Inventory cards: " + CARDS);
-        System.out.println("Simulating " + ATTEMPTS + " consecutive runs to get omni");
+        System.out.println("Simulating " + ATTEMPTS + " consecutive runs to get omni (using Blitz3D random function)");
 
         long ts = System.currentTimeMillis();
         for (int i = 0; i < ATTEMPTS; i++) {
@@ -35,7 +34,7 @@ public class Tester914 {
             while (retry) {
                 // rolling cards until omni spawns
                 for (int j = 0; j < CARDS; j++) {
-                    if (random.nextInt(range) == 0) {
+                    if (BlitzRandom.bbRand(0, range) == 0) {
                         retry = false;
                         break;
                     }
@@ -45,18 +44,16 @@ public class Tester914 {
 
             // save run results by attempts count
             Integer result = results.get(attempt);
-            result = result == null ? 1 : result+1;
+            result = result == null ? 1 : result + 1;
             results.put(attempt, result);
         }
-
-        // todo draw plot
 
         // print probabilities
         final int[] sum = {0};
         System.out.println();
         results.keySet().stream().sorted().forEach(k -> {
             sum[0] += results.get(k);
-            System.out.println("ROLL #" + k + ": " + sum[0] + " (" + (sum[0]*100f/ATTEMPTS) + "%)");
+            System.out.println("ROLL #" + k + ": " + (sum[0] * 100.0 / ATTEMPTS) + "%");
         });
     }
 }

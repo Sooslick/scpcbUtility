@@ -1,5 +1,7 @@
 package ru.sooslick.scpcb;
 
+import ru.sooslick.scpcb.map.ScpcbRoom;
+
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import java.awt.*;
