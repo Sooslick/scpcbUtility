@@ -9,10 +9,6 @@ import java.util.Set;
 import static ru.sooslick.scpcb.BlitzRandom.bbRand;
 import static ru.sooslick.scpcb.BlitzRandom.bbRnd;
 import static ru.sooslick.scpcb.BlitzRandom.bbSeedRnd;
-import static ru.sooslick.scpcb.map.BlitzFloatMath.maxXLesserOrEquals;
-import static ru.sooslick.scpcb.map.BlitzFloatMath.maxZLesserOrEquals;
-import static ru.sooslick.scpcb.map.BlitzFloatMath.minXBiggerOrEquals;
-import static ru.sooslick.scpcb.map.BlitzFloatMath.minZBiggerOrEquals;
 
 public class SeedGenerator {
     public static final int ROOM1 = 1;
@@ -21,8 +17,8 @@ public class SeedGenerator {
     public static final int ROOM3 = 4;
     public static final int ROOM4 = 5;
 
-    private static final int MAP_WIDTH = 18;
-    private static final int MAP_HEIGHT = 18;
+    public static final int MAP_WIDTH = 18;
+    public static final int MAP_HEIGHT = 18;
     private static final int ZONE_AMOUNT = 3;
 
     private static String[][] mapRoom;
@@ -59,13 +55,17 @@ public class SeedGenerator {
     }
 
     public static PathFinder scpcbCreateSeed(String randomSeed) {
+        return scpcbCreateSeed(randomSeed, false);
+    }
+
+    public static PathFinder scpcbCreateSeed(String randomSeed, boolean useSpeedrunMod) {
 
         // consts declared outside CreateMap function
         int[][] mapTemp = new int[MAP_WIDTH + 1][MAP_HEIGHT + 1];
         boolean[][] mapFound = new boolean[MAP_WIDTH + 1][MAP_HEIGHT + 1];
 
         // recreation of original CreateMap function
-        System.out.println("Generating a map using the seed " + randomSeed);
+        System.out.println("Generating a map using the seed " + randomSeed + ", with speedrun mod toggle = " + useSpeedrunMod);
 
         int iZoneTransition0 = 13;
         int iZoneTransition1 = 7;
@@ -77,7 +77,10 @@ public class SeedGenerator {
 
         int zone = 0;
 
-        bbSeedRnd(SeedTester.generateSeedNumber(randomSeed.toCharArray()));
+        if (useSpeedrunMod)
+            bbSeedRnd(Integer.parseInt(randomSeed));
+        else
+            bbSeedRnd(SeedTester.generateSeedNumber(randomSeed.toCharArray()));
 
         String[][] mapName = new String[MAP_WIDTH][MAP_HEIGHT];
 
@@ -507,7 +510,6 @@ public class SeedGenerator {
 
         savedRooms = new LinkedHashSet<>();
 
-        temp = 0;
         ScpcbRoom r = null;
         float spacing = 8f;
         for (y = MAP_HEIGHT - 1; y >= 1; y--) {
@@ -524,9 +526,9 @@ public class SeedGenerator {
                 if (mapTemp[x][y] == 255) {
                     int type = temp == 2 ? ROOM2 : ROOM1;
                     if (y > MAP_HEIGHT / 2)     // zone = 2
-                        r = createRoom(zone, type, x * 8, 0, y * 8, "checkpoint1");
+                        r = createRoom(zone, type, x * 8, y * 8, "checkpoint1");
                     else    // zone = 3
-                        r = createRoom(zone, type, x * 8, 0, y * 8, "checkpoint2");
+                        r = createRoom(zone, type, x * 8, y * 8, "checkpoint2");
                 } else if (mapTemp[x][y] > 0) {
                     switch (temp) {     // number of rooms in adjacement cells
                         case 1:
@@ -535,7 +537,7 @@ public class SeedGenerator {
                                     mapName[x][y] = mapRoom[ROOM1][mapRoomID[ROOM1]];
                             }
 
-                            r = createRoom(zone, ROOM1, x * 8, 0, y * 8, mapName[x][y]);
+                            r = createRoom(zone, ROOM1, x * 8, y * 8, mapName[x][y]);
                             if (mapTemp[x][y + 1] > 0)
                                 r.angle = 180;
                             else if (mapTemp[x - 1][y] > 0)
@@ -552,7 +554,7 @@ public class SeedGenerator {
                                     if (mapRoom[ROOM2][mapRoomID[ROOM2]] != null)
                                         mapName[x][y] = mapRoom[ROOM2][mapRoomID[ROOM2]];
                                 }
-                                r = createRoom(zone, ROOM2, x * 8, 0, y * 8, mapName[x][y]);
+                                r = createRoom(zone, ROOM2, x * 8, y * 8, mapName[x][y]);
                                 if (bbRand(1, 2) == 1) {
                                     System.out.println(r.roomTemplate.name + " random angle: 90");
                                     r.angle = 90;
@@ -566,7 +568,7 @@ public class SeedGenerator {
                                     if (mapRoom[ROOM2][mapRoomID[ROOM2]] != null)
                                         mapName[x][y] = mapRoom[ROOM2][mapRoomID[ROOM2]];
                                 }
-                                r = createRoom(zone, ROOM2, x * 8, 0, y * 8, mapName[x][y]);
+                                r = createRoom(zone, ROOM2, x * 8, y * 8, mapName[x][y]);
                                 if (bbRand(1, 2) == 1) {
                                     System.out.println(r.roomTemplate.name + " random angle: 180");
                                     r.angle = 180;
@@ -582,16 +584,16 @@ public class SeedGenerator {
                                 }
 
                                 if (mapTemp[x - 1][y] > 0 && mapTemp[x][y + 1] > 0) {
-                                    r = createRoom(zone, ROOM2C, x * 8, 0, y * 8, mapName[x][y]);
+                                    r = createRoom(zone, ROOM2C, x * 8, y * 8, mapName[x][y]);
                                     r.angle = 180;
                                 } else if (mapTemp[x + 1][y] > 0 && mapTemp[x][y + 1] > 0) {
-                                    r = createRoom(zone, ROOM2C, x * 8, 0, y * 8, mapName[x][y]);
+                                    r = createRoom(zone, ROOM2C, x * 8, y * 8, mapName[x][y]);
                                     r.angle = 90;
                                 } else if (mapTemp[x - 1][y] > 0 && mapTemp[x][y - 1] > 0) {
-                                    r = createRoom(zone, ROOM2C, x * 8, 0, y * 8, mapName[x][y]);
+                                    r = createRoom(zone, ROOM2C, x * 8, y * 8, mapName[x][y]);
                                     r.angle = 270;
                                 } else
-                                    r = createRoom(zone, ROOM2C, x * 8, 0, y * 8, mapName[x][y]);
+                                    r = createRoom(zone, ROOM2C, x * 8, y * 8, mapName[x][y]);
                                 mapRoomID[ROOM2C]++;
                             }
                             break;
@@ -601,7 +603,7 @@ public class SeedGenerator {
                                     mapName[x][y] = mapRoom[ROOM3][mapRoomID[ROOM3]];
                             }
 
-                            r = createRoom(zone, ROOM3, x * 8, 0, y * 8, mapName[x][y]);
+                            r = createRoom(zone, ROOM3, x * 8, y * 8, mapName[x][y]);
                             if (mapTemp[x][y - 1] == 0)
                                 r.angle = 180;
                             else if (mapTemp[x - 1][y] == 0)
@@ -616,7 +618,7 @@ public class SeedGenerator {
                                     mapName[x][y] = mapRoom[ROOM4][mapRoomID[ROOM4]];
                             }
 
-                            r = createRoom(zone, ROOM4, x * 8, 0, y * 8, mapName[x][y]);
+                            r = createRoom(zone, ROOM4, x * 8, y * 8, mapName[x][y]);
                             mapRoomID[ROOM4]++;
                             break;
                     }
@@ -629,12 +631,12 @@ public class SeedGenerator {
         // gate a skipped (no rnd calls)
         mapRoomID[ROOM1]++;
 
-        createRoom(0, ROOM1, (MAP_WIDTH - 1) * 8, 0, (MAP_HEIGHT - 1) * 8, "pocketdimension");
+        createRoom(0, ROOM1, (MAP_WIDTH - 1) * 8, (MAP_HEIGHT - 1) * 8, "pocketdimension");
         mapRoomID[ROOM1]++;
 
         // intro skipped (although "173" room contains some Rnd calls, intro banned by speedrun rules)
 
-        r = createRoom(0, ROOM1, 8, 800, 0, "dimension1499");
+        r = createRoom(0, ROOM1, 8, 0, "dimension1499");
         savedRooms.add(r);
         mapRoomID[ROOM1]++;
 
@@ -666,11 +668,9 @@ public class SeedGenerator {
 
     ///////////////////////////////////////////
 
-    private static boolean setRoom(String roomName, int roomType, int pos, int minPos, int maxPos) {
-        if (maxPos < minPos) {
+    private static void setRoom(String roomName, int roomType, int pos, int minPos, int maxPos) {
+        if (maxPos < minPos)
             System.out.println("Can't place " + roomName);
-            return false;
-        }
 
         System.out.println("--- SETROOM: " + roomName.toUpperCase() + " ---");
         boolean looped = false;
@@ -692,14 +692,11 @@ public class SeedGenerator {
         if (canPlace) {
             System.out.println("--------------");
             mapRoom[roomType][pos] = roomName;
-            return true;
-        } else {
+        } else
             System.out.println("couldn't place " + roomName);
-            return false;
-        }
     }
 
-    private static ScpcbRoom createRoom(int zone, int roomShape, int x, int y, int z, String name) {
+    private static ScpcbRoom createRoom(int zone, int roomShape, int x, int z, String name) {
         ScpcbRoom r = new ScpcbRoom();
         r.shape = roomShape;
 
@@ -879,14 +876,17 @@ public class SeedGenerator {
         // room was able to the placed in a different spot
         if (!isIntersecting) {
             System.out.println("Room re-placing successful! " + r.roomTemplate.name);
+            return;
         }
+
+        System.out.println("Couldn't fix overlap issue for room " + r.roomTemplate.name);
     }
 
     private static boolean checkRoomOverlap(ScpcbRoom r1, ScpcbRoom r2) {
-        if (maxXLesserOrEquals(r1, r2) || maxZLesserOrEquals(r1, r2))
+        if (r1.maxX <= r2.minX || r1.maxZ <= r2.minZ)
             return false;
 
-        if (minXBiggerOrEquals(r1, r2) || minZBiggerOrEquals(r1, r2))
+        if (r1.minX >= r2.maxX || r1.minZ >= r2.maxZ)
             return false;
 
         System.out.println("CheckRoomOverlap: " + r1.roomTemplate.name + " / " + r2.roomTemplate.name + "\n...");

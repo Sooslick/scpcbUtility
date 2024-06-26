@@ -44,8 +44,8 @@ public class ScpcbRoom {
 
     public ScpcbRoomTemplate roomTemplate;
 
-    double minX, minY, minZ;
-    double maxX, maxY, maxZ;
+    public double minX, minY, minZ;
+    public double maxX, maxY, maxZ;
     int extentsAngle;
     MeshExtents extents;
 
@@ -638,6 +638,16 @@ public class ScpcbRoom {
                 minX, minY, minZ,
                 maxX, maxY, maxZ,
                 angle);
+
+        // adjustments by boundaries db dumped from vanilla game
+        // TODO: remove vanilla math entirely after tests
+        if (x > 0 && z > 0) {
+            RoomExtentsDB.Boundaries b = RoomExtentsDB.findExtents(roomTemplate.name, angle, (int) x / 8, (int) z / 8);
+            minX = b.minX;
+            maxX = b.maxX;
+            minZ = b.minZ;
+            maxZ = b.maxZ;
+        }
     }
 
     private void genForestGrid() {

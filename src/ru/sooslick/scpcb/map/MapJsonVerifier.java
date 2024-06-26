@@ -33,7 +33,8 @@ public class MapJsonVerifier {
         // search "rooms" array
         int i = 19;
         //noinspection StatementWithEmptyBody
-        while (json[i++] != '[') {}
+        while (json[i++] != '[') {
+        }
 
         // parsing "rooms" objects
         while (json[i] != ']') {
@@ -62,7 +63,8 @@ public class MapJsonVerifier {
     private int readRoom(byte[] json, int from) {
         int i = from;
         //noinspection StatementWithEmptyBody
-        while (json[i++] != '{') {}
+        while (json[i++] != '{') {
+        }
         int bracketsAmount = 1;
         while (bracketsAmount > 0) {
             if (json[i] == '{')
@@ -89,7 +91,7 @@ public class MapJsonVerifier {
         if (m.find())
             return m;
         System.out.println("Regex test failure. String: " + string);
-        throw new RuntimeException("testRRegex failure");
+        throw new RuntimeException("testRegex failure");
     }
 
     private static class RoomMeta {
@@ -104,5 +106,30 @@ public class MapJsonVerifier {
             this.y = y;
             this.angle = angle;
         }
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        String seed = "$";
+        String testFile = "tests/dollar.json";
+        if (args.length > 1) {
+            seed = args[0];
+            testFile = args[1];
+        }
+        new MapJsonVerifier(testFile, seed).test();
+
+//        boolean testResult =
+//                new MapJsonVerifier("tests/dollar.json", "$").test() &&
+//                new MapJsonVerifier("tests/whitespace.json", " ").test() &&
+//                new MapJsonVerifier("tests/6.json", "6").test() &&
+//                new MapJsonVerifier("tests/K.json", "K").test() &&
+//                new MapJsonVerifier("tests/446456054.json", "446456054").test() &&
+//                new MapJsonVerifier("tests/990066099.json", "990066099").test() &&
+//                new MapJsonVerifier("tests/bmu23i0.json", "bmu23i0").test() &&
+//                new MapJsonVerifier("tests/x9mc.json", "x9mc").test() &&
+//                new MapJsonVerifier("tests/2001011999.json", "2001011999").test() &&
+//                new MapJsonVerifier("tests/557110973.json", "557110973").test();
+//        if (!testResult)
+//            return;
     }
 }

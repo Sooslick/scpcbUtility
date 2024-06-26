@@ -189,11 +189,22 @@ public class PathFinder {
 
     public void printMaze() {
         for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++)
-                if (map[j][i] != null)
-                    System.out.print("█");
-                else
+            for (int j = 0; j < 20; j++) {
+                if (map[j][i] != null) {
+                    String colorPrefix = "\u001B[37m";
+                    String name = map[j][i].roomTemplate.name;
+                    if ("room079".equals(name) || "room049".equals(name) || "room3storage".equals(name) || "room2ccont".equals(name))
+                        colorPrefix = "\u001B[31m";
+                    else if ("008".equals(name) || "914".equals(name) || "room2sl".equals(name))
+                        colorPrefix = "\u001B[32m";
+                    else if ("room2tunnel".equals(name) || "roompj".equals(name) || "room1123".equals(name) || "room2storage".equals(name))
+                        colorPrefix = "\u001B[33m";
+                    else if ("room2closets".equals(name) || "room2testroom2".equals(name) || "room106".equals(name) || "room2servers".equals(name))
+                        colorPrefix = "\u001B[34m";
+                    System.out.print(colorPrefix + "█");
+                } else
                     System.out.print(" ");
+            }
             System.out.println();
         }
         System.out.printf("Seed: '%s'", seed);

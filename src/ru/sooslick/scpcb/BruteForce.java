@@ -7,6 +7,7 @@ public class BruteForce {
     public final static String CAPS_AND_NUMBERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     public final static String CAPS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public final static String NUMBERS = "0123456789";
+    public final static String CUSTOM = "@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     private final String printable;
     private final int minLen;
@@ -28,7 +29,7 @@ public class BruteForce {
     }
 
     public BruteForce(String characters, int min, int max, int[] positions) {
-        this(characters, min, max, min, new int[max]);
+        this(characters, min, max, min, positions);
     }
 
     public BruteForce(String characters, int min, int max, int currentLength, int[] positions) {

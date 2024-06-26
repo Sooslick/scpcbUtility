@@ -44,4 +44,8 @@ public class RMeshReader {
     public float readFloat() {
         return Float.intBitsToFloat(readInt());
     }
+
+    public boolean isEof() {
+        return caret>= content.length;
+    }
 }
