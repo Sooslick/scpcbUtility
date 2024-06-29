@@ -634,10 +634,10 @@ public class ScpcbRoom {
         // while generating map SCP:CB can rotate room without changing extents
         // so I have to store this variable to prevent blatant lie in console output
         extentsAngle = angle;
-        System.out.printf("Room %s extents : %s, %s, %s / %s, %s, %s / %s°%n", roomTemplate.name,
-                minX, minY, minZ,
-                maxX, maxY, maxZ,
-                angle);
+//        System.out.printf("Room %s extents : %s, %s, %s / %s, %s, %s / %s°%n", roomTemplate.name,
+//                minX, minY, minZ,
+//                maxX, maxY, maxZ,
+//                angle);
 
         // adjustments by boundaries db dumped from vanilla game
         // TODO: remove vanilla math entirely after tests

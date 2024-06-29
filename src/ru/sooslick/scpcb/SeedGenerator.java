@@ -65,7 +65,7 @@ public class SeedGenerator {
         boolean[][] mapFound = new boolean[MAP_WIDTH + 1][MAP_HEIGHT + 1];
 
         // recreation of original CreateMap function
-        System.out.println("Generating a map using the seed " + randomSeed + ", with speedrun mod toggle = " + useSpeedrunMod);
+        System.out.println("Generating a map using the seed '" + randomSeed + "', with speedrun mod toggle = " + useSpeedrunMod);
 
         int iZoneTransition0 = 13;
         int iZoneTransition1 = 7;
@@ -280,7 +280,7 @@ public class SeedGenerator {
             }
 
             if (room4Amount[i] < 1) {   // we want at least 1 ROOM4
-                System.out.println("forcing a ROOM4 into zone " + i);
+                //System.out.println("forcing a ROOM4 into zone " + i);
                 temp = 0;
 
                 for (y = zone; y <= temp2; y++) {
@@ -301,7 +301,7 @@ public class SeedGenerator {
                             }
                             if (temp == 1) {
                                 mapTemp[x][y] = 4; // turn this room into a ROOM4
-                                System.out.println("ROOM4 forced into slot (" + x + ", " + y + ")");
+                                //System.out.println("ROOM4 forced into slot (" + x + ", " + y + ")");
                                 room4Amount[i]++;
                                 room3Amount[i]--;
                                 room1Amount[i]++;
@@ -314,12 +314,12 @@ public class SeedGenerator {
                         break;
                 }
 
-                if (temp == 0)
-                    System.out.println("Couldn't place ROOM4 in zone " + i);
+//                if (temp == 0)
+                    //System.out.println("Couldn't place ROOM4 in zone " + i);
             }
 
             if (room2cAmount[i] < 1) {  // we want at least 1 ROOM2C
-                System.out.println("forcing a ROOM2C into zone " + i);
+                //System.out.println("forcing a ROOM2C into zone " + i);
                 temp = 0;
 
                 zone++;
@@ -333,13 +333,13 @@ public class SeedGenerator {
                                     if (mapTemp[x + 1][y - 2] + mapTemp[x + 2][y - 1] + mapTemp[x + 1][y - 1] == 0) {
                                         mapTemp[x][y] = 2;
                                         mapTemp[x + 1][y] = 2;
-                                        System.out.println("ROOM2C forced into slot (" + (x + 1) + ", " + (y) + ")");
+                                        //System.out.println("ROOM2C forced into slot (" + (x + 1) + ", " + (y) + ")");
                                         mapTemp[x + 1][y - 1] = 1;
                                         temp = 1;
                                     } else if (mapTemp[x + 1][y + 2] + mapTemp[x + 2][y + 1] + mapTemp[x + 1][y + 1] == 0) {
                                         mapTemp[x][y] = 2;
                                         mapTemp[x + 1][y] = 2;
-                                        System.out.println("ROOM2C forced into slot (" + (x + 1) + ", " + (y) + ")");
+                                        //System.out.println("ROOM2C forced into slot (" + (x + 1) + ", " + (y) + ")");
                                         mapTemp[x + 1][y + 1] = 1;
                                         temp = 1;
                                     }
@@ -349,13 +349,13 @@ public class SeedGenerator {
                                     if (mapTemp[x - 1][y - 2] + mapTemp[x - 2][y - 1] + mapTemp[x - 1][y - 1] == 0) {
                                         mapTemp[x][y] = 2;
                                         mapTemp[x - 1][y] = 2;
-                                        System.out.println("ROOM2C forced into slot (" + (x - 1) + ", " + (y) + ")");
+                                        //System.out.println("ROOM2C forced into slot (" + (x - 1) + ", " + (y) + ")");
                                         mapTemp[x - 1][y - 1] = 1;
                                         temp = 1;
                                     } else if (mapTemp[x - 1][y + 2] + mapTemp[x - 2][y + 1] + mapTemp[x - 1][y + 1] == 0) {
                                         mapTemp[x][y] = 2;
                                         mapTemp[x - 1][y] = 2;
-                                        System.out.println("ROOM2C forced into slot (" + (x - 1) + ", " + (y) + ")");
+                                        //System.out.println("ROOM2C forced into slot (" + (x - 1) + ", " + (y) + ")");
                                         mapTemp[x - 1][y + 1] = 1;
                                         temp = 1;
                                     }
@@ -365,13 +365,13 @@ public class SeedGenerator {
                                     if (mapTemp[x - 2][y + 1] + mapTemp[x - 1][y + 2] + mapTemp[x - 1][y + 1] == 0) {
                                         mapTemp[x][y] = 2;
                                         mapTemp[x][y + 1] = 2;
-                                        System.out.println("ROOM2C forced into slot (" + x + ", " + (y + 1) + ")");
+                                        //System.out.println("ROOM2C forced into slot (" + x + ", " + (y + 1) + ")");
                                         mapTemp[x - 1][y + 1] = 1;
                                         temp = 1;
                                     } else if (mapTemp[x + 2][y + 1] + mapTemp[x + 1][y + 2] + mapTemp[x + 1][y + 1] == 0) {
                                         mapTemp[x][y] = 2;
                                         mapTemp[x][y + 1] = 2;
-                                        System.out.println("ROOM2C forced into slot (" + (x) + ", " + (y + 1) + ")");
+                                        //System.out.println("ROOM2C forced into slot (" + (x) + ", " + (y + 1) + ")");
                                         mapTemp[x + 1][y + 1] = 1;
                                         temp = 1;
                                     }
@@ -381,13 +381,13 @@ public class SeedGenerator {
                                     if (mapTemp[x - 2][y - 1] + mapTemp[x - 1][y - 2] + mapTemp[x - 1][y - 1] == 0) {
                                         mapTemp[x][y] = 2;
                                         mapTemp[x][y - 1] = 2;
-                                        System.out.println("ROOM2C forced into slot (" + x + ", " + (y - 1) + ")");
+                                        //System.out.println("ROOM2C forced into slot (" + x + ", " + (y - 1) + ")");
                                         mapTemp[x - 1][y - 1] = 1;
                                         temp = 1;
                                     } else if (mapTemp[x + 2][y - 1] + mapTemp[x + 1][y - 2] + mapTemp[x + 1][y - 1] == 0) {
                                         mapTemp[x][y] = 2;
                                         mapTemp[x][y - 1] = 2;
-                                        System.out.println("ROOM2C forced into slot (" + (x) + ", " + (y - 1) + ")");
+                                        //System.out.println("ROOM2C forced into slot (" + (x) + ", " + (y - 1) + ")");
                                         mapTemp[x + 1][y - 1] = 1;
                                         temp = 1;
                                     }
@@ -405,8 +405,8 @@ public class SeedGenerator {
                         break;
                 }
 
-                if (temp == 0)
-                    System.out.println("Couldn't place ROOM2C in zone " + i);
+//                if (temp == 0)
+                    //System.out.println("Couldn't place ROOM2C in zone " + i);
             }
         }
 
@@ -556,10 +556,10 @@ public class SeedGenerator {
                                 }
                                 r = createRoom(zone, ROOM2, x * 8, y * 8, mapName[x][y]);
                                 if (bbRand(1, 2) == 1) {
-                                    System.out.println(r.roomTemplate.name + " random angle: 90");
+                                    //System.out.println(r.roomTemplate.name + " random angle: 90");
                                     r.angle = 90;
                                 } else {
-                                    System.out.println(r.roomTemplate.name + " random angle: 270");
+                                    //System.out.println(r.roomTemplate.name + " random angle: 270");
                                     r.angle = 270;
                                 }
                                 mapRoomID[ROOM2]++;
@@ -570,10 +570,10 @@ public class SeedGenerator {
                                 }
                                 r = createRoom(zone, ROOM2, x * 8, y * 8, mapName[x][y]);
                                 if (bbRand(1, 2) == 1) {
-                                    System.out.println(r.roomTemplate.name + " random angle: 180");
+                                    //System.out.println(r.roomTemplate.name + " random angle: 180");
                                     r.angle = 180;
                                 } else {
-                                    System.out.println(r.roomTemplate.name + " random angle: 0");
+                                    //System.out.println(r.roomTemplate.name + " random angle: 0");
                                     r.angle = 0;
                                 }
                                 mapRoomID[ROOM2]++;
@@ -636,6 +636,7 @@ public class SeedGenerator {
 
         // intro skipped (although "173" room contains some Rnd calls, intro banned by speedrun rules)
 
+        // todo check if room height messes up overlapping check
         r = createRoom(0, ROOM1, 8, 0, "dimension1499");
         savedRooms.add(r);
         mapRoomID[ROOM1]++;
@@ -669,14 +670,14 @@ public class SeedGenerator {
     ///////////////////////////////////////////
 
     private static void setRoom(String roomName, int roomType, int pos, int minPos, int maxPos) {
-        if (maxPos < minPos)
-            System.out.println("Can't place " + roomName);
+//        if (maxPos < minPos)
+//            System.out.println("Can't place " + roomName);
 
-        System.out.println("--- SETROOM: " + roomName.toUpperCase() + " ---");
+//        System.out.println("--- SETROOM: " + roomName.toUpperCase() + " ---");
         boolean looped = false;
         boolean canPlace = true;
         while (mapRoom[roomType][pos] != null) {
-            System.out.println("found " + mapRoom[roomType][pos]);
+//            System.out.println("found " + mapRoom[roomType][pos]);
             pos++;
             if (pos > maxPos) {
                 if (!looped) {
@@ -688,12 +689,12 @@ public class SeedGenerator {
                 }
             }
         }
-        System.out.println(roomName + " " + pos);
+//        System.out.println(roomName + " " + pos);
         if (canPlace) {
-            System.out.println("--------------");
+//            System.out.println("--------------");
             mapRoom[roomType][pos] = roomName;
-        } else
-            System.out.println("couldn't place " + roomName);
+        } //else
+//            System.out.println("couldn't place " + roomName);
     }
 
     private static ScpcbRoom createRoom(int zone, int roomShape, int x, int z, String name) {
@@ -714,7 +715,7 @@ public class SeedGenerator {
             }
             // add light cones - seems no random here
             r.calcExtents();
-            System.out.println("Room " + r.roomTemplate.name + " at " + x + ", " + z);
+//            System.out.println("Room " + r.roomTemplate.name + " at " + x + ", " + z);
             return r;
         }
 
@@ -742,7 +743,7 @@ public class SeedGenerator {
                         r.fill();
                         // add light cones - seems no random here
                         r.calcExtents();
-                        System.out.println("Room " + r.roomTemplate.name + " at " + x + ", " + z);
+//                        System.out.println("Room " + r.roomTemplate.name + " at " + x + ", " + z);
                         return r;
                     }
                 }
@@ -762,8 +763,8 @@ public class SeedGenerator {
         if (r.roomTemplate.name.contains("checkpoint") || r.roomTemplate.name.equalsIgnoreCase("start"))
             return;
 
-        System.out.println("////////////////////");
-        System.out.println("PreventRoomOverlap: " + r.roomTemplate.name);
+        //System.out.println("////////////////////");
+        //System.out.println("PreventRoomOverlap: " + r.roomTemplate.name);
 
         // First, check if the room is actually intersecting at all
         for (ScpcbRoom r2 : savedRooms) {
@@ -802,7 +803,7 @@ public class SeedGenerator {
 
         // room is ROOM2 and was able to be turned by 180 degrees
         if (!isIntersecting) {
-            System.out.println("ROOM2 turning succesful! " + r.roomTemplate.name);
+//            System.out.println("ROOM2 turning succesful! " + r.roomTemplate.name);
             return;
         }
 
@@ -866,20 +867,20 @@ public class SeedGenerator {
                         isIntersecting = false; // this assignment does nothing but give misleading debug message
                     }
                     // my personal stuff to work around SCP:CB bug
-                    else {
-                        System.out.println("ACTUAL successful room replacement");
-                    }
+//                    else {
+//                        System.out.println("ACTUAL successful room replacement");
+//                    }
                 }
             }
         }
 
         // room was able to the placed in a different spot
         if (!isIntersecting) {
-            System.out.println("Room re-placing successful! " + r.roomTemplate.name);
+//            System.out.println("Room re-placing successful! " + r.roomTemplate.name);
             return;
         }
 
-        System.out.println("Couldn't fix overlap issue for room " + r.roomTemplate.name);
+//        System.out.println("Couldn't fix overlap issue for room " + r.roomTemplate.name);
     }
 
     private static boolean checkRoomOverlap(ScpcbRoom r1, ScpcbRoom r2) {
@@ -889,7 +890,7 @@ public class SeedGenerator {
         if (r1.minX >= r2.maxX || r1.minZ >= r2.maxZ)
             return false;
 
-        System.out.println("CheckRoomOverlap: " + r1.roomTemplate.name + " / " + r2.roomTemplate.name + "\n...");
+        //System.out.println("CheckRoomOverlap: " + r1.roomTemplate.name + " / " + r2.roomTemplate.name + "\n...");
         return true;
     }
 }

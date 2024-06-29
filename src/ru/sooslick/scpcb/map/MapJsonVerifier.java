@@ -43,21 +43,26 @@ public class MapJsonVerifier {
 
         AtomicInteger failures = new AtomicInteger();
         PathFinder pf = SeedGenerator.scpcbCreateSeed(seed);
-        expectedRooms.forEach(rm -> {
-            ScpcbRoom r = pf.map[rm.x][rm.y];
-            if (r == null) {
+        expectedRooms.forEach(expectedRoom -> {
+            ScpcbRoom actualRoom = pf.map[expectedRoom.x][expectedRoom.y];
+            if (actualRoom == null) {
                 failures.getAndIncrement();
-                System.out.println("Expected room at " + rm.x + ":" + rm.y);
-            } else if (!r.roomTemplate.name.equals(rm.name)) {
+                System.out.printf("Expected room at %d:%d%n", expectedRoom.x, expectedRoom.y);
+            } else if (!actualRoom.roomTemplate.name.equals(expectedRoom.name)) {
                 failures.getAndIncrement();
-                System.out.println("Expected at " + rm.x + ":" + rm.y + " room " + rm.name + ", actual " + r.roomTemplate.name);
-            } else if (r.angle != rm.angle) {
-                //failures.getAndIncrement();   // just report at this point // todo fix later, some tests contains bad angles
-                System.out.println("Wrong room rotation at " + rm.x + ":" + rm.y);
+                System.out.printf("Expected %s at %d:%d but got %s%n", expectedRoom.name, expectedRoom.x, expectedRoom.y, actualRoom.roomTemplate.name);
+            } else if (actualRoom.angle % 360 != expectedRoom.angle % 360) {
+                failures.getAndIncrement();
+                System.out.printf("Wrong room rotation at %d:%d (%s)%n", expectedRoom.x, expectedRoom.y, expectedRoom.name);
             }
         });
-        System.out.println("Detected " + failures + " map errors for map " + seed);
-        return failures.get() == 0;
+        if (failures.get() == 0) {
+            System.out.println("\u001B[32mTests passed for seed '" + seed + "'\u001B[37m");
+            return true;
+        } else {
+            System.out.println("\u001B[31mDetected " + failures + " map errors for seed '" + seed + "'\u001B[37m");
+            return false;
+        }
     }
 
     private int readRoom(byte[] json, int from) {
@@ -110,26 +115,21 @@ public class MapJsonVerifier {
 
 
     public static void main(String[] args) throws IOException {
-        String seed = "$";
-        String testFile = "tests/dollar.json";
         if (args.length > 1) {
-            seed = args[0];
-            testFile = args[1];
+            System.out.println("custom test launch");
+            new MapJsonVerifier(args[0], args[1]).test();
+            return;
         }
-        new MapJsonVerifier(testFile, seed).test();
 
-//        boolean testResult =
-//                new MapJsonVerifier("tests/dollar.json", "$").test() &&
-//                new MapJsonVerifier("tests/whitespace.json", " ").test() &&
-//                new MapJsonVerifier("tests/6.json", "6").test() &&
-//                new MapJsonVerifier("tests/K.json", "K").test() &&
-//                new MapJsonVerifier("tests/446456054.json", "446456054").test() &&
-//                new MapJsonVerifier("tests/990066099.json", "990066099").test() &&
-//                new MapJsonVerifier("tests/bmu23i0.json", "bmu23i0").test() &&
-//                new MapJsonVerifier("tests/x9mc.json", "x9mc").test() &&
-//                new MapJsonVerifier("tests/2001011999.json", "2001011999").test() &&
-//                new MapJsonVerifier("tests/557110973.json", "557110973").test();
-//        if (!testResult)
-//            return;
+        new MapJsonVerifier("tests/dollar.json", "$").test();
+        new MapJsonVerifier("tests/whitespace.json", " ").test();
+        new MapJsonVerifier("tests/6.json", "6").test();
+        new MapJsonVerifier("tests/K.json", "K").test();
+        new MapJsonVerifier("tests/446456054.json", "446456054").test();
+        new MapJsonVerifier("tests/990066099.json", "990066099").test();
+        new MapJsonVerifier("tests/bmu23i0.json", "bmu23i0").test();
+        new MapJsonVerifier("tests/x9mc.json", "x9mc").test();
+        new MapJsonVerifier("tests/2001011999.json", "2001011999").test();
+        new MapJsonVerifier("tests/557110973.json", "557110973").test();
     }
 }

@@ -254,7 +254,7 @@ public class ScpcbRoomTemplate {
 
         // trigger boxes
         if (hasTriggerBox) {
-            System.out.println("TriggerBoxEnable");
+//            System.out.println("TriggerBoxEnable");
             int amount = reader.readInt();
             for (int tb = 0; tb < amount; tb++) {
                 count = reader.readInt();
@@ -273,7 +273,8 @@ public class ScpcbRoomTemplate {
                         reader.readInt();
                     }
                 }
-                System.out.println("Triggerbox: " + reader.readString());
+//                System.out.println("Triggerbox: " + reader.readString());
+                reader.readString();
             }
         }
 
@@ -339,7 +340,7 @@ public class ScpcbRoomTemplate {
                         reader.readFloat();
                         reader.readFloat();
                     } else {
-                        System.out.println("file = 0");
+//                        System.out.println("file = 0");
                         reader.readFloat();
                         reader.readFloat();
                         reader.readFloat();
@@ -350,7 +351,7 @@ public class ScpcbRoomTemplate {
 
         if (!disableOverlapCheck) {
             extents = new MeshExtents(minX, minY, minZ, maxX, maxY, maxZ);
-            System.out.println("room template extents: " + name + " " + extents);
+//            System.out.println("room template extents: " + name + " " + extents);
         }
     }
 
