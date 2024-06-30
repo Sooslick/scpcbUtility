@@ -7,7 +7,7 @@ public class BruteForce {
     public final static String CAPS_AND_NUMBERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     public final static String CAPS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public final static String NUMBERS = "0123456789";
-    public final static String CUSTOM = "@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    public final static String CUSTOM = "@`ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     private final String printable;
     private final int minLen;

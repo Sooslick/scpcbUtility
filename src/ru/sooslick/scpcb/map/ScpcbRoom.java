@@ -15,15 +15,15 @@ import static ru.sooslick.scpcb.SeedGenerator.ROOM2;
 import static ru.sooslick.scpcb.SeedGenerator.ROOM2C;
 import static ru.sooslick.scpcb.SeedGenerator.ROOM3;
 import static ru.sooslick.scpcb.SeedGenerator.ROOM4;
+import static ru.sooslick.scpcb.map.ScpcbDoor.createDoor;
 
 public class ScpcbRoom {
+    private static final double ROOM_SCALE = 8d / 2048;
+    private static final BufferedImage[] hmap = new BufferedImage[ROOM4 + 1];
+
     private static boolean room2gwBrokenDoor = false;
     private static double room2gw_x;
     private static double room2gw_z;
-
-    private static double ROOM_SCALE = 8d / 2048;
-
-    private static final BufferedImage[] hmap = new BufferedImage[ROOM4 + 1];
 
     static {
         try {
@@ -43,6 +43,8 @@ public class ScpcbRoom {
     public int shape;
 
     public ScpcbRoomTemplate roomTemplate;
+    public ScpcbDoor adjDoorBottom;
+    public ScpcbDoor adjDoorRight;
 
     public double minX, minY, minZ;
     public double maxX, maxY, maxZ;
@@ -610,43 +612,49 @@ public class ScpcbRoom {
         if (roomTemplate.disableOverlapCheck)
             return;
 
-        // System.out.println("Room template extents: " + roomTemplate.extents);
-
-        // shrink the extents slightly - we don't care if the overlap is smaller than the thickness of the walls
-        extents = roomTemplate.extents.copyTransform(ROOM_SCALE, angle);
-        minX = extents.minX + 0.05 + x;
-        minZ = extents.minZ + 0.05 + z;
-        maxX = extents.maxX - 0.05 + x;
-        maxZ = extents.maxZ - 0.05 + z;
-
-        // re-implementing BUG from SCP:CB
-        if (minX > maxX) {
-            double a = minX;
-            minX = maxX;
-            maxX = a;
-        }
-        if (minZ > maxZ) {
-            double a = minZ;
-            minZ = maxZ;
-            maxZ = a;
-        }
-
         // while generating map SCP:CB can rotate room without changing extents
         // so I have to store this variable to prevent blatant lie in console output
         extentsAngle = angle;
-//        System.out.printf("Room %s extents : %s, %s, %s / %s, %s, %s / %s°%n", roomTemplate.name,
-//                minX, minY, minZ,
-//                maxX, maxY, maxZ,
-//                angle);
+        extents = roomTemplate.extents.copyTransform(ROOM_SCALE, angle);
+        // System.out.println("Room template extents: " + roomTemplate.extents);
 
-        // adjustments by boundaries db dumped from vanilla game
-        // TODO: remove vanilla math entirely after tests
+        // adjustments by bounds db dumped from vanilla game
+        // this is custom block of code which overwrites vanilla behaviour
+        // but this block is critically important because of differences in java vs blitz3d floating point math
         if (x > 0 && z > 0) {
+            // System.out.printf("request db search: %s (%f:%f %d°)%n", roomTemplate.name, x, z, angle);
             RoomExtentsDB.Boundaries b = RoomExtentsDB.findExtents(roomTemplate.name, angle, (int) x / 8, (int) z / 8);
             minX = b.minX;
             maxX = b.maxX;
             minZ = b.minZ;
             maxZ = b.maxZ;
+        }
+
+        // vanilla math block
+        // todo I left this branch because of unusual 1499 placement (i believe 1499 messes up the overlap check)
+        else {
+            // shrink the extents slightly - we don't care if the overlap is smaller than the thickness of the walls
+            minX = extents.minX + 0.05 + x;
+            minZ = extents.minZ + 0.05 + z;
+            maxX = extents.maxX - 0.05 + x;
+            maxZ = extents.maxZ - 0.05 + z;
+
+            // re-implementing BUG from SCP:CB
+            if (minX > maxX) {
+                double a = minX;
+                minX = maxX;
+                maxX = a;
+            }
+            if (minZ > maxZ) {
+                double a = minZ;
+                minZ = maxZ;
+                maxZ = a;
+            }
+
+//        System.out.printf("Room %s extents : %s, %s, %s / %s, %s, %s / %s°%n", roomTemplate.name,
+//                minX, minY, minZ,
+//                maxX, maxY, maxZ,
+//                angle);
         }
     }
 
@@ -938,13 +946,6 @@ public class ScpcbRoom {
             return pathx - 1 + dir;
         else
             return pathy;
-    }
-
-    private void createDoor(boolean open, int big) {
-        bbRand(1, 8);
-//        if (open && big == 0 && bbRand(1, 8) == 1) {
-//            // todo should I save "autoclose" state for pathfind purposes?
-//        }
     }
 
     private void createItem() {

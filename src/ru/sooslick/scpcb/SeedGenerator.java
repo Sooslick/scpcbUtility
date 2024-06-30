@@ -1,5 +1,6 @@
 package ru.sooslick.scpcb;
 
+import ru.sooslick.scpcb.map.ScpcbDoor;
 import ru.sooslick.scpcb.map.ScpcbRoom;
 import ru.sooslick.scpcb.map.ScpcbRoomTemplate;
 
@@ -26,30 +27,28 @@ public class SeedGenerator {
     private static Set<ScpcbRoom> savedRooms;
 
     public static void main(String[] args) {
-        // found good seeds for further examination
-//        String randomSeed = "qu"; // - Any% good seed
-//        String randomSeed = "QZI"; // - Any% good seed
-//        String randomSeed = "7em"; // - super good start
-
         // seed printer block
-        PathFinder pf = scpcbCreateSeed("6");
+        String targetSeed = args.length > 0 ? args[0] : "6";
+        boolean useMod = args.length > 1;
+        PathFinder pf = scpcbCreateSeed(targetSeed, useMod);
         pf.printMaze();
         pf.drawMap();
         pf.exportJson();
         System.out.println(pf.testRouteLength(PathFinder.ANY_PERCENT));
 
-        // seed bruteforcer block
-//        int routeLengthThreshold = 21;
-//        int[] savedState = {40, 0, 91};
-//        int savedLength = 3;
-//        BruteForce bf = new BruteForce(BruteForce.ASCII_HALF, 2, 15, savedLength, savedState);
-//        while (!bf.isFinished()) {
-//            PathFinder pf = scpcbCreateSeed(new String(bf.next()));     // severe memory leak
-//            int routeLength = pf.testRouteLength(PathFinder.ANY_PERCENT_ENDGAME);
-//            if (routeLength < routeLengthThreshold) {
-//                pf.printMaze();
-//                bf.printState();
-//                break;
+        // speedrun mod search
+//        int routeLengthThreshold = 52;
+//        for (int i = 131760; i < Integer.MAX_VALUE; i++) {
+//            try {
+//                PathFinder pf = scpcbCreateSeed(String.valueOf(i), true);
+//                int routeLength = pf.testRouteLength(PathFinder.ANY_PERCENT);
+//                if (routeLength < routeLengthThreshold) {
+//                    pf.printMaze();
+//                    System.out.println(i);
+//                    break;
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
 //            }
 //        }
     }
@@ -62,16 +61,11 @@ public class SeedGenerator {
 
         // consts declared outside CreateMap function
         int[][] mapTemp = new int[MAP_WIDTH + 1][MAP_HEIGHT + 1];
-        boolean[][] mapFound = new boolean[MAP_WIDTH + 1][MAP_HEIGHT + 1];
 
         // recreation of original CreateMap function
         System.out.println("Generating a map using the seed '" + randomSeed + "', with speedrun mod toggle = " + useSpeedrunMod);
 
-        int iZoneTransition0 = 13;
-        int iZoneTransition1 = 7;
-        boolean iZoneHasCustomMT = false;
-
-        int x, y, temp = 0;     // unknown initial values
+        int x, y, temp = 0;
         int i, x2 = 0, y2 = 0;
         int width, height;
 
@@ -166,9 +160,8 @@ public class SeedGenerator {
 
             for (x = 1; x <= MAP_WIDTH - 1; x++) {
                 if (mapTemp[x][y] > 0) {
-                    temp = getConnections(mapTemp, x, y);
                     if (mapTemp[x][y] < 255)
-                        mapTemp[x][y] = temp;
+                        mapTemp[x][y] = getConnections(mapTemp, x, y);
                     switch (mapTemp[x][y]) {
                         case 1:
                             room1Amount[zone]++;
@@ -313,9 +306,6 @@ public class SeedGenerator {
                     if (temp == 1)
                         break;
                 }
-
-//                if (temp == 0)
-                    //System.out.println("Couldn't place ROOM4 in zone " + i);
             }
 
             if (room2cAmount[i] < 1) {  // we want at least 1 ROOM2C
@@ -404,9 +394,6 @@ public class SeedGenerator {
                     if (temp == 1)
                         break;
                 }
-
-//                if (temp == 0)
-                    //System.out.println("Couldn't place ROOM2C in zone " + i);
             }
         }
 
@@ -511,7 +498,6 @@ public class SeedGenerator {
         savedRooms = new LinkedHashSet<>();
 
         ScpcbRoom r = null;
-        float spacing = 8f;
         for (y = MAP_HEIGHT - 1; y >= 1; y--) {
 
             if (y < MAP_HEIGHT / 3 + 1)
@@ -638,15 +624,100 @@ public class SeedGenerator {
 
         // todo check if room height messes up overlapping check
         r = createRoom(0, ROOM1, 8, 0, "dimension1499");
-        savedRooms.add(r);
+        savedRooms.add(r);  // add 1499 to overlap check
         mapRoomID[ROOM1]++;
 
         savedRooms.forEach(SeedGenerator::preventRoomOverlap);
-        savedRooms.remove(r);
+        savedRooms.remove(r);   /// remove 1499 from the map after overlap check
+
+        int iZoneTransition0 = 13;
+        int iZoneTransition1 = 7;
+
+        ScpcbDoor d;
+        boolean shouldSpawnDoor;
+        for (y = MAP_HEIGHT; y >= 0; y--) {
+            if (y < iZoneTransition1 - 1)
+                zone = 3;
+            else if (y >= iZoneTransition1 && y < iZoneTransition0)
+                zone = 2;
+            else
+                zone = 1;
+
+            for (x = MAP_WIDTH; x >= 0; x--) {
+                if (mapTemp[x][y] > 0) {
+                    if (zone == 2)
+                        temp = 2;
+                    else
+                        temp = 0;
+                }
+
+                r = findRoom(x, y);
+                if (r != null) {
+                    r.angle = r.angle % 360;
+                    shouldSpawnDoor = false;
+                    switch (r.shape) {
+                        case ROOM1:
+                            if (r.angle == 90)
+                                shouldSpawnDoor = true;
+                            break;
+                        case ROOM2:
+                            if (r.angle == 90 || r.angle == 270)
+                                shouldSpawnDoor = true;
+                            break;
+                        case ROOM2C:
+                            if (r.angle == 0 || r.angle == 90)
+                                shouldSpawnDoor = true;
+                            break;
+                        case ROOM3:
+                            if (r.angle == 0 || r.angle == 90 || r.angle == 180)
+                                shouldSpawnDoor = true;
+                            break;
+                        default:
+                            shouldSpawnDoor = true;
+                    }
+                    if (shouldSpawnDoor) {
+                        if (x < MAP_WIDTH) {
+                            if (mapTemp[x+1][y] > 0) {
+                                d = new ScpcbDoor(r, Math.max(bbRand(-3, 1), 0) > 0, temp);
+                                r.adjDoorRight = d;
+                            }
+                        }
+                    }
+
+                    shouldSpawnDoor = false;
+                    switch (r.shape) {
+                        case ROOM1:
+                            if (r.angle == 180)
+                                shouldSpawnDoor = true;
+                            break;
+                        case ROOM2:
+                            if (r.angle == 0 || r.angle == 180)
+                                shouldSpawnDoor = true;
+                            break;
+                        case ROOM2C:
+                            if (r.angle == 90 || r.angle == 180)
+                                shouldSpawnDoor = true;
+                            break;
+                        case ROOM3:
+                            if (r.angle == 90 || r.angle == 180 || r.angle == 270)
+                                shouldSpawnDoor = true;
+                            break;
+                        default:
+                            shouldSpawnDoor = true;
+                    }
+                    if (shouldSpawnDoor) {
+                        if (x < MAP_HEIGHT) {
+                            if (mapTemp[x][y+1] > 0) {
+                                d = new ScpcbDoor(r, Math.max(bbRand(-3, 1), 0) > 0, temp);
+                                r.adjDoorBottom = d;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         return new PathFinder(randomSeed, savedRooms);
-
-        // todo line 7642
     }
 
     private static int getZone(int y) {
@@ -670,9 +741,6 @@ public class SeedGenerator {
     ///////////////////////////////////////////
 
     private static void setRoom(String roomName, int roomType, int pos, int minPos, int maxPos) {
-//        if (maxPos < minPos)
-//            System.out.println("Can't place " + roomName);
-
 //        System.out.println("--- SETROOM: " + roomName.toUpperCase() + " ---");
         boolean looped = false;
         boolean canPlace = true;
@@ -875,10 +943,10 @@ public class SeedGenerator {
         }
 
         // room was able to the placed in a different spot
-        if (!isIntersecting) {
+//        if (!isIntersecting) {
 //            System.out.println("Room re-placing successful! " + r.roomTemplate.name);
-            return;
-        }
+//            return;
+//        }
 
 //        System.out.println("Couldn't fix overlap issue for room " + r.roomTemplate.name);
     }
@@ -892,5 +960,13 @@ public class SeedGenerator {
 
         //System.out.println("CheckRoomOverlap: " + r1.roomTemplate.name + " / " + r2.roomTemplate.name + "\n...");
         return true;
+    }
+
+    private static ScpcbRoom findRoom(int x, int z) {
+        return savedRooms.stream()
+                .filter(r -> (int) r.x / 8 == x)
+                .filter(r -> (int) r.z / 8 == z)
+                .findFirst()
+                .orElse(null);
     }
 }

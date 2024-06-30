@@ -17,6 +17,7 @@ public class RoomExtentsDB {
 
         while (!r.isEof()) {
             String name = r.readString();
+            // todo i have to extend angles library up to 630° (some rooms actually can have such rotation)
             for (int a = 0; a <= 450; a+= 90) {
                 int angle = r.readInt();
                 RoomExtentsDB roomDb = new RoomExtentsDB();
@@ -35,8 +36,6 @@ public class RoomExtentsDB {
 
     public static Boundaries findExtents(String name, int angle, int x, int z) {
         Boundaries b = new Boundaries();
-//        while (angle >= 360)
-//            angle-= 360;
         RoomExtentsDB db = DB.get(name + angle);
         b.minX = db.boundaries.get(x).minX;
         b.maxX = db.boundaries.get(x).maxX;

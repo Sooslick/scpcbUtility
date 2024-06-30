@@ -6,12 +6,10 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class RMeshReader {
-    private final String filename;
     private final byte[] content;
     private int caret = 0;
 
     public RMeshReader(String filename) {
-        this.filename = filename;
         File f = new File(filename);
         if (!f.exists())
             throw new RuntimeException("Error reading file " + filename);
