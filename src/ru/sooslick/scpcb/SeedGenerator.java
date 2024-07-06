@@ -8,6 +8,10 @@ import java.util.function.Function;
 
 public class SeedGenerator {
 
+    public static final int GENERATOR_DEPTH_FULL = 0;
+    public static final int GENERATOR_DEPTH_MAZE = 1;
+    public static final int GENERATOR_DEPTH_ROOMS = 2;
+
     public static final Function<String, Integer> V1311 = (seed) -> generateSeedNumber(seed.toCharArray());
     public static final Function<String, Integer> SPEEDRUN_MOD = Integer::parseInt;
 
@@ -24,17 +28,17 @@ public class SeedGenerator {
         // speedrun mod search
 //        AnyPercentPathFinder pf = new AnyPercentPathFinder();
 //        int routeLengthThreshold = 50;
-//        for (int i = 559723; i < Integer.MAX_VALUE; i++) {
+//        for (int i = 599107; i < Integer.MAX_VALUE; i++) {
 //            try {
-//                MapExplorer map = generateMap(String.valueOf(i), speedrunMod);
+//                MapExplorer map = generateMap(String.valueOf(i), SPEEDRUN_MOD);
 //                int routeLength = map.testRouteLength(pf);
 //                if (routeLength < routeLengthThreshold) {
 //                    map.printMaze();
 //                    System.out.println("Route length: " + routeLength);
 //                    break;
 //                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
+//            } catch (NullPointerException ignored) {
+//                // todo fix extents db
 //            }
 //        }
     }
@@ -46,7 +50,7 @@ public class SeedGenerator {
     public static MapExplorer generateMap(String randomSeed, Function<String, Integer> seedConverter) {
         System.out.println("Generating a map using the seed '" + randomSeed + "'");
         int actualSeed = seedConverter.apply(randomSeed);
-        Map map = new Map(actualSeed);
+        Map map = new Map(actualSeed, GENERATOR_DEPTH_FULL);
         return new MapExplorer(randomSeed, map);
     }
 
