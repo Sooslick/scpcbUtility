@@ -1,5 +1,6 @@
 package ru.sooslick.scpcb;
 
+import ru.sooslick.scpcb.map.Map;
 import ru.sooslick.scpcb.map.ScpcbRoom;
 import ru.sooslick.scpcb.pathfinder.PathFinder;
 import ru.sooslick.scpcb.pathfinder.XY;
@@ -14,20 +15,25 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.Set;
 
+import static ru.sooslick.scpcb.map.Map.MAP_HEIGHT;
+import static ru.sooslick.scpcb.map.Map.MAP_WIDTH;
+
 public class MapExplorer {
+
+    private static final int W = MAP_WIDTH - 1;
 
     public final Object seed;
     public final Set<ScpcbRoom> rooms;
-    public final ScpcbRoom[][] map;
+    public final ScpcbRoom[][] grid;
 
-    public MapExplorer(Object seed, Set<ScpcbRoom> rooms) {
+    public MapExplorer(Object seed, Map map) {
         this.seed = seed;
-        this.rooms = rooms;
-        this.map = new ScpcbRoom[20][20];
+        this.rooms = map.savedRooms;
+        this.grid = new ScpcbRoom[MAP_WIDTH][MAP_HEIGHT];
         for (ScpcbRoom r : rooms) {
-            int x = (int) (19 - r.x / 8);
+            int x = (int) (W - r.x / 8);
             int y = (int) (r.z / 8);
-            map[x][y] = r;
+            this.grid[x][y] = r;
         }
     }
 
@@ -38,14 +44,14 @@ public class MapExplorer {
                 .orElse(null);
         if (room == null)
             return null;
-        return new XY((int) (19 - room.x / 8), (int) (room.z / 8));
+        return new XY((int) (W - room.x / 8), (int) (room.z / 8));
     }
 
     public int pathFind(XY start, XY end) {
         if (start == null || end == null)
             return 9999;
 
-        int[][] paths = new int[20][20];
+        int[][] paths = new int[MAP_WIDTH][MAP_HEIGHT];
         LinkedList<XY> queue = new LinkedList<>();
         start.steps = 1;
         queue.add(start);
@@ -57,13 +63,13 @@ public class MapExplorer {
             if (paths[current.x][current.y] == 0) {
                 paths[current.x][current.y] = current.steps;
 
-                if (current.x < 19 && map[current.x + 1][current.y] != null)
+                if (current.x < W && grid[current.x + 1][current.y] != null)
                     queue.add(current.getRelative(1, 0));
-                if (current.x > 0 && map[current.x - 1][current.y] != null)
+                if (current.x > 0 && grid[current.x - 1][current.y] != null)
                     queue.add(current.getRelative(-1, 0));
-                if (current.y < 19 && map[current.x][current.y + 1] != null)
+                if (current.y < W && grid[current.x][current.y + 1] != null)
                     queue.add(current.getRelative(0, 1));
-                if (current.y > 0 && map[current.x][current.y - 1] != null)
+                if (current.y > 0 && grid[current.x][current.y - 1] != null)
                     queue.add(current.getRelative(0, -1));
             }
         }
@@ -75,11 +81,11 @@ public class MapExplorer {
     }
 
     public void printMaze() {
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                if (map[j][i] != null) {
+        for (int i = 0; i < MAP_WIDTH; i++) {
+            for (int j = 0; j < MAP_HEIGHT; j++) {
+                if (grid[j][i] != null) {
                     String colorPrefix = "\u001B[37m";
-                    String name = map[j][i].roomTemplate.name;
+                    String name = grid[j][i].roomTemplate.name;
                     if ("room079".equals(name) || "room049".equals(name) || "room3storage".equals(name) || "room2ccont".equals(name))
                         colorPrefix = "\u001B[31m";
                     else if ("008".equals(name) || "914".equals(name) || "room2sl".equals(name))
@@ -105,12 +111,12 @@ public class MapExplorer {
         g.fillRect(0, 0, 1000, 1000);
         g.setFont(new Font("Arial", Font.PLAIN, 10));
         int yOff = 1;
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                ScpcbRoom r = map[i][j];
+        for (int i = 0; i < MAP_WIDTH; i++) {
+            for (int j = 0; j < MAP_HEIGHT; j++) {
+                ScpcbRoom r = grid[i][j];
                 if (r == null)
                     continue;
-                int x = (int) (19 - r.x / 8) * 50;
+                int x = (int) (W - r.x / 8) * 50;
                 int y = (int) (r.z / 8) * 50;
                 g.setColor(Color.LIGHT_GRAY);
                 g.fillRect(x, y, 50, 50);
@@ -134,12 +140,12 @@ public class MapExplorer {
                 .append(seed)
                 .append("\",\"rooms\":[");
         boolean comma = false;
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                ScpcbRoom r = map[i][j];
+        for (int i = 0; i < MAP_WIDTH; i++) {
+            for (int j = 0; j < MAP_WIDTH; j++) {
+                ScpcbRoom r = grid[i][j];
                 if (r == null)
                     continue;
-                int x = (int) (19 - r.x / 8);
+                int x = (int) (W - r.x / 8);
                 int y = (int) (r.z / 8);
                 if (comma)
                     sb.append(",");

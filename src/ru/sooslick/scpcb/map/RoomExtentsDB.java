@@ -3,7 +3,7 @@ package ru.sooslick.scpcb.map;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.sooslick.scpcb.SeedGenerator.MAP_WIDTH;
+import static ru.sooslick.scpcb.map.Map.MAP_WIDTH;
 
 public class RoomExtentsDB {
 

@@ -42,9 +42,9 @@ public class MapJsonVerifier {
         }
 
         AtomicInteger failures = new AtomicInteger();
-        MapExplorer pf = SeedGenerator.scpcbCreateSeed(seed);
+        MapExplorer pf = SeedGenerator.generateMap(seed);
         expectedRooms.forEach(expectedRoom -> {
-            ScpcbRoom actualRoom = pf.map[expectedRoom.x][expectedRoom.y];
+            ScpcbRoom actualRoom = pf.grid[expectedRoom.x][expectedRoom.y];
             if (actualRoom == null) {
                 failures.getAndIncrement();
                 System.out.printf("Expected room at %d:%d%n", expectedRoom.x, expectedRoom.y);
@@ -82,7 +82,7 @@ public class MapJsonVerifier {
         Matcher m = testRegex(ROOM_PATTERN, roomObject);
         String name = m.group(1);
         m = testRegex(X_PATTERN, roomObject);
-        int x = Integer.parseInt(m.group(1));
+        int x = Integer.parseInt(m.group(1)) - 2;   // TODO fix tests and exportJson functions
         m = testRegex(Y_PATTERN, roomObject);
         int y = Integer.parseInt(m.group(1));
         m = testRegex(ANGLE_PATTERN, roomObject);

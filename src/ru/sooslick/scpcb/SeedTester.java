@@ -25,21 +25,10 @@ public class SeedTester {
 
         do {
             seed = bf.next();
-            if (generateSeedNumber(seed) == baseSeed) {
+            if (SeedGenerator.generateSeedNumber(seed) == baseSeed) {
                 p.print(new String(seed));
             }
         } while (!bf.isFinished());
-    }
-
-    // exact function from SCP:CB
-    static int generateSeedNumber(char[] seed) {
-        int tmp = 0;
-        int shift = 0;
-        for (char c : seed) {
-            tmp = tmp ^ (c << shift);
-            shift = (shift + 1) % 24;
-        }
-        return tmp;
     }
 
     private static interface SeedPrinter {

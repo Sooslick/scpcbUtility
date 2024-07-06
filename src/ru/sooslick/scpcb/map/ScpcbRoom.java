@@ -10,11 +10,11 @@ import java.util.Map;
 
 import static ru.sooslick.scpcb.BlitzRandom.bbRand;
 import static ru.sooslick.scpcb.BlitzRandom.bbRnd;
-import static ru.sooslick.scpcb.SeedGenerator.ROOM1;
-import static ru.sooslick.scpcb.SeedGenerator.ROOM2;
-import static ru.sooslick.scpcb.SeedGenerator.ROOM2C;
-import static ru.sooslick.scpcb.SeedGenerator.ROOM3;
-import static ru.sooslick.scpcb.SeedGenerator.ROOM4;
+import static ru.sooslick.scpcb.map.Map.ROOM1;
+import static ru.sooslick.scpcb.map.Map.ROOM2;
+import static ru.sooslick.scpcb.map.Map.ROOM2C;
+import static ru.sooslick.scpcb.map.Map.ROOM3;
+import static ru.sooslick.scpcb.map.Map.ROOM4;
 import static ru.sooslick.scpcb.map.ScpcbDoor.createDoor;
 
 public class ScpcbRoom {

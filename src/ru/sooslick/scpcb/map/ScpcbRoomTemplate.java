@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static ru.sooslick.scpcb.SeedGenerator.ROOM1;
-import static ru.sooslick.scpcb.SeedGenerator.ROOM2;
-import static ru.sooslick.scpcb.SeedGenerator.ROOM2C;
-import static ru.sooslick.scpcb.SeedGenerator.ROOM3;
-import static ru.sooslick.scpcb.SeedGenerator.ROOM4;
+import static ru.sooslick.scpcb.map.Map.ROOM1;
+import static ru.sooslick.scpcb.map.Map.ROOM2;
+import static ru.sooslick.scpcb.map.Map.ROOM2C;
+import static ru.sooslick.scpcb.map.Map.ROOM3;
+import static ru.sooslick.scpcb.map.Map.ROOM4;
 
 public class ScpcbRoomTemplate {
     private static final String ROOMS_INI = "scpcbFiles/rooms.ini";
