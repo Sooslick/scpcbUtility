@@ -20,8 +20,6 @@ import static ru.sooslick.scpcb.map.Map.MAP_WIDTH;
 
 public class MapExplorer {
 
-    private static final int W = MAP_WIDTH - 1;
-
     public final Object seed;
     public final Set<ScpcbRoom> rooms;
     public final ScpcbRoom[][] grid;
@@ -31,7 +29,7 @@ public class MapExplorer {
         this.rooms = map.savedRooms;
         this.grid = new ScpcbRoom[MAP_WIDTH][MAP_HEIGHT];
         for (ScpcbRoom r : rooms) {
-            int x = (int) (W - r.x / 8);
+            int x = (int) (r.x / 8);
             int y = (int) (r.z / 8);
             this.grid[x][y] = r;
         }
@@ -44,7 +42,7 @@ public class MapExplorer {
                 .orElse(null);
         if (room == null)
             return null;
-        return new XY((int) (W - room.x / 8), (int) (room.z / 8));
+        return new XY((int) (room.x / 8), (int) (room.z / 8));
     }
 
     public int pathFind(XY start, XY end) {
@@ -63,11 +61,11 @@ public class MapExplorer {
             if (paths[current.x][current.y] == 0) {
                 paths[current.x][current.y] = current.steps;
 
-                if (current.x < W && grid[current.x + 1][current.y] != null)
+                if (current.x < MAP_WIDTH - 1 && grid[current.x + 1][current.y] != null)
                     queue.add(current.getRelative(1, 0));
                 if (current.x > 0 && grid[current.x - 1][current.y] != null)
                     queue.add(current.getRelative(-1, 0));
-                if (current.y < W && grid[current.x][current.y + 1] != null)
+                if (current.y < MAP_HEIGHT - 1 && grid[current.x][current.y + 1] != null)
                     queue.add(current.getRelative(0, 1));
                 if (current.y > 0 && grid[current.x][current.y - 1] != null)
                     queue.add(current.getRelative(0, -1));
@@ -81,11 +79,11 @@ public class MapExplorer {
     }
 
     public void printMaze() {
-        for (int i = 0; i < MAP_WIDTH; i++) {
-            for (int j = 0; j < MAP_HEIGHT; j++) {
-                if (grid[j][i] != null) {
+        for (int y = 0; y < MAP_HEIGHT; y++) {
+            for (int x = MAP_WIDTH - 1; x >= 0; x--) {
+                if (grid[x][y] != null) {
                     String colorPrefix = "\u001B[37m";
-                    String name = grid[j][i].roomTemplate.name;
+                    String name = grid[x][y].roomTemplate.name;
                     if ("room079".equals(name) || "room049".equals(name) || "room3storage".equals(name) || "room2ccont".equals(name))
                         colorPrefix = "\u001B[31m";
                     else if ("008".equals(name) || "914".equals(name) || "room2sl".equals(name))
@@ -110,24 +108,25 @@ public class MapExplorer {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, 1000, 1000);
         g.setFont(new Font("Arial", Font.PLAIN, 10));
-        int yOff = 1;
-        for (int i = 0; i < MAP_WIDTH; i++) {
-            for (int j = 0; j < MAP_HEIGHT; j++) {
-                ScpcbRoom r = grid[i][j];
-                if (r == null)
-                    continue;
-                int x = (int) (W - r.x / 8) * 50;
-                int y = (int) (r.z / 8) * 50;
-                g.setColor(Color.LIGHT_GRAY);
-                g.fillRect(x, y, 50, 50);
-                g.setColor(Color.BLACK);
-                String name = r.roomTemplate.name.replaceAll("room", "");
-                //name = name.substring(0, Math.min(name.length(), 8));
-                g.drawString(name, x - 1, y + yOff * 10);
-                if (++yOff > 5)
-                    yOff = 1;
+        rooms.forEach(r -> {
+            int x = (MAP_WIDTH - 1 - (int) r.x / 8) * 50;
+            int y = (int) r.z / 8 * 50;
+            g.setColor(Color.LIGHT_GRAY);
+            g.fillRect(x, y, 50, 50);
+            g.setColor(Color.BLACK);
+            String name = r.roomTemplate.name.replaceAll("room", "");
+            g.drawString(name, x - 1, y + 20);
+            if (r.adjDoorBottom != null) {
+                int val = r.adjDoorBottom.open ? 4 : 24;
+                g.fillRect(x, y + 47, val, 3);
+                g.fillRect(x + 50 - val, y + 47, val, 3);
             }
-        }
+            if (r.adjDoorRight != null) {
+                int val = r.adjDoorRight.open ? 4 : 24;
+                g.fillRect(x, y, 3, val);
+                g.fillRect(x, y + 50 - val, 3, val);
+            }
+        });
         try {
             FileImageOutputStream fios = new FileImageOutputStream(new File(seed + ".jpg"));
             ImageIO.write(img, "jpg", fios);
@@ -145,15 +144,14 @@ public class MapExplorer {
                 ScpcbRoom r = grid[i][j];
                 if (r == null)
                     continue;
-                int x = (int) (W - r.x / 8);
-                int y = (int) (r.z / 8);
                 if (comma)
                     sb.append(",");
                 sb.append("{")
                         .append("\"name\":\"").append(r.roomTemplate.name).append("\",")
-                        .append("\"x\":").append(x).append(",")
-                        .append("\"y\":").append(y).append(",")
+                        .append("\"x\":").append(i).append(",")
+                        .append("\"y\":").append(j).append(",")
                         .append("\"angle\":").append(r.angle);
+                // todo: write doors state
                 if (r.rndInfo != null && r.rndInfo.size() > 0)
                     sb.append(",\"info\":\"").append(r.rndInfo).append("\"");
                 sb.append("}");

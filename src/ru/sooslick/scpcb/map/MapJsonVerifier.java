@@ -82,7 +82,7 @@ public class MapJsonVerifier {
         Matcher m = testRegex(ROOM_PATTERN, roomObject);
         String name = m.group(1);
         m = testRegex(X_PATTERN, roomObject);
-        int x = Integer.parseInt(m.group(1)) - 2;   // TODO fix tests and exportJson functions
+        int x = Integer.parseInt(m.group(1));
         m = testRegex(Y_PATTERN, roomObject);
         int y = Integer.parseInt(m.group(1));
         m = testRegex(ANGLE_PATTERN, roomObject);
@@ -131,5 +131,6 @@ public class MapJsonVerifier {
         new MapJsonVerifier("tests/x9mc.json", "x9mc").test();
         new MapJsonVerifier("tests/2001011999.json", "2001011999").test();
         new MapJsonVerifier("tests/557110973.json", "557110973").test();
+        new MapJsonVerifier("tests/n790.json", "n790").test();
     }
 }

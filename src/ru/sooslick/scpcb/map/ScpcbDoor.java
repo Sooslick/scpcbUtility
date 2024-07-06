@@ -4,7 +4,7 @@ import static ru.sooslick.scpcb.BlitzRandom.bbRand;
 
 public class ScpcbDoor {
 
-    private final boolean open;
+    public final boolean open;
     private final boolean autoClose;
     // todo check if unused
     //private final ScpcbRoom room;

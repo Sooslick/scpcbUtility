@@ -855,6 +855,7 @@ public class Map {
         savedRooms.remove(r);   /// remove 1499 from the map after overlap check
     }
 
+    // todo: check rnd calls. Current rnd state is diverged, generator opens wrong doors
     private void createDoors() {
         int iZoneTransition0 = 13;
         int iZoneTransition1 = 7;

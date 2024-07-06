@@ -46,8 +46,8 @@ public class ScpcbRoom {
     public ScpcbDoor adjDoorBottom;
     public ScpcbDoor adjDoorRight;
 
-    public double minX, minY, minZ;
-    public double maxX, maxY, maxZ;
+    public double minX, minZ;
+    public double maxX, maxZ;
     int extentsAngle;
     MeshExtents extents;
 
