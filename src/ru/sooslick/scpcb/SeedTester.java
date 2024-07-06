@@ -1,36 +1,34 @@
 package ru.sooslick.scpcb;
 
-public class SeedTester {
-//    private final static String base = "bmu23i0";
-//    private final static String base = "796994829";
-    private final static String base = "QZI";
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
-    public static void main(String[] args) {
-        int total = 0;
-        int baseSeed = generateSeedNumber(base.toCharArray());
+public class SeedTester {
+    public static void main(String[] args) throws IOException {
+        int baseSeed = 56141;
 
         // EXTREMELY UNOPTIMISED CYCLE.
         // OK for small alphabets or seed length < 8 characters, otherwise it will last forever
+        // TODO introduce new bruteforce function with binary math that optimized for seed search
 
-        int[] charPositions = {23, 6, 8, 39, 17, 51, 9, 5};    // last saved word
+        int[] charPositions = {2, 2, 2, 2, 2, 2, 26, 0, 1, 0};    // last saved word
         char[] seed;
 
         // max possible seed length: 15;
-        BruteForce bf = new BruteForce(BruteForce.ALL_LETTERS, 2, 4);
-//        BruteForce bf = new BruteForce(BruteForce.ALL_LETTERS, 2, 4, charPositions);
+//        BruteForce bf = new BruteForce(BruteForce.ALL_LETTERS, 2, 6);
+        BruteForce bf = new BruteForce(BruteForce.CUSTOM, 10, 10, charPositions);
+//        SeedPrinter p = new SeedPrinterImpl();
+        SeedPrinter p = new DictionarySeedPrinter();
 
         do {
-            // test seed
             seed = bf.next();
-            int test = generateSeedNumber(seed);
-            if (test == baseSeed) {
-//                System.out.println(new String(seed));                 // print every seed from new line
-                System.out.print(new String(seed) + " ");               // print seeds in columns
-                if (total++ % 24 == 0)
-                    System.out.println();
+            if (generateSeedNumber(seed) == baseSeed) {
+                p.print(new String(seed));
             }
         } while (!bf.isFinished());
-        System.out.println("\nTotal seeds found: " + total);
     }
 
     // exact function from SCP:CB
@@ -42,5 +40,36 @@ public class SeedTester {
             shift = (shift + 1) % 24;
         }
         return tmp;
+    }
+
+    private static interface SeedPrinter {
+        void print(String seed);
+    }
+
+    private static class SeedPrinterImpl implements SeedPrinter {
+        final int maxCols = 16;
+        int col = 0;
+
+        public void print(String seed) {
+            System.out.print(seed + " ");
+            if (++col > maxCols) {
+                System.out.println();
+                col = 0;
+            }
+        }
+    }
+
+    private static class DictionarySeedPrinter implements SeedPrinter {
+        // TODO add dictionary file to project
+        private final List<String> dictionary = new ArrayList<>(
+                Files.readAllLines(Paths.get("WL_DICT.txt")));
+
+        private DictionarySeedPrinter() throws IOException {
+        }
+
+        public void print(String seed) {
+            if (dictionary.contains(seed.toUpperCase().replaceAll("[A-Z]", "")))
+                System.out.println(seed);
+        }
     }
 }

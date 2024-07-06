@@ -1,6 +1,6 @@
 package ru.sooslick.scpcb.map;
 
-import ru.sooslick.scpcb.PathFinder;
+import ru.sooslick.scpcb.MapExplorer;
 import ru.sooslick.scpcb.SeedGenerator;
 
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class MapJsonVerifier {
         }
 
         AtomicInteger failures = new AtomicInteger();
-        PathFinder pf = SeedGenerator.scpcbCreateSeed(seed);
+        MapExplorer pf = SeedGenerator.scpcbCreateSeed(seed);
         expectedRooms.forEach(expectedRoom -> {
             ScpcbRoom actualRoom = pf.map[expectedRoom.x][expectedRoom.y];
             if (actualRoom == null) {

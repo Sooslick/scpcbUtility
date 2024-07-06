@@ -3,6 +3,8 @@ package ru.sooslick.scpcb;
 import ru.sooslick.scpcb.map.ScpcbDoor;
 import ru.sooslick.scpcb.map.ScpcbRoom;
 import ru.sooslick.scpcb.map.ScpcbRoomTemplate;
+import ru.sooslick.scpcb.pathfinder.AnyPercentPathFinder;
+import ru.sooslick.scpcb.pathfinder.CommonStartPathFinder;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -30,21 +32,23 @@ public class SeedGenerator {
         // seed printer block
         String targetSeed = args.length > 0 ? args[0] : "6";
         boolean useMod = args.length > 1;
-        PathFinder pf = scpcbCreateSeed(targetSeed, useMod);
+        MapExplorer pf = scpcbCreateSeed(targetSeed, useMod);
         pf.printMaze();
         pf.drawMap();
         pf.exportJson();
-        System.out.println(pf.testRouteLength(PathFinder.ANY_PERCENT));
+        System.out.println(pf.testRouteLength(new AnyPercentPathFinder()));
+        System.out.println(pf.testRouteLength(new CommonStartPathFinder()));
 
         // speedrun mod search
-//        int routeLengthThreshold = 52;
-//        for (int i = 131760; i < Integer.MAX_VALUE; i++) {
+//        AnyPercentPathFinder pf = new AnyPercentPathFinder();
+//        int routeLengthThreshold = 50;
+//        for (int i = 559723; i < Integer.MAX_VALUE; i++) {
 //            try {
-//                PathFinder pf = scpcbCreateSeed(String.valueOf(i), true);
-//                int routeLength = pf.testRouteLength(PathFinder.ANY_PERCENT);
+//                MapExplorer map = scpcbCreateSeed(String.valueOf(i), true);
+//                int routeLength = map.testRouteLength(pf);
 //                if (routeLength < routeLengthThreshold) {
-//                    pf.printMaze();
-//                    System.out.println(i);
+//                    map.printMaze();
+//                    System.out.println("Route length: " + routeLength);
 //                    break;
 //                }
 //            } catch (Exception e) {
@@ -53,11 +57,11 @@ public class SeedGenerator {
 //        }
     }
 
-    public static PathFinder scpcbCreateSeed(String randomSeed) {
+    public static MapExplorer scpcbCreateSeed(String randomSeed) {
         return scpcbCreateSeed(randomSeed, false);
     }
 
-    public static PathFinder scpcbCreateSeed(String randomSeed, boolean useSpeedrunMod) {
+    public static MapExplorer scpcbCreateSeed(String randomSeed, boolean useSpeedrunMod) {
 
         // consts declared outside CreateMap function
         int[][] mapTemp = new int[MAP_WIDTH + 1][MAP_HEIGHT + 1];
@@ -717,7 +721,7 @@ public class SeedGenerator {
             }
         }
 
-        return new PathFinder(randomSeed, savedRooms);
+        return new MapExplorer(randomSeed, savedRooms);
     }
 
     private static int getZone(int y) {
