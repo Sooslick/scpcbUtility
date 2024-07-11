@@ -151,7 +151,10 @@ public class MapExplorer {
                         .append("\"x\":").append(i).append(",")
                         .append("\"y\":").append(j).append(",")
                         .append("\"angle\":").append(r.angle);
-                // todo: write doors state
+                if (r.adjDoorRight != null)
+                    sb.append(",\"doorh\":").append(r.adjDoorRight.getJsonValue());
+                if (r.adjDoorBottom != null)
+                    sb.append(",\"doorv\":").append(r.adjDoorBottom.getJsonValue());
                 if (r.rndInfo != null && r.rndInfo.size() > 0)
                     sb.append(",\"info\":\"").append(r.rndInfo).append("\"");
                 sb.append("}");

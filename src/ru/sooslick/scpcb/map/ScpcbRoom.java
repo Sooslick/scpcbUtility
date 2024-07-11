@@ -133,8 +133,14 @@ public class ScpcbRoom {
             case "checkpoint2":
                 createDoor(false, 0);
                 createDoor(false, 0);
-                if (shape == ROOM1)
+                if (shape == ROOM1) {
                     createDoor(false, 0);
+                    // My workaround for checkpoint rooms
+                    // SCP:CB works with checkpoint as if they are ROOM2s, but with some extra code
+                    // I'd simplified a lot of scp:cb code by making dead end checkpoints ROOM1,
+                    // but I have to set it back to ROOM2 to generate doors correctly
+                    shape = ROOM2;
+                }
                 break;
             case "room2testroom2":
                 createDoor(false, 0);
@@ -908,9 +914,9 @@ public class ScpcbRoom {
                 if (grid[(i * gridSize) + j] != 0)
                     sb.append("█");
                 else
-                    sb.append(" ");
+                    sb.append("X");
             }
-            sb.append("\n");
+            sb.append("|");
         }
         rndInfo.put("forest", sb.toString());
     }

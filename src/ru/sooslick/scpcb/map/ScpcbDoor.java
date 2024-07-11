@@ -23,4 +23,10 @@ public class ScpcbDoor {
         this.autoClose = (open && big == 0 && rndState == 1);
         //this.room = r;
     }
+
+    public int getJsonValue() {
+        if (autoClose)
+            return 2;
+        else return open ? 1 : 0;
+    }
 }

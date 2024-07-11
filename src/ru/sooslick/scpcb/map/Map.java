@@ -745,6 +745,8 @@ public class Map {
             for (int x = 1; x <= Map.MAP_WIDTH - 2; x++) {
                 connections = getConnections(mapTemp, x, y);
                 if (mapTemp[x][y] == 255) {
+                    // this is my workaround for checkpoint rooms
+                    // check ScpcbRoom#fill checkpoint branch for more details
                     int type = connections == 2 ? Map.ROOM2 : Map.ROOM1;
                     if (y > Map.MAP_HEIGHT / 2)     // zone = 2
                         r = createRoom(zone, type, x * 8, y * 8, "checkpoint1");
@@ -838,7 +840,7 @@ public class Map {
             }
         }
 
-        // gate a skipped (no rnd calls)
+        createRoom(0, Map.ROOM1, 500, 500, "gatea");
         mapRoomID[Map.ROOM1]++;
 
         createRoom(0, Map.ROOM1, (Map.MAP_WIDTH - 1) * 8, (Map.MAP_HEIGHT - 1) * 8, "pocketdimension");
@@ -855,7 +857,6 @@ public class Map {
         savedRooms.remove(r);   /// remove 1499 from the map after overlap check
     }
 
-    // todo: check rnd calls. Current rnd state is diverged, generator opens wrong doors
     private void createDoors() {
         int iZoneTransition0 = 13;
         int iZoneTransition1 = 7;
