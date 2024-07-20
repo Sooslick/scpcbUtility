@@ -40,12 +40,17 @@ public class Map {
     // maze fill queue
     private String[][] mapRoom;
 
+    public int state106;
+    public int playerAngle;
+    public int seed;
+
     public Map(int seed, int depth) {
         this.depth = depth;
         createMap(seed);
     }
 
     private void createMap(int seed) {
+        this.seed = seed;
         bbSeedRnd(seed);
         generateMaze();
         countRooms();
@@ -63,12 +68,11 @@ public class Map {
         if (depth == GENERATOR_DEPTH_ROOMS)
             return;
 
-        initWayPoints();
-    }
+        state106 = 70 * 60 * bbRand(12,17);
+        createDecals();
+        playerAngle = bbRand(160, 200);
 
-    private void initWayPoints() {
-        // todo Main.bb line 8400
-        // I've checked waypoints and seen no rnd calls there, so I can delete this part prob
+        // todo Main.bb line 8496 - events
     }
 
     private int getZone(int y) {
@@ -944,6 +948,39 @@ public class Map {
                     }
                 }
             }
+        }
+    }
+
+    private void createDecals() {
+        for (ScpcbRoom r : savedRooms) {
+            if (!r.roomTemplate.disableDecals) {
+                randomDecals();
+            }
+            if (r.roomTemplate.name.equals("start")) {
+                r.createItem();
+                r.createItem();
+            }
+        }
+        //I'd removed these rooms from list, so I have to create decals outside rooms cycle
+        randomDecals(); // "gatea"
+        randomDecals(); // "pocketdimension"
+    }
+
+    private void randomDecals() {
+        if (bbRand(1, 4) == 1) {
+            bbRand(2, 3);
+            bbRnd(-2, 2);
+            bbRnd(-2, 2);
+            bbRand(0, 360);
+            bbRnd(0.1f, 0.4f);
+            bbRnd(0.85f, 0.95f);
+        }
+        if (bbRand(1, 4) == 1) {
+            bbRnd(-2, 2);
+            bbRnd(-2, 2);
+            bbRand(0, 360);
+            bbRnd(0.5f, 0.7f);
+            bbRnd(0.7f, 0.85f);
         }
     }
 }

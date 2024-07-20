@@ -20,11 +20,13 @@ import static ru.sooslick.scpcb.map.Map.MAP_WIDTH;
 
 public class MapExplorer {
 
+    public final Map map;
     public final Object seed;
     public final Set<ScpcbRoom> rooms;
     public final ScpcbRoom[][] grid;
 
     public MapExplorer(Object seed, Map map) {
+        this.map = map;
         this.seed = seed;
         this.rooms = map.savedRooms;
         this.grid = new ScpcbRoom[MAP_WIDTH][MAP_HEIGHT];
@@ -135,9 +137,12 @@ public class MapExplorer {
     }
 
     public void exportJson() {
-        StringBuilder sb = new StringBuilder("{\"seed\":\"")
+        StringBuilder sb = new StringBuilder("{\"seedString\":\"")
                 .append(seed)
-                .append("\",\"rooms\":[");
+                .append("\",\"seedValue\":").append(map.seed)
+                .append(",\"state106\":").append(map.state106)
+                .append(",\"angle\":").append(map.playerAngle)
+                .append(",\"rooms\":[");
         boolean comma = false;
         for (int i = 0; i < MAP_WIDTH; i++) {
             for (int j = 0; j < MAP_WIDTH; j++) {

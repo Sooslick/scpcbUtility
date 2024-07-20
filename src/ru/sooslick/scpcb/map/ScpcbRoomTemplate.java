@@ -31,7 +31,7 @@ public class ScpcbRoomTemplate {
     public int[] zone = new int[5];
     public int commonness;
     private int large;
-    private int disableDecals;
+    public boolean disableDecals;
     private int useLightCones;
     public boolean disableOverlapCheck;
 
@@ -85,7 +85,7 @@ public class ScpcbRoomTemplate {
 
             rt.commonness = getIniInt(k, "commonness");
             rt.large = getIniInt(k, "large");
-            rt.disableDecals = getIniInt(k, "disabledecals");
+            rt.disableDecals = getIniBool(k, "disabledecals");
             rt.useLightCones = getIniInt(k, "usevolumelighting");
 
             roomTemplates.add(rt);

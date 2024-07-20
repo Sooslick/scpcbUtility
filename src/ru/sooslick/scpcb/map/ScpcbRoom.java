@@ -954,7 +954,7 @@ public class ScpcbRoom {
             return pathy;
     }
 
-    private void createItem() {
+    protected void createItem() {
         bbRand(1, 360); // just rotation ._.
     }
 

@@ -46,4 +46,8 @@ public class RMeshReader {
     public boolean isEof() {
         return caret>= content.length;
     }
+
+    public byte[] getContent() {
+        return content;
+    }
 }
