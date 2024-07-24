@@ -137,8 +137,8 @@ public class MapExplorer {
     }
 
     public void exportJson() {
-        StringBuilder sb = new StringBuilder("{\"seedString\":\"")
-                .append(seed)
+        StringBuilder sb = new StringBuilder()
+                .append("{\"seedString\":\"").append(seed)
                 .append("\",\"seedValue\":").append(map.seed)
                 .append(",\"state106\":").append(map.state106)
                 .append(",\"angle\":").append(map.playerAngle)
@@ -160,6 +160,8 @@ public class MapExplorer {
                     sb.append(",\"doorh\":").append(r.adjDoorRight.getJsonValue());
                 if (r.adjDoorBottom != null)
                     sb.append(",\"doorv\":").append(r.adjDoorBottom.getJsonValue());
+                if (r.linkedEvent != null)
+                    sb.append(",\"event\":\"").append(r.linkedEvent.event).append("\"");
                 if (r.rndInfo != null && r.rndInfo.size() > 0)
                     sb.append(",\"info\":\"").append(r.rndInfo).append("\"");
                 sb.append("}");

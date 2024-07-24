@@ -52,6 +52,7 @@ public class ScpcbRoom {
     MeshExtents extents;
 
     public Map<String, String> rndInfo = new HashMap<>();
+    public ScpcbEvent linkedEvent;
 
     public void fill() {
         switch (roomTemplate.name) {
