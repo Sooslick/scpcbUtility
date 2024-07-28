@@ -121,17 +121,23 @@ public class MapExplorer {
     public void drawMap() {
         BufferedImage img = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB);
         Graphics g = img.createGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, 1000, 1000);
+        g.setColor(new Color(60, 0, 0));
+        g.fillRect(0, 0, 1000, 300);
+        g.setColor(new Color(40, 20, 0));
+        g.fillRect(0, 300, 1000, 350);
+        g.setColor(new Color(40, 40, 0));
+        g.fillRect(0, 350, 1000, 600);
+        g.setColor(new Color(20, 40, 0));
+        g.fillRect(0, 600, 1000, 650);
+        g.setColor(new Color(0, 40, 0));
+        g.fillRect(0, 650, 1000, 1000);
         g.setFont(new Font("Arial", Font.PLAIN, 10));
         rooms.forEach(r -> {
             int x = (MAP_WIDTH - 1 - (int) r.x / 8) * 50;
             int y = (int) r.z / 8 * 50;
             g.setColor(Color.LIGHT_GRAY);
             g.fillRect(x, y, 50, 50);
-            g.setColor(Color.BLACK);
-            String name = r.roomTemplate.name.replaceAll("room", "");
-            g.drawString(name, x - 1, y + 20);
+            g.setColor(Color.GRAY);
             if (r.adjDoorBottom != null) {
                 int val = r.adjDoorBottom.open ? 4 : 24;
                 g.fillRect(x, y + 47, val, 3);
@@ -142,6 +148,10 @@ public class MapExplorer {
                 g.fillRect(x, y, 3, val);
                 g.fillRect(x, y + 50 - val, 3, val);
             }
+            g.setColor(Color.BLACK);
+            g.drawString(r.roomTemplate.name.replaceAll("room", ""), x - 1, y + 20);
+            if (r.linkedEvent != null)
+                g.drawString(r.linkedEvent.event.replaceAll("room", ""), x - 1, y + 30);
         });
         try {
             FileImageOutputStream fios = new FileImageOutputStream(new File(seed + ".jpg"));
