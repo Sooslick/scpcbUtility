@@ -20,6 +20,8 @@ public class SeedGenerator {
         String targetSeed = args.length > 0 ? args[0] : "6";
         MapExplorer pf = generateMap(targetSeed, V1311);
         pf.printMaze();
+        pf.printForest();
+        pf.printTunnels();
         pf.drawMap();
         pf.exportJson();
         System.out.println(pf.testRouteLength(new AnyPercentPathFinder()));

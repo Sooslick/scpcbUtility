@@ -910,8 +910,8 @@ public class ScpcbRoom {
         }
 
         StringBuilder sb = new StringBuilder();
-        for (i = 0; i <= gridSize - 1; i++) {
-            for (j = 0; j <= gridSize - 1; j++) {
+        for (i = 0; i < gridSize; i++) {
+            for (j = gridSize - 1; j >= 0; j--) {
                 if (grid[(i * gridSize) + j] != 0)
                     sb.append("█");
                 else

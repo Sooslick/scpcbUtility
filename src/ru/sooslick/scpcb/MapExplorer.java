@@ -104,6 +104,20 @@ public class MapExplorer {
         System.out.println();
     }
 
+    public void printForest() {
+        rooms.stream()
+                .filter(r -> r.roomTemplate.name.contains("860"))
+                .findFirst()
+                .ifPresent(r -> System.out.println(r.rndInfo.get("forest").replace("|", "\n")));
+    }
+
+    public void printTunnels() {
+        rooms.stream()
+                .filter(r -> r.roomTemplate.name.contains("room2tunnel"))
+                .findFirst()
+                .ifPresent(r -> System.out.println(r.rndInfo.get("tunnels").replace("|", "\n")));
+    }
+
     public void drawMap() {
         BufferedImage img = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB);
         Graphics g = img.createGraphics();

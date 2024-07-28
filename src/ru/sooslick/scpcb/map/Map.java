@@ -19,6 +19,7 @@ public class Map {
 
     public static final int MAP_WIDTH = 18;
     public static final int MAP_HEIGHT = 18;
+    public static final int MT_SIZE = 19;
     public static final int ZONE_AMOUNT = 3;
 
     // custom field - depth of generator
@@ -74,10 +75,7 @@ public class Map {
         playerAngle = bbRand(160, 200);
 
         createEvents();
-
-        // todo detected rnd event: room3tunnel, 106sinkhole, room1archive
-
-        // todo Maintenance Tunnels - UpdateEvents.bb #3169
+        createTunnels();
     }
 
     private int getZone(int y) {
@@ -1180,5 +1178,179 @@ public class Map {
                 }
             }
         }
+    }
+
+    private void createTunnels() {
+        int[] grid = new int[MT_SIZE * MT_SIZE];
+        bbSeedRnd(seed);
+
+        // 0 = right
+        // 1 = up
+        // 2 = left
+        // 3 = down
+        int dir = bbRand(0, 1) << 1;
+        int ix = MT_SIZE / 2 + bbRand(-2, 2);
+        int iy = MT_SIZE / 2 + bbRand(-2, 2);
+        grid[ix + (iy * MT_SIZE)] = 1;
+        if (dir == 2) {
+            grid[(ix + 1) + (iy * MT_SIZE)] = 1;
+        } else {
+            grid[(ix - 1) + (iy * MT_SIZE)] = 1;
+        }
+
+        int count = 2;
+        while (count < 100) {
+            int tempInt = bbRand(1, 5) << bbRand(1, 2);
+            for (int i = 1; i <= tempInt; i++) {
+
+                boolean tempInt2 = true;    // Regalis??? hello
+
+                switch (dir) {
+                    case 0:
+                        if (ix < MT_SIZE - 2 - (i % 2))
+                            ix = ix + 1;
+                        else
+                            tempInt2 = false;
+                        break;
+                    case 1:
+                        if (iy < MT_SIZE - 2 - (i % 2))
+                            iy = iy + 1;
+                        else
+                            tempInt2 = false;
+                        break;
+                    case 2:
+                        if (ix > 1 + (i % 2))
+                            ix = ix - 1;
+                        else
+                            tempInt2 = false;
+                        break;
+                    case 3:
+                        if (iy > 1 + (i % 2))
+                            iy = iy - 1;
+                        else
+                            tempInt2 = false;
+                        break;
+                }
+
+                if (tempInt2) {
+                    if (grid[ix + (iy * MT_SIZE)] == 0) {
+                        grid[ix + (iy * MT_SIZE)] = 1;
+                        count = count + 1;
+                    }
+                } else
+                    break;
+            }
+
+            dir += (bbRand(0, 1) << 1) - 1;
+            if (dir < 0)
+                dir += 4;
+            else if (dir > 3)
+                dir -= 4;
+        }
+
+        for (int x = 0; x < MT_SIZE; x++) {
+            for (int y = 0; y < MT_SIZE; y++) {
+                if (grid[x + ((y) * MT_SIZE)] > 0)
+                    grid[x + ((y) * MT_SIZE)] = Math.min(grid[x + ((y + 1) * MT_SIZE)], 1) +
+                            Math.min(grid[x + ((y - 1) * MT_SIZE)], 1) +
+                            Math.min(grid[(x + 1) + (y * MT_SIZE)], 1) +
+                            Math.min(grid[(x - 1) + (y * MT_SIZE)], 1);
+            }
+        }
+
+        int maxX = MT_SIZE - 1;
+        boolean canRetry = false;
+
+        for (ix = 0; ix <= maxX; ix++) {
+            for (iy = 0; iy <= MT_SIZE - 1; iy++) {
+                if (grid[ix + 1 + (iy * MT_SIZE)] > 0) {
+                    maxX = ix;
+                    if (grid[ix + 1 + ((iy + 1) * MT_SIZE)] < 3 && grid[ix + 1 + ((iy - 1) * MT_SIZE)] < 3) {
+                        canRetry = true;
+                        if (bbRand(0, 1) == 1) {
+                            grid[ix + 1 + ((iy) * MT_SIZE)] = grid[ix + 1 + ((iy) * MT_SIZE)] + 1;
+                            grid[ix + ((iy) * MT_SIZE)] = 7;
+                            canRetry = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (canRetry)
+                ix--;
+        }
+
+        // Regalis??? hello what's wrong with your vars initialization
+        int firstX = -1;
+        int lastX = 0;
+        int firstY = 0;
+        int lastY = -1;
+
+        for (iy = 0; iy < MT_SIZE; iy++) {
+            for (ix = 0; ix < MT_SIZE; ix++) {
+                if (grid[ix + (iy * MT_SIZE)] == 2) {
+                    if (grid[(ix + 1) + ((iy) * MT_SIZE)] > 0 && grid[(ix - 1) + ((iy) * MT_SIZE)] > 0) {
+                        // horizontal
+                        if (firstX == -1 || firstY == -1) {
+                            if (grid[ix - 1 + (iy * MT_SIZE)] < 3 && grid[ix + 1 + (iy * MT_SIZE)] < 3 && grid[ix + ((iy - 1) * MT_SIZE)] < 3 && grid[ix + ((iy + 1) * MT_SIZE)] < 3) {
+                                if (grid[ix - 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix + 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix + 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix - 1 + ((iy + 1) * MT_SIZE)] < 1) {
+                                    firstX = ix;
+                                    firstY = iy;
+                                }
+                            }
+                        }
+                        if (grid[ix - 1 + (iy * MT_SIZE)] < 3 && grid[ix + 1 + (iy * MT_SIZE)] < 3 && grid[ix + ((iy - 1) * MT_SIZE)] < 3 && grid[ix + ((iy + 1) * MT_SIZE)] < 3) {
+                            if (grid[ix - 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix + 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix + 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix - 1 + ((iy + 1) * MT_SIZE)] < 1) {
+                                lastX = ix;
+                                lastY = iy;
+                            }
+                        }
+                    } else if (grid[(ix) + ((iy + 1) * MT_SIZE)] > 0 && grid[(ix) + ((iy - 1) * MT_SIZE)] > 0) {
+                        // vertical
+                        if (firstX == -1 || firstY == -1) {
+                            if (grid[ix - 1 + (iy * MT_SIZE)] < 3 && grid[ix + 1 + (iy * MT_SIZE)] < 3 && grid[ix + ((iy - 1) * MT_SIZE)] < 3 && grid[ix + ((iy + 1) * MT_SIZE)] < 3) {
+                                if (grid[ix - 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix + 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix + 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix - 1 + ((iy + 1) * MT_SIZE)] < 1) {
+                                    firstX = ix;
+                                    firstY = iy;
+                                }
+                            }
+                        }
+                        if (grid[ix - 1 + (iy * MT_SIZE)] < 3 && grid[ix + 1 + (iy * MT_SIZE)] < 3 && grid[ix + ((iy - 1) * MT_SIZE)] < 3 && grid[ix + ((iy + 1) * MT_SIZE)] < 3) {
+                            if (grid[ix - 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix + 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix + 1 + ((iy - 1) * MT_SIZE)] < 1 && grid[ix - 1 + ((iy + 1) * MT_SIZE)] < 1) {
+                                lastX = ix;
+                                lastY = iy;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (firstX >= 0 && firstY >= 0)
+            grid[firstX + (firstY * MT_SIZE)] = 5;
+        if (lastX >= 0 && lastY >= 0)
+            grid[lastX + (lastY * MT_SIZE)] = 6;
+
+        // I assume the following code does not generate any valuable info
+        // UpdateEvents.bb #3236
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < MT_SIZE; i++) {
+            for (int j = 0; j < MT_SIZE; j++) {
+                if (grid[(i * MT_SIZE) + j] >= 7)
+                    sb.append("H");
+                else if (grid[(i * MT_SIZE) + j] >= 5)
+                    sb.append("E");
+                else if (grid[(i * MT_SIZE) + j] > 0)
+                    sb.append("█");
+                else
+                    sb.append(".");
+            }
+            sb.append("|");
+        }
+        savedRooms.stream()
+                .filter(r -> r.roomTemplate.name.contains("room2tunnel"))
+                .findFirst()
+                .ifPresent(r -> r.rndInfo.put("tunnels", sb.toString()));
     }
 }
