@@ -7,7 +7,5 @@ public class ScpcbEvent {
     public ScpcbEvent(String event, ScpcbRoom room) {
         this.event = event;
         this.room = room;
-
-        room.linkedEvent = this;
     }
 }

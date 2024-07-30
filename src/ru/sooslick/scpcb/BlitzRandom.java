@@ -14,6 +14,10 @@ public class BlitzRandom {
         rnd_state = (seed != 0) ? seed : 1;
     }
 
+    public static int getRndState() {
+        return rnd_state;
+    }
+
     public static int bbRand(int from, int to) {
         if (to < from) {
             int a = from;

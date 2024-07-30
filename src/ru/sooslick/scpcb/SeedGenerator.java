@@ -8,10 +8,6 @@ import java.util.function.Function;
 
 public class SeedGenerator {
 
-    public static final int GENERATOR_DEPTH_FULL = 0;
-    public static final int GENERATOR_DEPTH_MAZE = 1;
-    public static final int GENERATOR_DEPTH_ROOMS = 2;
-
     public static final Function<String, Integer> V1311 = (seed) -> generateSeedNumber(seed.toCharArray());
     public static final Function<String, Integer> SPEEDRUN_MOD = Integer::parseInt;
 
@@ -19,6 +15,7 @@ public class SeedGenerator {
         // seed printer block
         String targetSeed = args.length > 0 ? args[0] : "6";
         MapExplorer pf = generateMap(targetSeed, V1311);
+//        MapExplorer pf = generateMap(targetSeed, SPEEDRUN_MOD);
         pf.printMaze();
         pf.printForest();
         pf.printTunnels();
@@ -52,7 +49,7 @@ public class SeedGenerator {
     public static MapExplorer generateMap(String randomSeed, Function<String, Integer> seedConverter) {
         System.out.println("Generating a map using the seed '" + randomSeed + "'");
         int actualSeed = seedConverter.apply(randomSeed);
-        Map map = new Map(actualSeed, GENERATOR_DEPTH_FULL);
+        Map map = new Map(actualSeed);
         return new MapExplorer(randomSeed, map);
     }
 

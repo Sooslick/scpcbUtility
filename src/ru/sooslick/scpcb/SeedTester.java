@@ -49,7 +49,6 @@ public class SeedTester {
     }
 
     private static class DictionarySeedPrinter implements SeedPrinter {
-        // TODO add dictionary file to project
         private final List<String> dictionary = new ArrayList<>(
                 Files.readAllLines(Paths.get("WL_DICT.txt")));
 

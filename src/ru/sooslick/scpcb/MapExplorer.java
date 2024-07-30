@@ -13,7 +13,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.LinkedList;
-import java.util.Set;
 
 import static ru.sooslick.scpcb.map.Map.MAP_HEIGHT;
 import static ru.sooslick.scpcb.map.Map.MAP_WIDTH;
@@ -21,16 +20,14 @@ import static ru.sooslick.scpcb.map.Map.MAP_WIDTH;
 public class MapExplorer {
 
     public final Map map;
-    public final Object seed;
-    public final Set<ScpcbRoom> rooms;
+    public final Object seedPrompt;
     public final ScpcbRoom[][] grid;
 
     public MapExplorer(Object seed, Map map) {
         this.map = map;
-        this.seed = seed;
-        this.rooms = map.savedRooms;
+        this.seedPrompt = seed;
         this.grid = new ScpcbRoom[MAP_WIDTH][MAP_HEIGHT];
-        for (ScpcbRoom r : rooms) {
+        for (ScpcbRoom r : map.savedRooms) {
             int x = (int) (r.x / 8);
             int y = (int) (r.z / 8);
             this.grid[x][y] = r;
@@ -38,7 +35,7 @@ public class MapExplorer {
     }
 
     public XY findRoom(String name) {
-        ScpcbRoom room = rooms.stream()
+        ScpcbRoom room = map.savedRooms.stream()
                 .filter(r -> name.equals(r.roomTemplate.name))
                 .findFirst()
                 .orElse(null);
@@ -100,19 +97,19 @@ public class MapExplorer {
             }
             System.out.println();
         }
-        System.out.printf("Seed: '%s'", seed);
+        System.out.printf("Seed: '%s'", seedPrompt);
         System.out.println();
     }
 
     public void printForest() {
-        rooms.stream()
+        map.savedRooms.stream()
                 .filter(r -> r.roomTemplate.name.contains("860"))
                 .findFirst()
                 .ifPresent(r -> System.out.println(r.rndInfo.get("forest").replace("|", "\n")));
     }
 
     public void printTunnels() {
-        rooms.stream()
+        map.savedRooms.stream()
                 .filter(r -> r.roomTemplate.name.contains("room2tunnel"))
                 .findFirst()
                 .ifPresent(r -> System.out.println(r.rndInfo.get("tunnels").replace("|", "\n")));
@@ -132,7 +129,7 @@ public class MapExplorer {
         g.setColor(new Color(0, 40, 0));
         g.fillRect(0, 650, 1000, 1000);
         g.setFont(new Font("Arial", Font.PLAIN, 10));
-        rooms.forEach(r -> {
+        map.savedRooms.forEach(r -> {
             int x = (MAP_WIDTH - 1 - (int) r.x / 8) * 50;
             int y = (int) r.z / 8 * 50;
             g.setColor(Color.LIGHT_GRAY);
@@ -150,11 +147,13 @@ public class MapExplorer {
             }
             g.setColor(Color.BLACK);
             g.drawString(r.roomTemplate.name.replaceAll("room", ""), x - 1, y + 20);
-            if (r.linkedEvent != null)
-                g.drawString(r.linkedEvent.event.replaceAll("room", ""), x - 1, y + 30);
+            if (r.linkedEventNormal != null)
+                g.drawString(r.linkedEventNormal.event.replaceAll("room", ""), x - 1, y + 30);
+            if (r.linkedEventKeter != null)
+                g.drawString(r.linkedEventKeter.event.replaceAll("room", ""), x - 1, y + 40);
         });
         try {
-            FileImageOutputStream fios = new FileImageOutputStream(new File(seed + ".jpg"));
+            FileImageOutputStream fios = new FileImageOutputStream(new File(seedPrompt + ".jpg"));
             ImageIO.write(img, "jpg", fios);
         } catch (Exception ignored) {
         }
@@ -162,7 +161,7 @@ public class MapExplorer {
 
     public void exportJson() {
         StringBuilder sb = new StringBuilder()
-                .append("{\"seedString\":\"").append(seed)
+                .append("{\"seedString\":\"").append(seedPrompt)
                 .append("\",\"seedValue\":").append(map.seed)
                 .append(",\"state106\":").append(map.state106)
                 .append(",\"angle\":").append(map.playerAngle)
@@ -181,11 +180,13 @@ public class MapExplorer {
                         .append("\"y\":").append(j).append(",")
                         .append("\"angle\":").append(r.angle);
                 if (r.adjDoorRight != null)
-                    sb.append(",\"doorh\":").append(r.adjDoorRight.getJsonValue());
+                    sb.append(",\"dh\":").append(r.adjDoorRight.getJsonValue());
                 if (r.adjDoorBottom != null)
-                    sb.append(",\"doorv\":").append(r.adjDoorBottom.getJsonValue());
-                if (r.linkedEvent != null)
-                    sb.append(",\"event\":\"").append(r.linkedEvent.event).append("\"");
+                    sb.append(",\"dv\":").append(r.adjDoorBottom.getJsonValue());
+                if (r.linkedEventNormal != null)
+                    sb.append(",\"en\":\"").append(r.linkedEventNormal.event).append("\"");
+                if (r.linkedEventKeter != null)
+                    sb.append(",\"ek\":\"").append(r.linkedEventKeter.event).append("\"");
                 if (r.rndInfo != null && r.rndInfo.size() > 0)
                     sb.append(",\"info\":\"").append(r.rndInfo).append("\"");
                 sb.append("}");
