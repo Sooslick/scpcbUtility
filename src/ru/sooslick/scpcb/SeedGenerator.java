@@ -2,7 +2,6 @@ package ru.sooslick.scpcb;
 
 import ru.sooslick.scpcb.map.Map;
 
-import java.util.HashMap;
 import java.util.function.Function;
 
 /**
@@ -12,21 +11,6 @@ public class SeedGenerator {
 
     public static final Function<String, Integer> V1311 = (seed) -> generateSeedNumber(seed.toCharArray());
     public static final Function<String, Integer> SPEEDRUN_MOD = Integer::parseInt;
-
-    public static void main(String[] args) {
-        HashMap<String, String> params = CommandLineArgumentParser.parse(args);
-
-        // seed printer block
-        String targetSeed = params.getOrDefault("--seed", "990066099");
-        Function<String, Integer> mode = params.containsKey("--modded") ? SPEEDRUN_MOD : V1311;
-
-        System.out.println("Generating a map using the seed '" + targetSeed + "'");
-        MapExplorer pf = generateMap(targetSeed, mode);
-        pf.printMaze();
-        pf.printForest();
-        pf.printTunnels();
-        System.out.println(pf.exportJson());
-    }
 
     /**
      * Create a vanilla SCP:CB v1.3.11 map
