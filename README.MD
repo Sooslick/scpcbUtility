@@ -50,3 +50,14 @@ Existing Pathfinder classes and recommended scores:
 - `AnyPercent914PathFinder:30` - Any% route (Out of Bounds)
 
 Other experimental pathfinders also may be available in `ru.sooslick.scpcb.pathfinder` package
+
+# Seed Previewer
+
+Launch app with following command:
+`java -jar scpcbmapServer.jar`
+
+Or launch `main` in `ru.sooslick.scpcb.server.ServerMain` from your IDE.
+
+Server will be available at port 1499.
+
+Index page: http://localhost:1499/frontend/
