@@ -22,17 +22,12 @@ public class ScpcbRoomTemplate {
 
     public static final List<ScpcbRoomTemplate> roomTemplates = new LinkedList<>();
 
-    private static int roomTempId = 0;
-
     private String meshPath;
-    private int id;
     public String name;
     public int shape;
     public int[] zone = new int[5];
     public int commonness;
-    private int large;
     public boolean disableDecals;
-    private int useLightCones;
     public boolean disableOverlapCheck;
 
     private float minX, minY, minZ;
@@ -84,9 +79,7 @@ public class ScpcbRoomTemplate {
             }
 
             rt.commonness = getIniInt(k, "commonness");
-            rt.large = getIniInt(k, "large");
             rt.disableDecals = getIniBool(k, "disabledecals");
-            rt.useLightCones = getIniInt(k, "usevolumelighting");
 
             roomTemplates.add(rt);
         });
@@ -103,9 +96,7 @@ public class ScpcbRoomTemplate {
         ScpcbRoomTemplate rt = new ScpcbRoomTemplate();
         rt.name = name;
         rt.meshPath = meshpath;
-        rt.id = roomTempId;
         rt.disableOverlapCheck = disableOverlapCheck;
-        roomTempId++;
 
         rt.loadRMesh();
         return rt;

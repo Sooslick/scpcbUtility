@@ -1,16 +1,7 @@
 package ru.sooslick.scpcb;
 
 import ru.sooslick.scpcb.map.Map;
-import ru.sooslick.scpcb.pathfinder.CommonStartPathFinder;
-import ru.sooslick.scpcb.pathfinder.SSA2PathFinder;
-import ru.sooslick.scpcb.pathfinder.SSB2PathFinder;
-import ru.sooslick.scpcb.pathfinder.SSIA2PathFinder;
-import ru.sooslick.scpcb.pathfinder.SSIB2PathFinder;
-import ru.sooslick.scpcb.pathfinder.SSIPathFinder;
-import ru.sooslick.scpcb.pathfinder.SSLegacyPathFinder;
-import ru.sooslick.scpcb.pathfinder.SSPathFinder;
 
-import java.util.HashMap;
 import java.util.function.Function;
 
 /**
@@ -20,30 +11,6 @@ public class SeedGenerator {
 
     public static final Function<String, Integer> V1311 = (seed) -> generateSeedNumber(seed.toCharArray());
     public static final Function<String, Integer> SPEEDRUN_MOD = Integer::parseInt;
-
-    public static void main(String[] args) {
-        HashMap<String, String> params = CommandLineArgumentParser.parse(args);
-
-        // seed printer block
-        String targetSeed = params.getOrDefault("--seed", "990066099");
-        Function<String, Integer> mode = params.containsKey("--modded") ? SPEEDRUN_MOD : V1311;
-
-        System.out.println("Generating a map using the seed '" + targetSeed + "'");
-        MapExplorer pf = generateMap(targetSeed, mode);
-        pf.printMaze();
-        pf.printForest();
-        pf.printTunnels();
-        System.out.println(pf.exportJson());
-        System.out.println();
-        System.out.println("SS A1/B1 Route length : " + pf.testRouteLength(new SSPathFinder()));
-        System.out.println("SS A2 Route length : " + pf.testRouteLength(new SSA2PathFinder()));
-        System.out.println("SS B2 Route length : " + pf.testRouteLength(new SSB2PathFinder()));
-        System.out.println("SS Legacy Route length : " + pf.testRouteLength(new SSLegacyPathFinder()));
-        System.out.println("SS Intended A1/B1 Route length : " + pf.testRouteLength(new SSIPathFinder()));
-        System.out.println("SS Intended A2 Route length : " + pf.testRouteLength(new SSIA2PathFinder()));
-        System.out.println("SS Intended B2 Route length : " + pf.testRouteLength(new SSIB2PathFinder()));
-        System.out.println("914 Route length: " + pf.testRouteLength(new CommonStartPathFinder()));
-    }
 
     /**
      * Create a vanilla SCP:CB v1.3.11 map
