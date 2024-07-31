@@ -20,7 +20,7 @@ public class SeedGenerator {
         pf.printForest();
         pf.printTunnels();
         pf.drawMap();
-        pf.exportJson();
+        System.out.println(pf.exportJson());
         System.out.println(pf.testRouteLength(new AnyPercentPathFinder()));
         System.out.println(pf.testRouteLength(new CommonStartPathFinder()));
 

@@ -914,9 +914,9 @@ public class ScpcbRoom {
         for (i = 0; i < gridSize; i++) {
             for (j = gridSize - 1; j >= 0; j--) {
                 if (grid[(i * gridSize) + j] != 0)
-                    sb.append("█");
-                else
                     sb.append("X");
+                else
+                    sb.append(".");
             }
             sb.append("|");
         }

@@ -1140,7 +1140,7 @@ public class Map {
                 else if (grid[(i * MT_SIZE) + j] >= 5)
                     sb.append("E");
                 else if (grid[(i * MT_SIZE) + j] > 0)
-                    sb.append("█");
+                    sb.append("X");
                 else
                     sb.append(".");
             }

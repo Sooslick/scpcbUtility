@@ -159,7 +159,7 @@ public class MapExplorer {
         }
     }
 
-    public void exportJson() {
+    public String exportJson() {
         StringBuilder sb = new StringBuilder()
                 .append("{\"seedString\":\"").append(seedPrompt)
                 .append("\",\"seedValue\":").append(map.seed)
@@ -194,6 +194,6 @@ public class MapExplorer {
             }
         }
         sb.append("]}");
-        System.out.println(sb);
+        return sb.toString();
     }
 }
