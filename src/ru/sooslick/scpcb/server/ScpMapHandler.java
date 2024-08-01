@@ -16,8 +16,7 @@ import java.util.function.Function;
 
 public class ScpMapHandler implements HttpHandler {
 
-    private static final char[] ILLEGAL_CHARACTERS = { ' ', '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
-    private static final String outputDir = "savedMaps";
+    private static final String outputDir = ServerProperties.SAVE_LOCATION;
     private static final Random random = new Random();
 
     private long lastActivity = 0;
@@ -28,9 +27,6 @@ public class ScpMapHandler implements HttpHandler {
         d.mkdirs();
         if (!d.exists())
             saveEnable = false;
-
-        new File(outputDir + "/v1311").mkdir();
-        new File(outputDir + "/mod").mkdir();
     }
 
     @Override
@@ -49,22 +45,18 @@ public class ScpMapHandler implements HttpHandler {
 
         String seed = null;
         Function<String, Integer> method = null;
-        String location = null;
         // vanilla seed prompt
         if (queryParams.containsKey("prompt")) {
             seed = queryParams.get("prompt");
             method = SeedGenerator.V1311;
-            location = "v1311";
         }
         // speedrun mod
         else if (queryParams.containsKey("seed")) {
             seed = queryParams.get("seed");
             if (seed.matches("-?[0-9]+")) {
                 method = SeedGenerator.SPEEDRUN_MOD;
-                location = "mod";
             } else {
                 method = SeedGenerator.V1311;
-                location = "v1311";
             }
         }
         // bro gimme cool map
@@ -72,11 +64,9 @@ public class ScpMapHandler implements HttpHandler {
             if (random.nextBoolean()) {
                 seed = String.valueOf(random.nextInt());
                 method = SeedGenerator.SPEEDRUN_MOD;
-                location = "mod";
             } else {
                 seed = randomPrompt();
                 method = SeedGenerator.V1311;
-                location = "v1311";
             }
         }
 
@@ -85,26 +75,17 @@ public class ScpMapHandler implements HttpHandler {
             return;
         }
 
-        System.out.printf("User prompt: %s (%s)%n", seed, location);
+        int seedNumber = method.apply(seed);
+        System.out.printf("User prompt: %s (%s)%n", seed, seedNumber);
         MapExplorer pf = SeedGenerator.generateMap(seed, method);
         String out = pf.exportJson();
         if (saveEnable) {
-            boolean good = true;
-            for (char c : ILLEGAL_CHARACTERS) {
-                if (seed.indexOf(c) != -1) {
-                    good = false;
-                    break;
-                }
-            }
-
-            if (good) {
-                String filename = outputDir + File.separator + location + File.separator + seed + ".json";
-                System.out.println("Write file attempt: " + filename);
-                try {
-                    Files.write(Paths.get(filename), out.getBytes(), StandardOpenOption.CREATE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            String filename = outputDir + File.separator + seedNumber + ".json";
+            System.out.println("Write file attempt: " + filename);
+            try {
+                Files.write(Paths.get(filename), out.getBytes(), StandardOpenOption.CREATE);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         answer(httpExchange, out, 200);

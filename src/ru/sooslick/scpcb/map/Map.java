@@ -63,7 +63,7 @@ public class Map {
         createRooms();
         createDoors();
 
-        state106 = 70 * 60 * bbRand(12, 17);
+        state106 = bbRand(12, 17);
         createDecals();
         playerAngle = bbRand(160, 200);
 

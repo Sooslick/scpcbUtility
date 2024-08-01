@@ -161,7 +161,7 @@ public class MapExplorer {
 
     public String exportJson() {
         StringBuilder sb = new StringBuilder()
-                .append("{\"seedString\":\"").append(seedPrompt)
+                .append("{\"seedString\":\"").append(seedPrompt.toString().replace("\"", "&quot;"))
                 .append("\",\"seedValue\":").append(map.seed)
                 .append(",\"state106\":").append(map.state106)
                 .append(",\"angle\":").append(map.playerAngle)

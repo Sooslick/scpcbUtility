@@ -26,18 +26,16 @@ public class ServerMain {
         server.start();
 
         boolean alive = true;
-        long checkupInterval = 300;
-        long idleLimit = 1800000;
         while (alive) {
             try {
-                TimeUnit.SECONDS.sleep(checkupInterval);
+                TimeUnit.SECONDS.sleep(ServerProperties.CHECKUP_INTERVAL);
             } catch (InterruptedException e) {
                 alive = false;
             }
             long lastActivity = handler.getLastRequestTime();
             long idleTime = System.currentTimeMillis() - lastActivity;
             System.out.println(idleTime + "ms since last activity");
-            if (idleTime > idleLimit)
+            if (idleTime > ServerProperties.IDLE_LIMIT)
                 alive = false;
         }
 
