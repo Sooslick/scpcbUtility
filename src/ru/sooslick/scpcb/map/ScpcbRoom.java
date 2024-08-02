@@ -27,11 +27,11 @@ public class ScpcbRoom {
 
     static {
         try {
-            hmap[ROOM1] = ImageIO.read(new FileInputStream("scpcbFiles\\forest1h.png"));
-            hmap[ROOM2] = ImageIO.read(new FileInputStream("scpcbFiles\\forest2h.png"));
-            hmap[ROOM2C] = ImageIO.read(new FileInputStream("scpcbFiles\\forest2Ch.png"));
-            hmap[ROOM3] = ImageIO.read(new FileInputStream("scpcbFiles\\forest3h.png"));
-            hmap[ROOM4] = ImageIO.read(new FileInputStream("scpcbFiles\\forest4h.png"));
+            hmap[ROOM1] = ImageIO.read(new FileInputStream("scpcbFiles/forest1h.png"));
+            hmap[ROOM2] = ImageIO.read(new FileInputStream("scpcbFiles/forest2h.png"));
+            hmap[ROOM2C] = ImageIO.read(new FileInputStream("scpcbFiles/forest2Ch.png"));
+            hmap[ROOM3] = ImageIO.read(new FileInputStream("scpcbFiles/forest3h.png"));
+            hmap[ROOM4] = ImageIO.read(new FileInputStream("scpcbFiles/forest4h.png"));
         } catch (Exception e) {
             throw new RuntimeException("Error reading Forest textures", e);
         }
