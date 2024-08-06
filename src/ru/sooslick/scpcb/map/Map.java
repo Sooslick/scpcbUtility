@@ -1149,6 +1149,6 @@ public class Map {
         savedRooms.stream()
                 .filter(r -> r.roomTemplate.name.contains("room2tunnel"))
                 .findFirst()
-                .ifPresent(r -> r.rndInfo.put("tunnels", sb.toString()));
+                .ifPresent(r -> r.rndInfo = "tunnels=" + sb);
     }
 }

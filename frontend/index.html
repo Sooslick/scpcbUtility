@@ -28,6 +28,7 @@
         <div id="map" class="map-component" hidden>
             <table id="map-table"></table>
         </div>
+        <button onclick="reportMap()" id="map-report" hidden>REPORT ERROR</button>
     </div>
     <div class="map-column">
         <div id="map-info" class="map-component" hidden>
@@ -94,7 +95,7 @@ body::-webkit-scrollbar-thumb {
 }
 #wrapper {
     background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,255) 100%);
-    height: 99vh;
+    min-height: 99vh;
 }
 
 span {
@@ -105,7 +106,7 @@ input {
 	background: #111;
 	color: white;
 	font-family: 'Courier New';
-	width: 256px;
+	width: 240px;
 	border: 2px solid white;
     font-size: 1.2em;
 }
@@ -114,15 +115,13 @@ input:focus {
 	border: 2px dashed white;
 	outline: none;
 }
+#inputs {
+    margin: auto;
+    width: 1000px;
+}
 
 table {
 	border-collapse: collapse;
-    table-layout: fixed;
-}
-td {
-	width: 30px;
-	height: 30px;
-	box-sizing: border-box;
 }
 td:hover {
 	background: #444;
@@ -152,6 +151,7 @@ button {
 	font-family: 'Courier New';
     margin: 0px 16px 8px;
     padding: 4px 32px;
+    width: 248px;
 }
 button:hover {
 	background: #222;
@@ -159,9 +159,7 @@ button:hover {
 
 #map-block {
     display: flex;
-}
-.map-column {
-    flex: 50%;
+    justify-content: center;
 }
 .map-component {
     border: 2px solid #666;
@@ -171,6 +169,9 @@ button:hover {
 }
 #map {
     width: fit-content;
+}
+#map td {
+    min-width: 16px;
 }
 #map-pd {
     display: none;
@@ -187,7 +188,10 @@ button:hover {
     height: 16px;
 }
 #room-info {
-    height: 220px;
+    height: 160px;
+}
+.info-line {
+    max-width: 420px;
 }
 
 .meta-head {
@@ -200,6 +204,8 @@ button:hover {
 
 <script>
 let currentMap = null;
+let exitx = 0;
+let exity = 0;
 let mapWrapper = document.getElementById("map-table");
 for (let i = 0; i <= 18; i++) {
 	let tr = document.createElement("tr");
@@ -313,12 +319,15 @@ function createMap() {
 
     let xhr = new XMLHttpRequest();
 	xhr.onload = buildMap;
-	xhr.open('GET', 'map.php' + query, true);
+	//xhr.open('GET', 'map.php' + query, true);
+	xhr.open('GET', '54.json' + query, true);
 	xhr.send();
 }
 
 function nullMap() {
     currentMap = null;
+    exitx = 0;
+    exity = 0;
 
     for (let i = 0; i <= 18; i++)
         for (let j = 0; j <= 18; j++) {
@@ -331,6 +340,7 @@ function nullMap() {
             document.getElementById("f" + i + "-" + j).style.background = null;
 
     document.getElementById("map").hidden = true;
+    document.getElementById("map-report").hidden = true;
     document.getElementById("map-pd").style.display = 'none';
     document.getElementById("map-forest").style.display = 'none';
     document.getElementById("map-info").hidden = true;
@@ -343,6 +353,7 @@ function buildMap() {
 
 		// show blocks
         document.getElementById("map").hidden = false;
+        document.getElementById("map-report").hidden = false;
         document.getElementById("map-pd").style.display = 'inline-block';
         document.getElementById("map-forest").style.display = 'inline-block';
         document.getElementById("map-info").hidden = false;
@@ -360,18 +371,39 @@ function buildMap() {
 			let img = document.createElement("img");
 			img.setAttribute("src", getRoomImage(r.name, r.en, r.ek));
 			img.style.transform = "rotate(" + getRoomRotation(r.name, r.angle) + "deg)";
-			document.getElementById(cellId).appendChild(img);
+			let td = document.getElementById(cellId);
+			td.appendChild(img);
+
+			if (r.dv != null)
+			    td.classList.add("dv" + r.dv);
+
+			if (r.dh != null)
+			    td.classList.add("dh" + r.dh);
 
 			if (r.name == "room2tunnel")
 			    buildTunnel(r.info)
 			else if (r.name == "room860")
 			    buildForest(r.info)
+			else if (r.name == "tunnel") {
+			    if (r.y > exity || (r.y == exity && r.x <= exitx)) {
+			        exitx = r.x;
+			        exity = r.y;
+			    }
+			}
 		});
+
+		document.getElementById("c" + exitx + "-" + exity).childNodes[0]
+		    .setAttribute("src", "img/room2EXIT.png");
 
 		// create annotations
 		currentMap.rooms.forEach(r => {
 			createAnnotation(r.name, r.x, r.y);
 		});
+
+		// scroll into viewport
+		setTimeout(function() {
+		    window.scroll({top: 170, left: 0, behavior: 'smooth'});
+        }, 150);
 	}
 }
 
@@ -413,7 +445,10 @@ function getRoomInfo(x, y) {
 		    else
 		        document.getElementById("room-event").innerHTML = en + " / " + ek;
 		    document.getElementById("room").innerHTML = r.name;
-		    document.getElementById("rnd-info").innerHTML = r.info == null ? "-" : r.info;
+		    if (r.info == null || r.info.includes("tunnel") || r.info.includes("forest"))
+		        document.getElementById("rnd-info").innerHTML = "-"
+		    else
+		        document.getElementById("rnd-info").innerHTML = r.info;
 		}
     });
 }
@@ -435,6 +470,7 @@ function getRoomImage(name, en, ek) {
         case "checkpoint2":
         case "testroom":
         case "room860":
+        case "room2doors":
         case "room2servers": return "img/room2L.png";
         case "room2storage":
         case "room2scps": return "img/room2SCP.png";
@@ -445,7 +481,7 @@ function getRoomImage(name, en, ek) {
         case "room2sl": return "img/room2SL.png";
         case "room2tesla":
         case "room2tesla_hcz":
-        case "room2tesla_ez": return "img/room2T.png";
+        case "room2tesla_lcz": return "img/room2T.png";
         case "room2sroom":
         case "room2toilets": return "img/room2WC.png";
         case "lockroom":
@@ -510,6 +546,7 @@ function createAnnotation(name, x, y) {
         case "room2testroom2": text = "K2"; break;
         case "914": text = "914"; break;
         case "room2sl": text = "CAMS"; break;
+        case "roompj": text = "372"; break;
         case "room2scps2": text = "1499"; break;
         case "room2storage": text = "K1"; break;
         case "room1123": text = "1123"; break;
@@ -517,6 +554,7 @@ function createAnnotation(name, x, y) {
         case "room079": text = "079"; break;
         case "room106": text = "106"; break;
         case "008": text = "008"; break;
+        case "coffin": text = "895"; break;
         case "room035": text = "035"; break;
         case "room049": text = "049"; break;
         case "room966": text = "966"; break;

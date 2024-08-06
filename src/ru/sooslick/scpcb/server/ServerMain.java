@@ -21,6 +21,7 @@ public class ServerMain {
         }
         ScpMapHandler handler = new ScpMapHandler();
         server.createContext("/map", handler);
+        server.createContext("/", new ScpStatusHandler());
         ExecutorService exec = Executors.newFixedThreadPool(8);
         server.setExecutor(exec);
         server.start();

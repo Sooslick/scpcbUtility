@@ -2,7 +2,6 @@ package ru.sooslick.scpcb.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.sooslick.scpcb.MapExplorer;
 import ru.sooslick.scpcb.SeedGenerator;
 
 import java.io.File;
@@ -77,8 +76,7 @@ public class ScpMapHandler implements HttpHandler {
 
         int seedNumber = method.apply(seed);
         System.out.printf("User prompt: %s (%s)%n", seed, seedNumber);
-        MapExplorer pf = SeedGenerator.generateMap(seed, method);
-        String out = pf.exportJson();
+        String out = RequestQueue.requestMap(seed, method);
         if (saveEnable) {
             String filename = outputDir + File.separator + seedNumber + ".json";
             System.out.println("Write file attempt: " + filename);

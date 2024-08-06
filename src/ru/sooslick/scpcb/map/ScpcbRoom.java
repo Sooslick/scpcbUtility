@@ -3,10 +3,8 @@ package ru.sooslick.scpcb.map;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static ru.sooslick.scpcb.BlitzRandom.bbRand;
 import static ru.sooslick.scpcb.BlitzRandom.bbRnd;
@@ -51,7 +49,7 @@ public class ScpcbRoom {
     int extentsAngle;
     MeshExtents extents;
 
-    public Map<String, String> rndInfo = new HashMap<>();
+    public String rndInfo = null;
     public ScpcbEvent linkedEventNormal;
     public ScpcbEvent linkedEventKeter;
 
@@ -269,13 +267,13 @@ public class ScpcbRoom {
                 createDoor(false, 3);
                 switch (bbRand(1, 3)) {
                     case 1:
-                        rndInfo.put("Hand", "Near nvgs");
+                        rndInfo = "Hand near nvgs";
                         break;
                     case 2:
-                        rndInfo.put("Hand", "Middle");
+                        rndInfo = "Hand at the middle";
                         break;
                     case 3:
-                        rndInfo.put("Hand", "Behind crates");
+                        rndInfo = "Hand behind crates";
                         break;
                 }
                 createItem();
@@ -525,7 +523,7 @@ public class ScpcbRoom {
                         }
                     }
                 }
-                rndInfo.put("items", items.toString());
+                rndInfo = "Items: " + String.join(", ", items);
                 createDoor(false, 0);
                 break;
             case "room2test1074":
@@ -920,7 +918,7 @@ public class ScpcbRoom {
             }
             sb.append("|");
         }
-        rndInfo.put("forest", sb.toString());
+        rndInfo = "forest=" + sb;
     }
 
     private boolean chance(int prob) {
