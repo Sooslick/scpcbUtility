@@ -43,7 +43,7 @@ public class Events {
         createEvent("tunnel2smoke", "tunnel2", 0, 0.2f);
 
         createEvent("tunnel2", "tunnel2", bbRand(0, 2), 0);
-        createEvent("tunnel2", "tunnel2", 0, 0, 0.2f);      // todo douuble check
+        createEvent("tunnel2", "tunnel2", 0, 0, 0.2f);
 
         // 173 appears in half of the "room2doors" -rooms
         createEvent("room2doors173", "room2doors", 0, 0.5f, 0.4f);

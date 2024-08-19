@@ -13,14 +13,14 @@ public class SeedGenerator {
 
     public static void main(String[] args) {
         // seed printer block
-        String targetSeed = args.length > 0 ? args[0] : "6";
+        String targetSeed = args.length > 0 ? args[0] : "3";
         MapExplorer pf = generateMap(targetSeed, V1311);
 //        MapExplorer pf = generateMap(targetSeed, SPEEDRUN_MOD);
         pf.printMaze();
         pf.printForest();
         pf.printTunnels();
         pf.drawMap();
-        pf.exportJson();
+        System.out.println(pf.exportJson());
         System.out.println(pf.testRouteLength(new AnyPercentPathFinder()));
         System.out.println(pf.testRouteLength(new CommonStartPathFinder()));
 
@@ -49,12 +49,12 @@ public class SeedGenerator {
     public static MapExplorer generateMap(String randomSeed, Function<String, Integer> seedConverter) {
         System.out.println("Generating a map using the seed '" + randomSeed + "'");
         int actualSeed = seedConverter.apply(randomSeed);
-        Map map = new Map(actualSeed);
+        Map map = new Map(randomSeed, actualSeed);
         return new MapExplorer(randomSeed, map);
     }
 
     // exact function from SCP:CB
-    static int generateSeedNumber(char[] seed) {
+    public static int generateSeedNumber(char[] seed) {
         int tmp = 0;
         int shift = 0;
         for (char c : seed) {

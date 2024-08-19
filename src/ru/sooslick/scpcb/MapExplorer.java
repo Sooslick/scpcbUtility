@@ -105,14 +105,14 @@ public class MapExplorer {
         map.savedRooms.stream()
                 .filter(r -> r.roomTemplate.name.contains("860"))
                 .findFirst()
-                .ifPresent(r -> System.out.println(r.rndInfo.get("forest").replace("|", "\n")));
+                .ifPresent(r -> System.out.println(r.rndInfo.replace("|", "\n")));
     }
 
     public void printTunnels() {
         map.savedRooms.stream()
                 .filter(r -> r.roomTemplate.name.contains("room2tunnel"))
                 .findFirst()
-                .ifPresent(r -> System.out.println(r.rndInfo.get("tunnels").replace("|", "\n")));
+                .ifPresent(r -> System.out.println(r.rndInfo.replace("|", "\n")));
     }
 
     public void drawMap() {
@@ -159,13 +159,15 @@ public class MapExplorer {
         }
     }
 
-    public void exportJson() {
+    public String exportJson() {
+        // todo: I have a request for overlap check
         StringBuilder sb = new StringBuilder()
-                .append("{\"seedString\":\"").append(seedPrompt)
+                .append("{\"seedString\":\"").append(seedPrompt.toString().replace("\\", "\\\\").replace("\"", "\\\""))
                 .append("\",\"seedValue\":").append(map.seed)
                 .append(",\"state106\":").append(map.state106)
                 .append(",\"angle\":").append(map.playerAngle)
-                .append(",\"rooms\":[");
+                .append(",\"loadingScreen\":\"").append(map.loadingScreen)
+                .append("\",\"rooms\":[");
         boolean comma = false;
         for (int i = 0; i < MAP_WIDTH; i++) {
             for (int j = 0; j < MAP_WIDTH; j++) {
@@ -187,13 +189,13 @@ public class MapExplorer {
                     sb.append(",\"en\":\"").append(r.linkedEventNormal.event).append("\"");
                 if (r.linkedEventKeter != null)
                     sb.append(",\"ek\":\"").append(r.linkedEventKeter.event).append("\"");
-                if (r.rndInfo != null && r.rndInfo.size() > 0)
+                if (r.rndInfo != null)
                     sb.append(",\"info\":\"").append(r.rndInfo).append("\"");
                 sb.append("}");
                 comma = true;
             }
         }
         sb.append("]}");
-        System.out.println(sb);
+        return sb.toString();
     }
 }

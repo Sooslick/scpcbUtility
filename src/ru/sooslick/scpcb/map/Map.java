@@ -1,6 +1,8 @@
 package ru.sooslick.scpcb.map;
 
 import ru.sooslick.scpcb.BlitzRandom;
+import ru.sooslick.scpcb.LoadingScreens;
+import ru.sooslick.scpcb.SeedGenerator;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -42,14 +44,18 @@ public class Map {
 
     public int state106;
     public int playerAngle;
-    public int seed;
+    public String loadingScreen;
 
-    public Map(int seed) {
+    public int seed;
+    public String prompt;
+
+    public Map(String prompt, int seed) {
+        this.prompt = prompt;
+        this.seed = seed;
         createMap(seed);
     }
 
     private void createMap(int seed) {
-        this.seed = seed;
         bbSeedRnd(seed);
         generateMaze();
         countRooms();
@@ -63,7 +69,7 @@ public class Map {
         createRooms();
         createDoors();
 
-        state106 = 70 * 60 * bbRand(12, 17);
+        state106 = bbRand(12, 17);
         createDecals();
         playerAngle = bbRand(160, 200);
 
@@ -75,10 +81,11 @@ public class Map {
         events = new Events(savedRooms, true);
         savedEventsKeter = events.createEvents();
 
-        createTunnels();
-
         savedEventsNormal.forEach(e -> e.room.linkedEventNormal = e);
         savedEventsKeter.forEach(e -> e.room.linkedEventKeter = e);
+
+        createTunnels();
+        defineLoadingScreen();
     }
 
     private int getZone(int y) {
@@ -846,7 +853,6 @@ public class Map {
 
         // intro skipped (although "173" room contains some Rnd calls, intro banned by speedrun rules)
 
-        // todo check if room height messes up overlapping check
         r = createRoom(0, Map.ROOM1, 8, 0, "dimension1499");
         savedRooms.add(r);  // add 1499 to overlap check
         mapRoomID[Map.ROOM1]++;
@@ -980,7 +986,7 @@ public class Map {
 
     private void createTunnels() {
         int[] grid = new int[MT_SIZE * MT_SIZE];
-        bbSeedRnd(seed);
+        bbSeedRnd(SeedGenerator.generateSeedNumber(prompt.toCharArray()));
 
         // 0 = right
         // 1 = up
@@ -1140,7 +1146,7 @@ public class Map {
                 else if (grid[(i * MT_SIZE) + j] >= 5)
                     sb.append("E");
                 else if (grid[(i * MT_SIZE) + j] > 0)
-                    sb.append("█");
+                    sb.append("X");
                 else
                     sb.append(".");
             }
@@ -1149,6 +1155,11 @@ public class Map {
         savedRooms.stream()
                 .filter(r -> r.roomTemplate.name.contains("room2tunnel"))
                 .findFirst()
-                .ifPresent(r -> r.rndInfo.put("tunnels", sb.toString()));
+                .ifPresent(r -> r.rndInfo = "tunnels=" + sb);
+    }
+
+    private void defineLoadingScreen() {
+        bbSeedRnd(seed);
+        loadingScreen = LoadingScreens.find(bbRand(1, 32));
     }
 }
