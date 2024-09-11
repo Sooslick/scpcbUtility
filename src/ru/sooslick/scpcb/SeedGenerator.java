@@ -13,33 +13,15 @@ public class SeedGenerator {
 
     public static void main(String[] args) {
         // seed printer block
-        String targetSeed = args.length > 0 ? args[0] : "3";
-        MapExplorer pf = generateMap(targetSeed, V1311);
-//        MapExplorer pf = generateMap(targetSeed, SPEEDRUN_MOD);
+        String targetSeed = args.length > 0 ? args[0] : "446456054";
+        Function<String, Integer> mode = args.length > 1 ? SPEEDRUN_MOD : V1311;
+        MapExplorer pf = generateMap(targetSeed, mode);
         pf.printMaze();
         pf.printForest();
         pf.printTunnels();
-        pf.drawMap();
         System.out.println(pf.exportJson());
-        System.out.println(pf.testRouteLength(new AnyPercentPathFinder()));
-        System.out.println(pf.testRouteLength(new CommonStartPathFinder()));
-
-        // speedrun mod search
-//        AnyPercentPathFinder pf = new AnyPercentPathFinder();
-//        int routeLengthThreshold = 50;
-//        for (int i = 599107; i < Integer.MAX_VALUE; i++) {
-//            try {
-//                MapExplorer map = generateMap(String.valueOf(i), SPEEDRUN_MOD);
-//                int routeLength = map.testRouteLength(pf);
-//                if (routeLength < routeLengthThreshold) {
-//                    map.printMaze();
-//                    System.out.println("Route length: " + routeLength);
-//                    break;
-//                }
-//            } catch (NullPointerException ignored) {
-//                // todo fix extents db
-//            }
-//        }
+        System.out.println("Route full : " + pf.testRouteLength(new AnyPercentPathFinder()));
+        System.out.println("Route start: " + pf.testRouteLength(new CommonStartPathFinder()));
     }
 
     public static MapExplorer generateMap(String randomSeed) {
@@ -49,7 +31,7 @@ public class SeedGenerator {
     public static MapExplorer generateMap(String randomSeed, Function<String, Integer> seedConverter) {
         System.out.println("Generating a map using the seed '" + randomSeed + "'");
         int actualSeed = seedConverter.apply(randomSeed);
-        Map map = new Map(randomSeed, actualSeed);
+        Map map = new Map(actualSeed);
         return new MapExplorer(randomSeed, map);
     }
 

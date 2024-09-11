@@ -5,13 +5,6 @@ import ru.sooslick.scpcb.map.ScpcbRoom;
 import ru.sooslick.scpcb.pathfinder.PathFinder;
 import ru.sooslick.scpcb.pathfinder.XY;
 
-import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageOutputStream;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.LinkedList;
 
 import static ru.sooslick.scpcb.map.Map.MAP_HEIGHT;
@@ -105,58 +98,14 @@ public class MapExplorer {
         map.savedRooms.stream()
                 .filter(r -> r.roomTemplate.name.contains("860"))
                 .findFirst()
-                .ifPresent(r -> System.out.println(r.rndInfo.replace("|", "\n")));
+                .ifPresent(r -> System.out.println(r.rndInfo.replace("forest=", "").replace("|", "\n")));
     }
 
     public void printTunnels() {
         map.savedRooms.stream()
                 .filter(r -> r.roomTemplate.name.contains("room2tunnel"))
                 .findFirst()
-                .ifPresent(r -> System.out.println(r.rndInfo.replace("|", "\n")));
-    }
-
-    public void drawMap() {
-        BufferedImage img = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB);
-        Graphics g = img.createGraphics();
-        g.setColor(new Color(60, 0, 0));
-        g.fillRect(0, 0, 1000, 300);
-        g.setColor(new Color(40, 20, 0));
-        g.fillRect(0, 300, 1000, 350);
-        g.setColor(new Color(40, 40, 0));
-        g.fillRect(0, 350, 1000, 600);
-        g.setColor(new Color(20, 40, 0));
-        g.fillRect(0, 600, 1000, 650);
-        g.setColor(new Color(0, 40, 0));
-        g.fillRect(0, 650, 1000, 1000);
-        g.setFont(new Font("Arial", Font.PLAIN, 10));
-        map.savedRooms.forEach(r -> {
-            int x = (MAP_WIDTH - 1 - (int) r.x / 8) * 50;
-            int y = (int) r.z / 8 * 50;
-            g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(x, y, 50, 50);
-            g.setColor(Color.GRAY);
-            if (r.adjDoorBottom != null) {
-                int val = r.adjDoorBottom.open ? 4 : 24;
-                g.fillRect(x, y + 47, val, 3);
-                g.fillRect(x + 50 - val, y + 47, val, 3);
-            }
-            if (r.adjDoorRight != null) {
-                int val = r.adjDoorRight.open ? 4 : 24;
-                g.fillRect(x, y, 3, val);
-                g.fillRect(x, y + 50 - val, 3, val);
-            }
-            g.setColor(Color.BLACK);
-            g.drawString(r.roomTemplate.name.replaceAll("room", ""), x - 1, y + 20);
-            if (r.linkedEventNormal != null)
-                g.drawString(r.linkedEventNormal.event.replaceAll("room", ""), x - 1, y + 30);
-            if (r.linkedEventKeter != null)
-                g.drawString(r.linkedEventKeter.event.replaceAll("room", ""), x - 1, y + 40);
-        });
-        try {
-            FileImageOutputStream fios = new FileImageOutputStream(new File(seedPrompt + ".jpg"));
-            ImageIO.write(img, "jpg", fios);
-        } catch (Exception ignored) {
-        }
+                .ifPresent(r -> System.out.println(r.rndInfo.replace("tunnels=", "").replace("|", "\n")));
     }
 
     public String exportJson() {

@@ -2,7 +2,6 @@ package ru.sooslick.scpcb.map;
 
 import ru.sooslick.scpcb.BlitzRandom;
 import ru.sooslick.scpcb.LoadingScreens;
-import ru.sooslick.scpcb.SeedGenerator;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -47,10 +46,8 @@ public class Map {
     public String loadingScreen;
 
     public int seed;
-    public String prompt;
 
-    public Map(String prompt, int seed) {
-        this.prompt = prompt;
+    public Map(int seed) {
         this.seed = seed;
         createMap(seed);
     }
@@ -986,7 +983,7 @@ public class Map {
 
     private void createTunnels() {
         int[] grid = new int[MT_SIZE * MT_SIZE];
-        bbSeedRnd(SeedGenerator.generateSeedNumber(prompt.toCharArray()));
+        bbSeedRnd(seed);
 
         // 0 = right
         // 1 = up
@@ -1003,7 +1000,8 @@ public class Map {
         }
 
         int count = 2;
-        while (count < 100) {
+        int turns = 0;
+        while (count < 100 && turns++ < 100) {
             int tempInt = bbRand(1, 5) << bbRand(1, 2);
             for (int i = 1; i <= tempInt; i++) {
 
@@ -1064,6 +1062,7 @@ public class Map {
 
         int maxX = MT_SIZE - 1;
         boolean canRetry = false;
+        int retries = 0;
 
         for (ix = 0; ix <= maxX; ix++) {
             for (iy = 0; iy <= MT_SIZE - 1; iy++) {
@@ -1080,7 +1079,7 @@ public class Map {
                     }
                 }
             }
-            if (canRetry)
+            if (canRetry && retries++ < 20)
                 ix--;
         }
 
