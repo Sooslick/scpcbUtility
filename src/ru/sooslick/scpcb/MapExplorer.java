@@ -140,6 +140,8 @@ public class MapExplorer {
                     sb.append(",\"ek\":\"").append(r.linkedEventKeter.event).append("\"");
                 if (r.rndInfo != null)
                     sb.append(",\"info\":\"").append(r.rndInfo).append("\"");
+                if (r.overlaps != null)
+                    sb.append(",\"overlaps\":\"").append(r.overlaps).append("\"");
                 sb.append("}");
                 comma = true;
             }

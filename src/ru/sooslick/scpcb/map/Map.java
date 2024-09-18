@@ -83,6 +83,8 @@ public class Map {
 
         createTunnels();
         defineLoadingScreen();
+
+        reportOverlaps();
     }
 
     private int getZone(int y) {
@@ -1160,5 +1162,25 @@ public class Map {
     private void defineLoadingScreen() {
         bbSeedRnd(seed);
         loadingScreen = LoadingScreens.find(bbRand(1, 32));
+    }
+
+    private void reportOverlaps() {
+        savedRooms.forEach(ScpcbRoom::fixExtents);
+
+        int totalRooms = savedRooms.size();
+        ScpcbRoom[] rooms = new ScpcbRoom[totalRooms];
+        savedRooms.toArray(rooms);
+
+        for (int i = 0; i < totalRooms - 1; i++) {
+            for (int j = i + 1; j < totalRooms; j++) {
+                ScpcbRoom r1 = rooms[i];
+                ScpcbRoom r2 = rooms[j];
+
+                if (checkRoomOverlap(r1, r2)) {
+                    r1.addOverlap(r2);
+                    r2.addOverlap(r1);
+                }
+            }
+        }
     }
 }

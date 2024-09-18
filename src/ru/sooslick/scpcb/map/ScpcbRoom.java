@@ -50,6 +50,7 @@ public class ScpcbRoom {
     MeshExtents extents;
 
     public String rndInfo = null;
+    public String overlaps = null;
     public ScpcbEvent linkedEventNormal;
     public ScpcbEvent linkedEventKeter;
 
@@ -660,6 +661,32 @@ public class ScpcbRoom {
 //                maxX, maxY, maxZ,
 //                angle);
         }
+    }
+
+    // I assume I haven't any need in vanilla extents after generating map,
+    // so I mess up vanilla extents to find out real overlaps
+    public void fixExtents() {
+        if (extents == null)
+            return;
+
+        double extMinX = Math.min(extents.minX, extents.maxX);
+        double extMaxX = Math.max(extents.minX, extents.maxX);
+        double extMinZ = Math.min(extents.minZ, extents.maxZ);
+        double extMaxZ = Math.max(extents.minZ, extents.maxZ);
+
+        // shrink the extents slightly - we don't care if the overlap is smaller than the thickness of the walls
+        minX = extMinX + 0.05 + x;
+        minZ = extMinZ + 0.05 + z;
+        maxX = extMaxX - 0.05 + x;
+        maxZ = extMaxZ - 0.05 + z;
+    }
+
+    public void addOverlap(ScpcbRoom other) {
+        String add = (int) (other.x / 8) + "-" + (int) (other.z / 8);
+        if (overlaps == null)
+            overlaps = add;
+        else
+            overlaps+= "," + add;
     }
 
     private void genForestGrid() {
