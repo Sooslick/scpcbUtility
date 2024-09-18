@@ -132,5 +132,6 @@ public class MapJsonVerifier {
         new MapJsonVerifier("tests/2001011999.json", "2001011999").test();
         new MapJsonVerifier("tests/557110973.json", "557110973").test();
         new MapJsonVerifier("tests/n790.json", "n790").test();
+        new MapJsonVerifier("tests/220.json", "\\@").test();
     }
 }

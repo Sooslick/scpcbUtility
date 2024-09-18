@@ -568,9 +568,7 @@ public class ScpcbRoom {
                 createDoor(false, 0);
                 createDoor(false, 0);
                 if (roomTemplate.name.equals("room2gw")) {
-                    boolean bd_temp = false;
-                    if (room2gwBrokenDoor && room2gw_x == x && room2gw_z == z)
-                        bd_temp = true;
+                    boolean bd_temp = (room2gwBrokenDoor && room2gw_x == x && room2gw_z == z);
                     if ((bbRand(1, 2) == 1 && !room2gwBrokenDoor) || bd_temp) {
                         room2gwBrokenDoor = true;
                         room2gw_x = x;
@@ -637,7 +635,7 @@ public class ScpcbRoom {
         }
 
         // vanilla math block
-        // todo I left this branch because of unusual 1499 placement (i believe 1499 messes up the overlap check)
+        // I left this branch because of unusual 1499 placement (db doesn't store dimension1499)
         else {
             // shrink the extents slightly - we don't care if the overlap is smaller than the thickness of the walls
             minX = extents.minX + 0.05 + x;

@@ -17,8 +17,7 @@ public class RoomExtentsDB {
 
         while (!r.isEof()) {
             String name = r.readString();
-            // todo i have to extend angles library up to 630° (some rooms actually can have such rotation)
-            for (int a = 0; a <= 450; a+= 90) {
+            for (int a = 0; a <= 630; a+= 90) {
                 int angle = r.readInt();
                 RoomExtentsDB roomDb = new RoomExtentsDB();
                 for (int i = 1; i < MAP_WIDTH; i++) {
