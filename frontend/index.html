@@ -28,7 +28,7 @@
         </div>
         <div id="page-meta" class="map-component">
             <div class="page-meta-line">SCP: Containment Breach v1.3.11 map</div>
-            <div class="page-meta-line">App version: v1.1 // 240813</div>
+            <div class="page-meta-line">App version: v1.2 // 240919</div>
             <div class="page-meta-line">Created by <a href="https://sooslick.art/">@Sooslick</a> for speedrunning community</div>
             <br />
             <div class="page-meta-line">Download game: <a href="https://www.scpcbgame.com/">Official website</a></div>
@@ -115,7 +115,7 @@ body::-webkit-scrollbar-thumb {
 }
 #wrapper {
     background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,255) 100%);
-    min-height: 99vh;
+    min-height: 100vh;
     height: 100%;
 }
 
@@ -163,6 +163,9 @@ table {
 }
 td:hover {
 	background: #444;
+}
+td.overlap {
+    background: #622;
 }
 td img {
     filter: invert();
@@ -274,6 +277,7 @@ let loading = false;
 let report = false;
 let exitx = 0;
 let exity = 0;
+let savedOverlaps = null;
 
 let mapWrapper = document.getElementById("map-table");
 for (let i = 0; i <= 18; i++) {
@@ -403,8 +407,7 @@ function createMap() {
 
     let xhr = new XMLHttpRequest();
 	xhr.onload = buildMap;
-	//xhr.open('GET', 'map.php' + query, true);
-	xhr.open('GET', '54.json' + query, true);
+	xhr.open('GET', 'map.php' + query, true);
 	xhr.send();
 }
 
@@ -529,6 +532,7 @@ function buildForest(info) {
 function getRoomInfo(x, y) {
     if (currentMap == null)
         return;
+    updateOverlaps(null);   // I can optimize this call but I'm a bit lazy to do this
     currentMap.rooms.forEach(r => {
         if (r.x == x && r.y == y) {
             let en = r.en == null ? "-" : r.en;
@@ -545,6 +549,7 @@ function getRoomInfo(x, y) {
 		        document.getElementById("rnd-info").innerHTML = "-"
 		    else
 		        document.getElementById("rnd-info").innerHTML = r.info;
+            updateOverlaps(r.overlaps);
 		}
     });
 }
@@ -697,6 +702,22 @@ function createAnnotation(name, x, y) {
         td.appendChild(a);
         td.style.verticalAlign = null;
         return;
+    }
+}
+
+function updateOverlaps(newOverlaps) {
+    if (savedOverlaps != null) {
+        savedOverlaps.split(",").forEach(pos => {
+            document.getElementById("c" + pos).classList.remove("overlap");
+        });
+        savedOverlaps = null;
+    }
+
+    if (newOverlaps != null) {
+        newOverlaps.split(",").forEach(pos => {
+            document.getElementById("c" + pos).classList.add("overlap");
+        });
+        savedOverlaps = newOverlaps;
     }
 }
 
