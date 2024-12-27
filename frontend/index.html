@@ -399,9 +399,9 @@ function createMap() {
         seed = seed.match("[0-9]{1,10}");
 
     if (prompt.length > 0)
-        query+= "?prompt=" + encodeURI(prompt);
+        query+= "?prompt=" + encodeURIComponent(prompt);
     else if (seed != null)
-        query+= "?seed=" + encodeURI(seed);
+        query+= "?seed=" + encodeURIComponent(seed);
     else
         query+= "?random";
 
