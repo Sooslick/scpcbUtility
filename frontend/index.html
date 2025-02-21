@@ -5,12 +5,12 @@
     <meta charset='utf-8'/>
     <meta http-equiv='Content-Type' content='text/html'/>
     <meta name='author' content='Sooslick'/>
-    <meta name='description' content='Map generator from famous SCP game'/>
+    <meta name='description' content='SCP: Containment Breach v1.3.11 map. Preview SCP:CB seeds on single webpage without launching the game!'/>
     <meta name='theme-color' content='gray'/>
 </HEAD>
 <BODY>
 <div id="wrapper">
-    <div id="header">
+    <div id="header" data-nosnippet>
         <div id="inputs" class="map-component">
             <div class="input-line">
                 <span><input id="prompt" autocomplete="off" oninput="updatePrompt()"/></span>
@@ -28,7 +28,7 @@
         </div>
         <div id="page-meta" class="map-component">
             <div class="page-meta-line">SCP: Containment Breach v1.3.11 map</div>
-            <div class="page-meta-line">App version: v1.2 // 240919</div>
+            <div class="page-meta-line">App version: v1.2.3 // 250221</div>
             <div class="page-meta-line">Created by <a href="https://sooslick.art/">@Sooslick</a> for speedrunning community</div>
             <br />
             <div class="page-meta-line">Download game: <a href="https://www.scpcbgame.com/">Official website</a></div>
@@ -362,13 +362,23 @@ function updatePrompt() {
 function updateSeed() {
     document.getElementById("prompt").value = "";
     let seedInput = document.getElementById("seed");
-    let seed = seedInput.value;
-    if (seed.length > 0)
+    let seedString = seedInput.value.toString();
+    for (let i = 0; i < seedString.length; i++) {
+        let c = seedString.charCodeAt(i);
+        if (c < 48 || c > 57) {
+            seedString = seedString.slice(0, i) + seedString.slice(i+1);
+            i--;
+        }
+    }
+    if (seedString.length > 0) {
+        seedInput.value = seedString;
+        let seed = parseInt(seedString);
         if (seed < 1)
-            seed = 1;
+            seedInput.value = 1;
         else if (seed > 2147483647)
-            seed = 2147483647;
-    seedInput.value = seed;
+            seedInput.value = 2147483647;
+    } else
+        seedInput.value = "";
 }
 
 function generateSeedNumber(seed) {

@@ -19,7 +19,7 @@ public class ScpMapHandler implements HttpHandler {
     private static final Random random = new Random();
 
     private long lastActivity = 0;
-    private boolean saveEnable = false;
+    private boolean saveEnable = false;     // TODO ServerProperties?
 
     public ScpMapHandler() {
         if (saveEnable) {
@@ -76,6 +76,7 @@ public class ScpMapHandler implements HttpHandler {
             return;
         }
 
+        // todo @artur98983 bugreport: number format exception here
         int seedNumber = method.apply(seed);
         System.out.printf("User prompt: %s (%s)%n", seed, seedNumber);
         String out = RequestQueue.requestMap(seed, method);

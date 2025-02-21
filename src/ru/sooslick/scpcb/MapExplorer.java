@@ -109,7 +109,6 @@ public class MapExplorer {
     }
 
     public String exportJson() {
-        // todo: I have a request for overlap check
         StringBuilder sb = new StringBuilder()
                 .append("{\"seedString\":\"").append(seedPrompt.toString().replace("\\", "\\\\").replace("\"", "\\\""))
                 .append("\",\"seedValue\":").append(map.seed)
