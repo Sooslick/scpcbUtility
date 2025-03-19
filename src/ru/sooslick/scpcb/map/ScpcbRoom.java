@@ -894,6 +894,8 @@ public class ScpcbRoom {
                         if (ty % 3 == 2 && !itemPlaced[ty / 3]) {
                             itemPlaced[ty / 3] = true;
                             createItem();
+
+                            grid[ty * gridSize + tx] = 255; // custom Sooslick stuff for painting webmap cells
                         }
 
                         // place trees and other details
@@ -936,7 +938,9 @@ public class ScpcbRoom {
         StringBuilder sb = new StringBuilder();
         for (i = 0; i < gridSize; i++) {
             for (j = gridSize - 1; j >= 0; j--) {
-                if (grid[(i * gridSize) + j] != 0)
+                if (grid[(i * gridSize) + j] == 255)
+                    sb.append("H");
+                else if (grid[(i * gridSize) + j] != 0)
                     sb.append("X");
                 else
                     sb.append(".");

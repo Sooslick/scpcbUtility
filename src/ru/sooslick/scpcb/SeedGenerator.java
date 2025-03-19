@@ -53,7 +53,7 @@ public class SeedGenerator {
     public static MapExplorer generateMap(String randomSeed, Function<String, Integer> seedConverter) {
         int actualSeed = seedConverter.apply(randomSeed);
         Map map = new Map(actualSeed);
-        return new MapExplorer(randomSeed, map);
+        return new MapExplorer(randomSeed, actualSeed, map);
     }
 
     /**

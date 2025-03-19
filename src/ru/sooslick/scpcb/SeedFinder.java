@@ -59,7 +59,7 @@ public class SeedFinder {
             MapExplorer map = SeedGenerator.generateMap(String.valueOf(i), SeedGenerator.SPEEDRUN_MOD);
             int routeLength = map.testRouteLength(pf);
             if (routeLength < maxLength) {
-                System.out.println(map.seedPrompt + "  -->  https://sooslick.art/scpcbmap/index?seed=" + map.seedPrompt);
+                System.out.println(map.seed + "  -->  https://sooslick.art/scpcbmap/index?seed=" + map.seed);
             }
         }
     }

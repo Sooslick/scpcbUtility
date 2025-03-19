@@ -13,12 +13,14 @@ import static ru.sooslick.scpcb.map.Map.MAP_WIDTH;
 public class MapExplorer {
 
     public final Map map;
-    public final Object seedPrompt;
+    public final String prompt;
+    public final int seed;
     public final ScpcbRoom[][] grid;
 
-    public MapExplorer(Object seed, Map map) {
+    public MapExplorer(String prompt, int seed, Map map) {
         this.map = map;
-        this.seedPrompt = seed;
+        this.prompt = prompt == null ? "" : prompt;
+        this.seed = seed;
         this.grid = new ScpcbRoom[MAP_WIDTH][MAP_HEIGHT];
         for (ScpcbRoom r : map.savedRooms) {
             int x = (int) (r.x / 8);
@@ -90,7 +92,7 @@ public class MapExplorer {
             }
             System.out.println();
         }
-        System.out.printf("Seed: '%s'", seedPrompt);
+        System.out.printf("Seed: '%s'", prompt);
         System.out.println();
     }
 
@@ -111,7 +113,7 @@ public class MapExplorer {
     public String exportJson() {
         // todo: I have a request for overlap check
         StringBuilder sb = new StringBuilder()
-                .append("{\"seedString\":\"").append(seedPrompt.toString().replace("\\", "\\\\").replace("\"", "\\\""))
+                .append("{\"seedString\":\"").append(prompt.replace("\\", "\\\\").replace("\"", "\\\""))
                 .append("\",\"seedValue\":").append(map.seed)
                 .append(",\"state106\":").append(map.state106)
                 .append(",\"angle\":").append(map.playerAngle)
