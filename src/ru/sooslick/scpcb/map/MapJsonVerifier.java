@@ -27,7 +27,7 @@ public class MapJsonVerifier {
         this.seed = seed;
     }
 
-    public boolean test() throws IOException {
+    public void test() throws IOException {
         byte[] json = Files.readAllBytes(Paths.get(pathJson));
 
         // search "rooms" array
@@ -58,10 +58,8 @@ public class MapJsonVerifier {
         });
         if (failures.get() == 0) {
             System.out.println("\u001B[32mTests passed for seed '" + seed + "'\u001B[37m");
-            return true;
         } else {
             System.out.println("\u001B[31mDetected " + failures + " map errors for seed '" + seed + "'\u001B[37m");
-            return false;
         }
     }
 
@@ -115,12 +113,6 @@ public class MapJsonVerifier {
 
 
     public static void main(String[] args) throws IOException {
-        if (args.length > 1) {
-            System.out.println("custom test launch");
-            new MapJsonVerifier(args[0], args[1]).test();
-            return;
-        }
-
         new MapJsonVerifier("tests/dollar.json", "$").test();
         new MapJsonVerifier("tests/whitespace.json", " ").test();
         new MapJsonVerifier("tests/6.json", "6").test();

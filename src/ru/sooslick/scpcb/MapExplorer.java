@@ -82,7 +82,7 @@ public class MapExplorer {
                         colorPrefix = "\u001B[32m";
                     else if ("room2tunnel".equals(name) || "roompj".equals(name) || "room1123".equals(name) || "room2storage".equals(name))
                         colorPrefix = "\u001B[33m";
-                    else if ("room2closets".equals(name) || "room2testroom2".equals(name) || "room106".equals(name) || "room2servers".equals(name))
+                    else if ("room2closets".equals(name) || "room2testroom2".equals(name) || "room106".equals(name) || "room2servers".equals(name) || "room860".equals(name))
                         colorPrefix = "\u001B[34m";
                     System.out.print(colorPrefix + "█");
                 } else
