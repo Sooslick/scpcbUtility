@@ -3,50 +3,57 @@ package ru.sooslick.scpcb.pathfinder;
 import ru.sooslick.scpcb.MapExplorer;
 import ru.sooslick.scpcb.map.ScpcbRoom;
 
-public class SSPathFinder implements PathFinder {
+public class SSA2PathFinder implements PathFinder {
     @Override
     public int calcRouteLength(MapExplorer map) {
         XY cont = map.findRoom("room2ccont");
         XY gateA = map.findRoom("gateaentrance");
-        XY gateB = map.findRoom("exit1");
+        XY room106 = map.findRoom("room106");
 
-        if (cont == null)
+        if (cont == null || gateA == null || room106 == null)
             return 9999;
 
         XY room008 = map.findRoom("008");
         XY room079 = map.findRoom("room079");
 
         int startLength = CommonStartPathFinder.instance.calcRouteLength(map);
-        int hczLength = calcBestHcz(map, room008, cont);
+        int hczLength = calcBestHcz(map, room106, room008, cont);
 
         return startLength * 2 + hczLength +
-                map.pathFind(cont, room079) * 2 +
-                Math.min(map.pathFind(cont, gateA), map.pathFind(cont, gateB));
+                map.pathFind(cont, room079, room106, cont, gateA);
     }
 
     @Override
     public String getName() {
-        return "Sed Seed Inbounds A1+B1";
+        return "Sed Seed Inbounds A2";
     }
 
-    private int calcBestHcz(MapExplorer map, XY room008, XY cont) {
-        XY room106 = map.findRoom("room106");
+    private int calcBestHcz(MapExplorer map, XY room106, XY room008, XY cont) {
         XY shaft = map.findRoom("shaft");
         XY tunnel = scanTunnel(map);
 
-        int route106 = 2 + calcHcz(map, room106, room008, cont);
-        int routeShaft = 2 + calcHcz(map, shaft, room008, cont);
-        int routeTunnel = 1 + calcHcz(map, tunnel, room008, cont);
+        int route106 = 2 + calcHcz(map, room106, room106, room008, cont);
+        int routeShaft = 2 + calcHcz(map, shaft, room106, room008, cont);
+        int routeTunnel = 1 + calcHcz(map, tunnel, room106, room008, cont);
         return Math.min(Math.min(route106, routeShaft), routeTunnel);
     }
 
-    private int calcHcz(MapExplorer map, XY startPoint, XY room008, XY cont) {
+    private int calcHcz(MapExplorer map, XY startPoint, XY room106, XY room008, XY cont) {
         if (startPoint == null)
             return 9999;
         if (room008 == null) {
-            return map.pathFind(startPoint, cont);
+            if (startPoint.equals(room106))
+                return map.pathFind(room106, cont);
+            else
+                return map.pathFind(startPoint, room106, cont);
         } else {
-            return map.pathFind(startPoint, room008, cont);
+            if (startPoint.equals(room106))
+                return map.pathFind(room106, room008, cont);
+            else
+                return Math.min(
+                        map.pathFind(startPoint, room106, room008, cont),
+                        map.pathFind(startPoint, room008, room106, cont)
+                );
         }
     }
 

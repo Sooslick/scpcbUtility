@@ -30,7 +30,7 @@ public class SeedGenerator {
         pf.printTunnels();
         System.out.println(pf.exportJson());
         System.out.println();
-        System.out.println("SS A1 Route length : " + pf.testRouteLength(new SSPathFinder()));
+        System.out.println("SS A1/B1 Route length : " + pf.testRouteLength(new SSPathFinder()));
         System.out.println("SS Legacy Route length : " + pf.testRouteLength(new SSLegacyPathFinder()));
         System.out.println("914 Route length: " + pf.testRouteLength(new CommonStartPathFinder()));
     }

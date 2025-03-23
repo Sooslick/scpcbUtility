@@ -14,13 +14,13 @@ public class SSLegacyPathFinder implements PathFinder {
         XY gateA = map.findRoom("gateaentrance");
         XY gateB = map.findRoom("exit1");
         XY sl = map.findRoom("room2sl");
-        XY clock = map.findRoom("914");
+        XY room914 = map.findRoom("914");
 
         int startLength = CommonStartPathFinder.instance.calcRouteLength(map) +
-                map.pathFind(clock, sl);
+                map.pathFind(room914, sl);
         int slToContLength = room008 == null ?
                 map.pathFind(sl, cont) :
-                map.pathFind(sl, room008) + map.pathFind(room008, cont);
+                map.pathFind(sl, room008, cont);
         return startLength * 2 + slToContLength +
                 map.pathFind(cont, room079) * 2 +
                 Math.min(map.pathFind(cont, gateA), map.pathFind(cont, gateB));

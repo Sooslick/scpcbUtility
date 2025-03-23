@@ -39,6 +39,13 @@ public class MapExplorer {
         return new XY((int) (room.x / 8), (int) (room.z / 8));
     }
 
+    public int pathFind(XY... points) {
+        int length = 0;
+        for (int i = 1; i < points.length; i++)
+            length+= pathFind(points[i-1],  points[i]);
+        return length;
+    }
+
     public int pathFind(XY start, XY end) {
         if (start == null || end == null)
             return 9999;

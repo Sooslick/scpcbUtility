@@ -10,31 +10,14 @@ public class CommonStartPathFinder implements PathFinder {
     public int calcRouteLength(MapExplorer map) {
         XY start = map.findRoom("start");
         XY closets = map.findRoom("room2closets");
-        XY storage = map.findRoom("room2storage");
-        XY skull = map.findRoom("room1123");
+        XY room970 = map.findRoom("room2storage");
         XY testroom2 = map.findRoom("room2testroom2");
         XY room914 = map.findRoom("914");
 
-        int defaultRoute = map.pathFind(start, closets) +
-                map.pathFind(closets, testroom2) +
-                map.pathFind(testroom2, room914);
+        int defaultRoute = map.pathFind(start, closets, testroom2, room914);
+        int altRoute = map.pathFind(start, room970, testroom2, closets, room914);
 
-        int altRoute1 = map.pathFind(start, storage) +
-                map.pathFind(storage, testroom2) +
-                map.pathFind(testroom2, skull) +
-                map.pathFind(skull, room914);
-
-        int altRoute2 = map.pathFind(start, storage) +
-                map.pathFind(storage, skull) +
-                map.pathFind(skull, testroom2) +
-                map.pathFind(testroom2, room914);
-
-        int altRoute3 = map.pathFind(start, skull) +
-                map.pathFind(skull, storage) +
-                map.pathFind(storage, testroom2) +
-                map.pathFind(testroom2, room914);
-
-        return Math.min(Math.min(defaultRoute, altRoute1), Math.min(altRoute2, altRoute3));
+        return Math.min(defaultRoute, altRoute);
     }
 
     @Override
