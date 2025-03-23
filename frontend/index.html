@@ -757,11 +757,11 @@ function loadFromQuery() {
         return;
 
     if ("seed" == kv[0]) {
-        document.getElementById("seed").value = kv[1];
+        document.getElementById("seed").value = decodeURIComponent(kv[1]);
         createMap();
         return;
     } else if ("prompt" == kv[0]) {
-        document.getElementById("prompt").value = kv[1];
+        document.getElementById("prompt").value = decodeURIComponent(kv[1]);
         createMap();
         return;
     }
