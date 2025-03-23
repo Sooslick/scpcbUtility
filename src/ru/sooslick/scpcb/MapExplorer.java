@@ -41,8 +41,11 @@ public class MapExplorer {
 
     public int pathFind(XY... points) {
         int length = 0;
-        for (int i = 1; i < points.length; i++)
-            length+= pathFind(points[i-1],  points[i]);
+        for (int i = 1; i < points.length; i++) {
+            length += pathFind(points[i - 1], points[i]);
+            if (length >= 9999)
+                return 9999;
+        }
         return length;
     }
 
