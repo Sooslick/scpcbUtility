@@ -4,63 +4,63 @@ import ru.sooslick.scpcb.pathfinder.PathFinder;
 import ru.sooslick.scpcb.pathfinder.PathFinderFactory;
 
 import java.util.HashMap;
-import java.util.Scanner;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * Utility class for brute force search
+ * Program for brute force search
  */
 public class SeedFinder {
 
     public static void main(String[] args) throws ReflectiveOperationException {
         HashMap<String, String> params = CommandLineArgumentParser.parse(args);
-
-        int routeLengthThreshold = params.containsKey("--max-length") ? Integer.parseInt(params.get("--max-length")) : 30;
-        PathFinder pf = PathFinderFactory.createInstance(params.getOrDefault("--path-finder", "ru.sooslick.scpcb.pathfinder.SSA1PathFinder"));
+        List<PathFinderParams> pfs = parse(params.getOrDefault("--path-finders", "ru.sooslick.scpcb.pathfinder.SSPathFinder:40"));
         int start = Integer.parseInt(params.getOrDefault("--start", "1"));
         int end = Integer.parseInt(params.getOrDefault("--end", "2147483647"));
-        int mode = Integer.parseInt(params.getOrDefault("--mode", "0"));
+        boolean printMaze = params.containsKey("--print-maze");
+        search(pfs, start, end, printMaze);
+    }
 
-        switch (mode) {
-            case 0:
-            default:
-                searchMode0(pf, routeLengthThreshold, start, end);
-                break;
-            case 1:
-                searchMode1(pf, routeLengthThreshold, start, end);
-                break;
+    private static void search(List<PathFinderParams> pathFinders, int start, int end, boolean printMaze) {
+        for (int i = start; i < end; i++) {
+            MapExplorer map = SeedGenerator.generateMap(String.valueOf(i), SeedGenerator.SPEEDRUN_MOD);
+            pathFinders.forEach(pfp -> {
+                PathFinder pf = pfp.getPathFinder();
+                int routeLength = map.testRouteLength(pf);
+                if (routeLength < pfp.getMaxLength()) {
+                    if (printMaze)
+                        map.printMaze();
+                    System.out.println(map.seed + " - " +  pf.getName() + ", route length " + routeLength + "  -->  https://sooslick.art/scpcbmap/index?seed=" + map.seed);
+                }
+            });
         }
     }
 
-    /**
-     * --mode=0
-     * Search will stop after every found seed and wait for user prompt
-     */
-    private static void searchMode0(PathFinder pf, int maxLength, int start, int end) {
-        Scanner sc = new Scanner(System.in);
-        for (int i = start; i < end; i++) {
-            MapExplorer map = SeedGenerator.generateMap(String.valueOf(i), SeedGenerator.SPEEDRUN_MOD);
-            int routeLength = map.testRouteLength(pf);
-            if (routeLength < maxLength) {
-                map.printMaze();
-                System.out.println("Route length: " + routeLength);
-                String prompt = sc.nextLine();
-                if (prompt.startsWith("q"))
-                    break;
-            }
+    private static List<PathFinderParams> parse(String arg) throws ReflectiveOperationException {
+        List<PathFinderParams> pfList = new LinkedList<>();
+        String[] pfstrings  = arg.split(",");
+        for (String pfstring : pfstrings) {
+            String[] pfp = pfstring.trim().split(":");
+            pfList.add(new PathFinderParams(PathFinderFactory.createInstance(pfp[0]), Integer.parseInt(pfp[1])));
         }
+        return pfList;
     }
 
-    /**
-     * --mode=1
-     * Search will work quietly and print every found seed to system out
-     */
-    private static void searchMode1(PathFinder pf, int maxLength, int start, int end) {
-        for (int i = start; i < end; i++) {
-            MapExplorer map = SeedGenerator.generateMap(String.valueOf(i), SeedGenerator.SPEEDRUN_MOD);
-            int routeLength = map.testRouteLength(pf);
-            if (routeLength < maxLength) {
-                System.out.println(map.seed + "  -->  https://sooslick.art/scpcbmap/index?seed=" + map.seed);
-            }
+    private static class PathFinderParams {
+        PathFinder pathFinder;
+        int maxLength;
+
+        public PathFinderParams(PathFinder pathFinder, int maxLength) {
+            this.pathFinder = pathFinder;
+            this.maxLength = maxLength;
+        }
+
+        public PathFinder getPathFinder() {
+            return pathFinder;
+        }
+
+        public int getMaxLength() {
+            return maxLength;
         }
     }
 }

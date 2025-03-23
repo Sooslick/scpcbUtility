@@ -21,8 +21,13 @@ public class SSLegacyPathFinder implements PathFinder {
         int slToContLength = room008 == null ?
                 map.pathFind(sl, cont) :
                 map.pathFind(sl, room008) + map.pathFind(room008, cont);
-        return startLength + slToContLength +
+        return startLength * 2 + slToContLength +
                 map.pathFind(cont, room079) * 2 +
                 Math.min(map.pathFind(cont, gateA), map.pathFind(cont, gateB));
+    }
+
+    @Override
+    public String getName() {
+        return "Set Seed Inbounds A1+B1 (Legacy route)";
     }
 }

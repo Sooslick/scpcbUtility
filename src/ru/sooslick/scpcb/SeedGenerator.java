@@ -2,8 +2,8 @@ package ru.sooslick.scpcb;
 
 import ru.sooslick.scpcb.map.Map;
 import ru.sooslick.scpcb.pathfinder.CommonStartPathFinder;
-import ru.sooslick.scpcb.pathfinder.SSA1PathFinder;
 import ru.sooslick.scpcb.pathfinder.SSLegacyPathFinder;
+import ru.sooslick.scpcb.pathfinder.SSPathFinder;
 
 import java.util.HashMap;
 import java.util.function.Function;
@@ -30,7 +30,7 @@ public class SeedGenerator {
         pf.printTunnels();
         System.out.println(pf.exportJson());
         System.out.println();
-        System.out.println("SS A1 Route length : " + pf.testRouteLength(new SSA1PathFinder()));
+        System.out.println("SS A1 Route length : " + pf.testRouteLength(new SSPathFinder()));
         System.out.println("SS Legacy Route length : " + pf.testRouteLength(new SSLegacyPathFinder()));
         System.out.println("914 Route length: " + pf.testRouteLength(new CommonStartPathFinder()));
     }

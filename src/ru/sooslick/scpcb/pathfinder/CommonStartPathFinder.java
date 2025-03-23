@@ -36,4 +36,9 @@ public class CommonStartPathFinder implements PathFinder {
 
         return Math.min(Math.min(defaultRoute, altRoute1), Math.min(altRoute2, altRoute3));
     }
+
+    @Override
+    public String getName() {
+        return "914";
+    }
 }

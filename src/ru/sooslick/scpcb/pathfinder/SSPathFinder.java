@@ -3,13 +3,14 @@ package ru.sooslick.scpcb.pathfinder;
 import ru.sooslick.scpcb.MapExplorer;
 import ru.sooslick.scpcb.map.ScpcbRoom;
 
-public class SSA1PathFinder implements PathFinder {
+public class SSPathFinder implements PathFinder {
     @Override
     public int calcRouteLength(MapExplorer map) {
         XY cont = map.findRoom("room2ccont");
         XY gateA = map.findRoom("gateaentrance");
+        XY gateB = map.findRoom("exit1");
 
-        if (cont == null || gateA == null)
+        if (cont == null)
             return 9999;
 
         XY room008 = map.findRoom("008");
@@ -18,9 +19,14 @@ public class SSA1PathFinder implements PathFinder {
         int startLength = CommonStartPathFinder.instance.calcRouteLength(map);
         int hczLength = calcHcz(map, room008, cont);
 
-        return startLength + hczLength +
+        return startLength * 2 + hczLength +
                 map.pathFind(cont, room079) * 2 +
-                map.pathFind(cont, gateA);
+                Math.min(map.pathFind(cont, gateA), map.pathFind(cont, gateB));
+    }
+
+    @Override
+    public String getName() {
+        return "Sed Seed Inbounds A1+B1";
     }
 
     private int calcHcz(MapExplorer map, XY room008, XY cont) {
@@ -30,13 +36,13 @@ public class SSA1PathFinder implements PathFinder {
 
         if (room008 == null) {
             int route106 = 2 + map.pathFind(room106, cont);
-            int routeShaft = 1 + map.pathFind(shaft, cont);
-            int routeTunnel = tunnel == null ? 9999 : map.pathFind(tunnel, cont);
+            int routeShaft = 2 + map.pathFind(shaft, cont);
+            int routeTunnel = tunnel == null ? 9999 : map.pathFind(tunnel, cont) + 1;
             return Math.min(Math.min(route106, routeShaft), routeTunnel);
         } else {
             int route106 = 2 + map.pathFind(room106, room008) + map.pathFind(room008, cont);
-            int routeShaft = 1 + map.pathFind(shaft, room008) + map.pathFind(room008, cont);
-            int routeTunnel = tunnel == null ? 9999 : map.pathFind(tunnel, room008) + map.pathFind(room008, cont);
+            int routeShaft = 2 + map.pathFind(shaft, room008) + map.pathFind(room008, cont);
+            int routeTunnel = tunnel == null ? 9999 : map.pathFind(tunnel, room008) + map.pathFind(room008, cont) + 1;
             return Math.min(Math.min(route106, routeShaft), routeTunnel);
         }
     }
