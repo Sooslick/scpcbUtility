@@ -28,6 +28,6 @@ public class SSLegacyPathFinder implements PathFinder {
 
     @Override
     public String getName() {
-        return "Set Seed Inbounds A1+B1 (Legacy route)";
+        return "Set Seed Inbounds A1+B1 (Old route)";
     }
 }

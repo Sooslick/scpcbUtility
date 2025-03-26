@@ -22,4 +22,8 @@ public class XY {
     public XY getRelative(int addX, int addY) {
         return new XY(x + addX, y + addY, steps + 1);
     }
+
+    public double distance(XY other) {
+        return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2));
+    }
 }

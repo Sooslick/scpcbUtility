@@ -22,9 +22,9 @@ public class SSB2PathFinder implements PathFinder {
         XY shaft = map.findRoom("shaft");
         XY tunnel = scanTunnel(map);
 
-        int route106 = calcRoute(map, room106, nuke, room008, cont, room079);
-        int routeShaft = calcRoute(map, shaft, nuke, room008, cont, room079);
-        int routeTunnel = calcRoute(map, tunnel, nuke, room008, cont, room079);
+        int route106 = 2 + calcRoute(map, room106, nuke, room008, cont, room079);
+        int routeShaft = 2 + calcRoute(map, shaft, nuke, room008, cont, room079);
+        int routeTunnel = 1 + calcRoute(map, tunnel, nuke, room008, cont, room079);
 
         return startLength * 2 + Math.min(Math.min(route106, routeShaft), routeTunnel) + map.pathFind(cont, gateB);
     }

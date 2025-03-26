@@ -121,9 +121,9 @@ public class MapExplorer {
     }
 
     public String exportJson() {
-        // todo: I have a request for overlap check
+        String actualPrompt = prompt.equals(String.valueOf(seed)) ? "" : prompt;
         StringBuilder sb = new StringBuilder()
-                .append("{\"seedString\":\"").append(prompt.replace("\\", "\\\\").replace("\"", "\\\""))
+                .append("{\"seedString\":\"").append(actualPrompt.replace("\\", "\\\\").replace("\"", "\\\""))
                 .append("\",\"seedValue\":").append(map.seed)
                 .append(",\"state106\":").append(map.state106)
                 .append(",\"angle\":").append(map.playerAngle)

@@ -102,8 +102,7 @@ public class ScpcbRoom {
                 createDoor(false, 0);
                 createDoor(false, 0);
                 createDoor(false, 0);
-                // todo create this door only if "gateaentrance" exist
-                //  since there are some cases where seed contains no gate A
+                // this door probably may cause some issues with maps without gate A, but everything is fine rn
                 createDoor(false, 3);
                 break;
             case "gateaentrance":
