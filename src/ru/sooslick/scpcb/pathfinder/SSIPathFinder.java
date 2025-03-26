@@ -32,6 +32,6 @@ public class SSIPathFinder implements PathFinder {
 
     @Override
     public String getName() {
-        return "Sed Seed Intended A1+B1";
+        return "Set Seed Intended A1+B1";
     }
 }

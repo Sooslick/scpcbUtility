@@ -26,7 +26,7 @@ public class SSPathFinder implements PathFinder {
 
     @Override
     public String getName() {
-        return "Sed Seed Inbounds A1+B1";
+        return "Set Seed Inbounds A1+B1";
     }
 
     private int calcBestHcz(MapExplorer map, XY room008, XY cont) {

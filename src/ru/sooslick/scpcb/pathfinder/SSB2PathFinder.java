@@ -31,7 +31,7 @@ public class SSB2PathFinder implements PathFinder {
 
     @Override
     public String getName() {
-        return "Sed Seed Inbounds B2";
+        return "Set Seed Inbounds B2";
     }
 
     private int calcRoute(MapExplorer map, XY startPoint, XY nuke, XY room008, XY cont, XY room079) {

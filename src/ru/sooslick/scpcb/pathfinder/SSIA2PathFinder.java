@@ -26,6 +26,6 @@ public class SSIA2PathFinder implements PathFinder {
 
     @Override
     public String getName() {
-        return "Sed Seed Intended A2";
+        return "Set Seed Intended A2";
     }
 }
