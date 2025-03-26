@@ -333,7 +333,8 @@ public class Map {
         // define start room
         mapTemp[x][Map.MAP_HEIGHT - 1] = 1;
 
-        int width, height, temp = 0;
+        int width, height;
+        int temp = 0;
         do {
             // generate horizontal line
             width = bbRand(10, 15);
@@ -414,12 +415,11 @@ public class Map {
                             room1Amount[zone]++;
                             break;
                         case 2:
-                            if (getHorizontalConnections(mapTemp, x, y) == 2)
-                                room2Amount[zone]++;
-                            else if (getVerticalConnections(mapTemp, x, y) == 2)
-                                room2Amount[zone]++;
-                            else
+                            int connections = getHorizontalConnections(mapTemp, x, y);
+                            if (connections == 1)
                                 room2cAmount[zone]++;
+                            else
+                                room2Amount[zone]++;
                             break;
                         case 3:
                             room3Amount[zone]++;

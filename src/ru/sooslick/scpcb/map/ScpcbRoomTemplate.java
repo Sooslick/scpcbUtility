@@ -22,17 +22,12 @@ public class ScpcbRoomTemplate {
 
     public static final List<ScpcbRoomTemplate> roomTemplates = new LinkedList<>();
 
-    private static int roomTempId = 0;
-
     private String meshPath;
-    private int id;
     public String name;
     public int shape;
     public int[] zone = new int[5];
     public int commonness;
-    private int large;
     public boolean disableDecals;
-    private int useLightCones;
     public boolean disableOverlapCheck;
 
     private float minX, minY, minZ;
@@ -44,9 +39,6 @@ public class ScpcbRoomTemplate {
     static {
         // Function LoadRoomTemplates
         roomsIni.forEach((k, vals) -> {
-            if ("room ambience".equals(k))
-                return;
-
             String strTemp = vals.get("mesh path");
             ScpcbRoomTemplate rt = createRoomTemplate(k.toLowerCase(), strTemp, getIniBool(k, "disableoverlapcheck"));
 
@@ -84,9 +76,7 @@ public class ScpcbRoomTemplate {
             }
 
             rt.commonness = getIniInt(k, "commonness");
-            rt.large = getIniInt(k, "large");
             rt.disableDecals = getIniBool(k, "disabledecals");
-            rt.useLightCones = getIniInt(k, "usevolumelighting");
 
             roomTemplates.add(rt);
         });
@@ -103,9 +93,7 @@ public class ScpcbRoomTemplate {
         ScpcbRoomTemplate rt = new ScpcbRoomTemplate();
         rt.name = name;
         rt.meshPath = meshpath;
-        rt.id = roomTempId;
         rt.disableOverlapCheck = disableOverlapCheck;
-        roomTempId++;
 
         rt.loadRMesh();
         return rt;
@@ -175,30 +163,21 @@ public class ScpcbRoomTemplate {
 
         int i, j, k;
         float x, y, z;
-        int temp1i;
-        String temp1s;
 
         boolean hasTriggerBox = false;
-
         String isRMesh = reader.readString();
-        if (isRMesh.equals("RoomMesh")) {
-            // continue
-        } else if (isRMesh.equals("RoomMesh.HasTriggerBox"))
+        if (isRMesh.equals("RoomMesh.HasTriggerBox"))
             hasTriggerBox = true;
-        else
-            throw new RuntimeException(meshPath + " is not RMESH / " + isRMesh);
 
         int count2;
-
+        int hasTexture;
         int count = reader.readInt();
-
         for (i = 1; i <= count; i++) {  // drawn mesh
 
             // mesh stuff
-
             for (j = 0; j <= 1; j++) {
-                temp1i = reader.readByte();
-                if (temp1i != 0) {
+                hasTexture = reader.readByte();
+                if (hasTexture != 0) {
                     reader.readString();
                     // texture stuff
                 }
@@ -279,9 +258,10 @@ public class ScpcbRoomTemplate {
         }
 
         count = reader.readInt();   // point entities
+        String pointEntity;
         for (i = 1; i <= count; i++) {
-            temp1s = reader.readString();
-            switch (temp1s) {
+            pointEntity = reader.readString();
+            switch (pointEntity) {
                 case "screen":
                 case "playerstart":
                     reader.readFloat();
