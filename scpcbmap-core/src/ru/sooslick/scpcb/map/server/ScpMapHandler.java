@@ -16,7 +16,7 @@ public class ScpMapHandler implements HttpHandler {
     private long lastActivity = 0;
 
     @Override
-    public void handle(HttpExchange httpExchange) {
+    public void handle(HttpExchange httpExchange) throws IOException {
         lastActivity = System.currentTimeMillis();
         HashMap<String, String> queryParams = new HashMap<>();
         String query = httpExchange.getRequestURI().getQuery();
@@ -63,8 +63,12 @@ public class ScpMapHandler implements HttpHandler {
 
         int seedNumber = method.apply(seed);
         System.out.printf("User prompt: %s (%s)%n", seed, seedNumber);
-        String out = RequestQueue.requestMap(seed, method);
-        answer(httpExchange, out, 200);
+        try {
+            String out = RequestQueue.requestMap(seed, method);
+            answer(httpExchange, out, 200);
+        } catch (Exception e) {
+            answer(httpExchange, "Map generator failed to create map " + seed, 500);
+        }
     }
 
     public long getLastRequestTime() {
@@ -79,15 +83,10 @@ public class ScpMapHandler implements HttpHandler {
         return sb.toString();
     }
 
-    private void answer(HttpExchange e, String content, int code) {
+    private void answer(HttpExchange e, String content, int code) throws IOException {
         byte[] answer = content.getBytes();
-        try {
-            e.sendResponseHeaders(code, answer.length);
-            e.getResponseBody().write(answer);
-        } catch (IOException io) {
-            System.out.println("unable to answer");
-            io.printStackTrace();
-        }
+        e.sendResponseHeaders(code, answer.length);
+        e.getResponseBody().write(answer);
         e.close();
     }
 
