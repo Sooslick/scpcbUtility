@@ -1,0 +1,174 @@
+body {
+    margin: 0;
+	background: repeating-linear-gradient(0deg, black, black 3px, #222 3px, #222 6px);
+	color: white;
+	font-family: 'Courier New';
+}
+body::-webkit-scrollbar {
+	background-color: black;
+	width: 8px;
+}
+body::-webkit-scrollbar-thumb {
+	background: linear-gradient(-45deg, #222, #666);
+	border-radius: 10px;
+}
+#wrapper {
+    background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,255) 100%);
+    min-height: 100vh;
+    height: 100%;
+}
+
+span {
+    word-break: break-word;
+}
+
+a {
+    color: aqua;
+}
+a:hover {
+    color: red;
+}
+
+input {
+	background: #111;
+	color: white;
+	font-family: 'Courier New';
+	width: 240px;
+	border: 2px solid white;
+    font-size: 1.2em;
+}
+input:focus {
+	background: #222;
+	border: 2px dashed white;
+	outline: none;
+}
+#inputs {
+    min-width: 300px;
+}
+#inputs img {
+    float: inline-end;
+}
+
+#page-meta {
+    text-align: right;
+    padding: 8px 16px;
+}
+.page-meta-line {
+    margin: 0px auto 4px;
+}
+
+table {
+	border-collapse: collapse;
+}
+td:hover {
+	background: #444;
+}
+td.overlap {
+    background: #622;
+}
+td img {
+    filter: invert();
+}
+td div {
+    text-align: center;
+    font-size: 0.66em;
+}
+
+.input-line {
+    margin: 12px 16px 0px;
+}
+.input-hint {
+    color: #aaa;
+    font-size: 0.8em;
+    margin: 6px 16px 0px;
+}
+button {
+	border: 2px solid white;
+	background: #111;
+	color: white;
+	font-weight: 700;
+    font-size: 1.2em;
+	font-family: 'Courier New';
+    margin: 8px 16px 8px;
+    padding: 4px 32px;
+    width: 248px;
+}
+button:hover {
+	background: #222;
+}
+
+#map-block, #header {
+    display: flex;
+    justify-content: center;
+}
+.map-component {
+    border: 2px solid #666;
+    background: rgba(1,1,1,0.4);
+    margin: 8px 16px;
+    padding: 4px;
+}
+#map {
+    width: fit-content;
+}
+#map td {
+    min-width: 16px;
+}
+#map-pd {
+    display: none;
+}
+#map-pd td {
+    width: 10px;
+    height: 10px;
+}
+#map-forest {
+    display: none;
+}
+#map-forest td {
+    width: 16px;
+    height: 16px;
+}
+#room-info {
+    height: 160px;
+}
+.info-line {
+    max-width: 420px;
+}
+
+.hidden-hint {
+    position: relative;
+    background: white;
+    border-radius: 13px;
+}
+.hidden-hint::before {
+    content: '?';
+    font-weight: bold;
+    font-size: 0.8em;
+    padding: 0px 4px;
+    color: black;
+}
+.hidden-hint .hidden-hint-text {
+    visibility: hidden;
+    position: absolute;
+    top: 32px;
+    left: -100px;
+    z-index: 1;
+    border: 2px solid white;
+    width: 200px;
+    padding: 8px 16px;
+    background: rgba(0,0,0,0.75);
+}
+.hidden-hint:hover .hidden-hint-text {
+    visibility: visible;
+}
+
+.meta-head {
+    font-weight: 700;
+    font-size: 1.1em;
+    text-decoration: underline;
+    margin-bottom: 8px;
+}
+
+.data-invalid {
+	background: rgba(128, 0, 0, 0.3) !important;
+	border-color: rgba(128, 0, 0, 1) !important;
+}
