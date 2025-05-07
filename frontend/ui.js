@@ -92,8 +92,18 @@ function createMap() {
 
     let xhr = new XMLHttpRequest();
 	xhr.onload = buildMap;
+	xhr.ontimeout = unableRequestMap;
+	xhr.addEventListener("error", unableRequestMap);
+	xhr.timeout = 6000;
 	xhr.open('GET', '/map' + query, true);
 	xhr.send();
+}
+
+function unableRequestMap() {
+	let errortext = document.getElementById("error-text");
+    errortext.hidden = false;
+    errortext.innerHTML = "Service seems to be unavailable. DM @Sooslick in Discord";
+    loading = false;
 }
 
 function nullMap() {
@@ -125,10 +135,20 @@ function buildMap() {
     loading = false;
     document.getElementById("loading-gif").hidden = true;
     if (this.status != 200) {
-        document.getElementById("error-text").hidden = false;
+    	let errtxt = document.getElementById("error-text");
+        errtxt.hidden = false;
+        errtxt.innerHTML = "Something is broken, DM @Sooslick in Discord";
+        return;
     }
 	if (this.status == 200) {
-		currentMap = JSON.parse(this.responseText);
+		try {
+			currentMap = JSON.parse(this.responseText);
+		} catch (jumpscare) {
+			let errtxt = document.getElementById("error-text");
+            errtxt.hidden = false;
+            errtxt.innerHTML = "Unable to create seed, DM @Sooslick in Discord";
+            return;
+		}
 
 		// show blocks
         document.getElementById("map").hidden = false;
@@ -229,21 +249,21 @@ function getRoomInfo(x, y) {
     updateOverlaps(null);   // I can optimize this call but I'm a bit lazy to do this
     currentMap.rooms.forEach(r => {
         if (r.x == x && r.y == y) {
+        	updateOverlaps(r.overlaps);
+		    document.getElementById("room").innerHTML = r.name;
             let en = r.en == null ? "-" : r.en;
             let ek = r.ek == null ? "-" : r.ek;
             if (en == ek) {
 		        document.getElementById("room-event").innerHTML = en;
-		        document.getElementById("event-hint").hidden = true;
 		    } else {
 		        document.getElementById("room-event").innerHTML = en + " / " + ek;
-		        document.getElementById("event-hint").hidden = false;
+		        document.getElementById("rnd-info").innerHTML = "The game can create different events for this room, depending on Aggressive NPCs setting";
+		        return;
 		    }
-		    document.getElementById("room").innerHTML = r.name;
 		    if (r.info == null || r.info.includes("tunnel") || r.info.includes("forest"))
 		        document.getElementById("rnd-info").innerHTML = "-"
 		    else
 		        document.getElementById("rnd-info").innerHTML = r.info;
-            updateOverlaps(r.overlaps);
 		}
     });
 }
