@@ -1,7 +1,6 @@
 let currentMap = null;
 let loading = false;
-let exitx = 0;
-let exity = 0;
+let exitr = null;
 let savedOverlaps = null;
 let link = null;
 
@@ -108,8 +107,7 @@ function unableRequestMap() {
 
 function nullMap() {
     currentMap = null;
-    exitx = 0;
-    exity = 0;
+    exitr = null;
 
     for (let i = 0; i <= 18; i++)
         for (let j = 0; j <= 18; j++) {
@@ -174,33 +172,35 @@ function buildMap() {
 		// fill main grid
 		currentMap.rooms.forEach(r => {
 		    let cellId = "c" + r.x + "-" + r.y;
-			let img = document.createElement("img");
-			img.setAttribute("src", getRoomImage(r.name, r.en, r.ek));
-			img.style.transform = "rotate(" + getRoomRotation(r.name, r.angle) + "deg)";
+		    let svg = svgCreate(
+		    	getRoomImage(r.name, r.en, r.ek),
+		    	getRoomRotation(r.name, r.angle),
+		    	r.dh,
+		    	r.dv
+		    );
+
 			let td = document.getElementById(cellId);
-			td.appendChild(img);
-
-			if (r.dv != null)
-			    td.classList.add("dv" + r.dv);
-
-			if (r.dh != null)
-			    td.classList.add("dh" + r.dh);
+			td.innerHTML = svg;
 
 			if (r.name == "room2tunnel")
 			    buildTunnel(r.info)
 			else if (r.name == "room860")
 			    buildForest(r.info)
 			else if (r.name == "tunnel") {
-			    if (r.y > exity || (r.y == exity && r.x <= exitx)) {
-			        exitx = r.x;
-			        exity = r.y;
+				if (exitr == null)
+					exitr = r;
+			    else if (r.y > exitr.y || (r.y == exitr.y && r.x <= exitr.x)) {
+			        exitr = r;
 			    }
 			}
 		});
 
-		let tunnelRooms = document.getElementById("c" + exitx + "-" + exity).childNodes;
-		if (tunnelRooms.length > 0)
-		    tunnelRooms[0].setAttribute("src", "img/room2EXIT.png");
+		document.getElementById("c" + exitr.x + "-" + exitr.y).innerHTML = svgCreate(
+			"room2EXIT",
+			getRoomRotation("tunnel", exitr.angle),
+            exitr.dh,
+            exitr.dv
+		);
 
 		// create annotations
 		currentMap.rooms.forEach(r => {
@@ -271,50 +271,49 @@ function getRoomInfo(x, y) {
 function getRoomImage(name, en, ek) {
     switch (name) {
         case "tunnel":
-        case "tunnel2": return "img/room2.png";
-        case "room2closets": return "img/room2CLOSETS.png";
+        case "tunnel2": return "room2";
+        case "room2closets": return "room2CLOSETS";
         case "room012":
         case "room2shaft":
-        case "room2scps2": return "img/room2MASK.png";
-        case "room2poffices": return "img/room2CODE.png";
-        case "room2nuke":
-        case "room2elevator": return "img/room2E.png";
+        case "room2scps2": return "room2MASK";
+        case "room2poffices": return "room2CODE";
         case "room049":
-        case "room2tunnel": return "img/room2ELEV.png";
+        case "room2tunnel": return "room2E";
         case "checkpoint1":
         case "checkpoint2":
         case "testroom":
         case "room860":
         case "room2doors":
         case "room2gw":
-        case "room2servers": return "img/room2L.png";
+        case "room2servers": return "room2L";
         case "room2storage":
-        case "room2scps": return "img/room2SCP.png";
+        case "room2scps": return "room2SCP";
         case "medibay":
         case "room1123":
         case "room2testroom2":
         case "room2cafeteria":
-        case "room2sl": return "img/room2SL.png";
+        case "room2sl": return "room2SL";
         case "room2tesla":
         case "room2tesla_hcz":
-        case "room2tesla_lcz": return "img/room2T.png";
+        case "room2tesla_lcz": return "room2T";
+        case "room2nuke":
         case "room2sroom":
-        case "room2toilets": return "img/room2WC.png";
+        case "room2toilets": return "room2WC";
         case "room2_4":
-        case "room2pit": return "img/room2TRAP.png";
+        case "room2pit": return "room2TRAP";
         case "lockroom":
         case "lockroom2":
         case "lockroom3":
-        case "room1162": return "img/room2C.png";
+        case "room1162": return "room2C";
         case "room3servers2":
         case "room513":
-        case "room966": return "img/room3L.png";
+        case "room966": return "room3L";
         case "room3gw":
-        case "room3storage": return "img/room3R.png";
-        case "room205": return "img/room1.png";
-        case "room1archive": return "img/room1K.png";
-        case "start": return "img/room1START.png";
-        case "coffin": return "img/room1PD.png";
+        case "room3storage": return "room3R";
+        case "room205": return "room1";
+        case "room1archive": return "room1K";
+        case "start": return "room1START";
+        case "coffin": return "room1PD";
     }
 
     if (en == null)
@@ -322,24 +321,24 @@ function getRoomImage(name, en, ek) {
     if (ek == null)
         ek = "";
     if (name.startsWith("room3") && (en.startsWith("106s") || ek.startsWith("106s")))
-        return "img/room3PD.png";
+        return "room3PD";
     if (name.startsWith("room4") && (en.startsWith("106s") || ek.startsWith("106s")))
-        return "img/room4PD.png";
+        return "room4PD";
     if (name.startsWith("end") && (en.startsWith("endroom106") || ek.startsWith("endroom106")))
-        return "img/room1PD.png";
+        return "room1PD";
 
     if (name.startsWith("room1"))
-        return "img/room1.png";
+        return "room1";
     else if (name.startsWith("room2c"))
-        return "img/room2C.png";
+        return "room2C";
     else if (name.startsWith("room2"))
-        return "img/room2.png";
+        return "room2";
     else if (name.startsWith("room3"))
-        return "img/room3.png";
+        return "room3";
     else if (name.startsWith("room4"))
-        return "img/room4.png";
+        return "room4";
     else
-        return "img/room1.png";
+        return "room1";
 }
 
 function getRoomRotation(name, angle) {
