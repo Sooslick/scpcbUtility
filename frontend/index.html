@@ -25,13 +25,13 @@
             <div class="input-hint" id="seed-hint">Number in range 1, 2147483647</div>
             <div class="input-hint" id="blank-hint">Leave fields blank for random seed</div>
             <button id="generate" onclick="createMap()">CREATE MAP</button>
-            <img id="loading-gif" src="load.gif" hidden />
+            <img id="loading-gif" src="load.gif" hidden/>
         </div>
         <div id="page-meta" class="map-component">
             <div class="page-meta-line">SCP: Containment Breach v1.3.11 map</div>
-            <div class="page-meta-line">App version: v1.3.1 // 250427</div>
+            <div class="page-meta-line">App version: v1.4 // 250509</div>
             <div class="page-meta-line">Created by <a id="sooslick-link" href="https://sooslick.art/">@Sooslick</a> for speedrunning community</div>
-            <br />
+            <br/>
             <div class="page-meta-line">Download game: <a id="scpcbgame-link" href="https://www.scpcbgame.com/">Official website</a></div>
             <div class="page-meta-line">Download Speedrun Mod: <a id="mod-link" href="https://github.com/forxandknives/SCPCB-Speedrun-Mod/releases">Github link</a></div>
         </div>
@@ -40,11 +40,11 @@
         <div class="map-column">
             <div id="map" class="map-component" hidden>
                 <table id="map-table"></table>
-                <!-- todo implement as canvas -->
             </div>
             <button onclick="shareMap()" id="map-share" hidden>COPY LINK</button>
             <div id="copied-text" class="input-hint" hidden>Copied to clipboard</div>
-            <div id="error-text" class="input-hint" hidden>Service seems to be unavailable. DM @Sooslick in Discord</div>
+            <div id="error-text" class="input-hint" hidden>Service seems to be unavailable. DM @Sooslick in Discord
+            </div>
         </div>
         <div class="map-column">
             <div id="map-info" class="map-component" hidden>
@@ -93,7 +93,11 @@
             </div>
             <div id="map-forest" class="map-component">
                 <div class="meta-head">Forest</div>
-                <table id="table-forest"></table>
+                <div id="map-forest-wrap">
+                    <hr/>
+                    <table id="table-forest"></table>
+                    <hr/>
+                </div>
             </div>
         </div>
     </div>

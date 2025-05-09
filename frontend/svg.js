@@ -78,13 +78,13 @@ function svgRoom1K() {
 }
 
 function svgRoom1PD() {
-	return svgRoom1() + '<circle cx="16" cy="16" r="3" stroke="white" stroke-width="1" fill="none" />';
+	return svgRoom1() + '<circle cx="16" cy="16" r="3" stroke="white" stroke-width="1.5" fill="none" />';
 }
 
 function svgRoom1Start() {
 	return svgRoom1() +
-		'<line x1="19" y1="9" x2="25" y2="15" stroke="white" />' +
-		'<line x1="25" y1="9" x2="19" y2="15" stroke="white" />';
+		'<line x1="17" y1="9" x2="23" y2="15" stroke="white" />' +
+		'<line x1="23" y1="9" x2="17" y2="15" stroke="white" />';
 }
 
 function svgRoom2() {
@@ -120,15 +120,15 @@ function svgRoom2Closets() {
 
 function svgRoom2Code() {
 	return svgRoom2() +
-		"<rect width='5' height='1' x='5' y='5' fill='white' />" +
-		"<rect width='5' height='1' x='5' y='27' fill='white' />" +
-		"<rect width='5' height='1' x='22' y='16' fill='white' />";
+		"<rect width='6' height='2' x='5' y='5' fill='white' />" +
+		"<rect width='6' height='2' x='5' y='26' fill='white' />" +
+		"<rect width='6' height='2' x='21' y='16' fill='white' />";
 }
 
 function svgRoom2E() {
 	return svgRoom2L() +
-    	"<rect width='5' height='1' x='22' y='5' fill='white' />" +
-    	"<rect width='5' height='1' x='5' y='27' fill='white' />";
+    	"<rect width='6' height='2' x='22' y='5' fill='white' />" +
+    	"<rect width='6' height='2' x='5' y='27' fill='white' />";
 }
 
 function svgRoom2Exit() {
@@ -138,28 +138,28 @@ function svgRoom2Exit() {
 }
 
 function svgRoom2L() {
-	return svgRoom2() + '<line x1="6" y1="16" x2="26" y2="16" stroke="white" />';
+	return svgRoom2() + '<line x1="6" y1="16" x2="26" y2="16" stroke="white" stroke-width="2" />';
 }
 
 function svgRoom2Mask() {
-	return svgRoom2() + "<rect width='5' height='1' x='5' y='27' fill='white' />";
+	return svgRoom2() + "<rect width='6' height='2' x='5' y='27' fill='white' />";
 }
 
 function svgRoom2Scp() {
 	return svgRoom2() +
-		'<line x1="5" y1="16" x2="10" y2="16" stroke="white" />' +
-		'<line x1="22" y1="16" x2="27" y2="16" stroke="white" />';
+		'<line x1="5" y1="16" x2="10" y2="16" stroke="white" stroke-width="2" />' +
+		'<line x1="22" y1="16" x2="27" y2="16" stroke="white" stroke-width="2" />';
 }
 
 function svgRoom2Sl() {
-	return svgRoom2() + "<rect width='5' height='1' x='22' y='26' fill='white' />";
+	return svgRoom2() + "<rect width='6' height='2' x='22' y='26' fill='white' />";
 }
 
 function svgRoom2T() {
 	return svgRoom2() +
-		'<line x1="6" y1="16" x2="17" y2="14" stroke="white" />' +
-		'<line x1="17" y1="14" x2="15" y2="18" stroke="white" />' +
-		'<line x1="15" y1="18" x2="26" y2="16" stroke="white" />';
+		'<line x1="6" y1="16" x2="17" y2="13.5" stroke="white" stroke-width="1.5" />' +
+		'<line x1="17" y1="13.5" x2="15" y2="18.5" stroke="white" stroke-width="1.5" />' +
+		'<line x1="15" y1="18.5" x2="26" y2="16" stroke="white" stroke-width="1.5" />';
 }
 
 function svgRoom2Trap() {
@@ -178,7 +178,7 @@ function svgRoom2Trap() {
 }
 
 function svgRoom2Wc() {
-	return svgRoom2() + '<line x1="22" y1="16" x2="28" y2="16" stroke="white" />';
+	return svgRoom2() + '<line x1="22" y1="16" x2="28" y2="16" stroke="white" stroke-width="2" />';
 }
 
 function svgRoom3() {
@@ -204,10 +204,11 @@ function svgRoom3L() {
 }
 
 function svgRoom3PD() {
-	return svgRoom3() + '<circle cx="16" cy="16" r="4" stroke="white" stroke-width="1" fill="none" />';
+	return svgRoom3() + '<circle cx="16" cy="16" r="4" stroke="white" stroke-width="1.5" fill="none" />';
 }
 
 function svgRoom3R() {
+	return svgRoom3() + '<line x1="8" y1="8" x2="24" y2="24" stroke="white" />';
 	return svgRoom3() + '<line x1="8" y1="8" x2="24" y2="24" stroke="white" />';
 }
 
@@ -235,5 +236,5 @@ function svgRoom4() {
 }
 
 function svgRoom4PD() {
-	return svgRoom4() + '<circle cx="16" cy="16" r="4" stroke="white" stroke-width="1" fill="none" />';
+	return svgRoom4() + '<circle cx="16" cy="16" r="4" stroke="white" stroke-width="1.5" fill="none" />';
 }

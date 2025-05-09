@@ -119,6 +119,7 @@ button:hover {
 }
 #map-pd {
     display: none;
+    padding-bottom: 12px;
 }
 #map-pd td {
     width: 10px;
@@ -126,6 +127,16 @@ button:hover {
 }
 #map-forest {
     display: none;
+}
+#map-forest-wrap {
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+#map-forest hr {
+	width: 66%;
+	border: 4px solid rgba(100, 100, 100, 0.5);
+	margin: 0 auto;
+	display: flex;
 }
 #map-forest td {
     width: 16px;
