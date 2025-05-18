@@ -19,7 +19,7 @@ public class SSA2PathFinder implements PathFinder {
         int startLength = CommonStartPathFinder.instance.calcRouteLength(map);
         int hczLength = calcBestHcz(map, room106, room008, cont);
 
-        return startLength * 2 + hczLength +
+        return startLength + 1 + hczLength +
                 map.pathFind(cont, room079, room106, cont, gateA);
     }
 
@@ -29,13 +29,11 @@ public class SSA2PathFinder implements PathFinder {
     }
 
     private int calcBestHcz(MapExplorer map, XY room106, XY room008, XY cont) {
-        XY shaft = map.findRoom("shaft");
         XY tunnel = scanTunnel(map);
 
-        int route106 = 2 + calcHcz(map, room106, room106, room008, cont);
-        int routeShaft = 2 + calcHcz(map, shaft, room106, room008, cont);
-        int routeTunnel = 1 + calcHcz(map, tunnel, room106, room008, cont);
-        return Math.min(Math.min(route106, routeShaft), routeTunnel);
+        int route106 = calcHcz(map, room106, room106, room008, cont);
+        int routeTunnel = calcHcz(map, tunnel, room106, room008, cont);
+        return Math.min(route106, routeTunnel);
     }
 
     private int calcHcz(MapExplorer map, XY startPoint, XY room106, XY room008, XY cont) {

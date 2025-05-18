@@ -19,7 +19,7 @@ public class SSPathFinder implements PathFinder {
         int startLength = CommonStartPathFinder.instance.calcRouteLength(map);
         int hczLength = calcBestHcz(map, room008, cont);
 
-        return startLength * 2 + hczLength +
+        return startLength + 1 + hczLength +
                 map.pathFind(cont, room079) * 2 +
                 Math.min(map.pathFind(cont, gateA), map.pathFind(cont, gateB));
     }
@@ -34,9 +34,9 @@ public class SSPathFinder implements PathFinder {
         XY shaft = map.findRoom("shaft");
         XY tunnel = scanTunnel(map);
 
-        int route106 = 2 + calcHcz(map, room106, room008, cont);
-        int routeShaft = 2 + calcHcz(map, shaft, room008, cont);
-        int routeTunnel = 1 + calcHcz(map, tunnel, room008, cont);
+        int route106 = calcHcz(map, room106, room008, cont);
+        int routeShaft = calcHcz(map, shaft, room008, cont);
+        int routeTunnel = calcHcz(map, tunnel, room008, cont);
         return Math.min(Math.min(route106, routeShaft), routeTunnel);
     }
 

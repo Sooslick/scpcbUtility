@@ -18,7 +18,7 @@ public class SSIA2PathFinder implements PathFinder {
         XY room914 = map.findRoom("914");
         XY room049 = map.findRoom("room049");
 
-        return CommonStartPathFinder.instance.calcRouteLength(map) * 2 +
+        return CommonStartPathFinder.instance.calcRouteLength(map) +
                 map.pathFind(room914, sl, room049, room106, room008, room106, cont) +
                 map.pathFind(cont, room079) * 2 +
                 map.pathFind(cont, gateA);

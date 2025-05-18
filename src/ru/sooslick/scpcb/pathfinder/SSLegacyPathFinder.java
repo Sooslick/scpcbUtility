@@ -21,7 +21,7 @@ public class SSLegacyPathFinder implements PathFinder {
         int slToContLength = room008 == null ?
                 map.pathFind(sl, cont) :
                 map.pathFind(sl, room008, cont);
-        return startLength * 2 + slToContLength +
+        return startLength + slToContLength +
                 map.pathFind(cont, room079) * 2 +
                 Math.min(map.pathFind(cont, gateA), map.pathFind(cont, gateB));
     }

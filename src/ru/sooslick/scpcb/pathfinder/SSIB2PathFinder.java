@@ -19,7 +19,7 @@ public class SSIB2PathFinder implements PathFinder {
         XY room049 = map.findRoom("room049");
         XY nuke = map.findRoom("room2nuke");
 
-        int start = CommonStartPathFinder.instance.calcRouteLength(map) * 2 + map.pathFind(room914, sl);
+        int start = CommonStartPathFinder.instance.calcRouteLength(map) + map.pathFind(room914, sl);
 
         // SCENARIO 1: NUKE BEFORE ENTRANCE ZONE
         int routeA = map.pathFind(sl, room008, room049, room106, nuke, cont);

@@ -23,16 +23,20 @@ public class SeedFinder {
 
     private static void search(List<PathFinderParams> pathFinders, int start, int end, boolean printMaze) {
         for (int i = start; i < end; i++) {
-            MapExplorer map = SeedGenerator.generateMap(String.valueOf(i), SeedGenerator.SPEEDRUN_MOD);
-            pathFinders.forEach(pfp -> {
-                PathFinder pf = pfp.getPathFinder();
-                int routeLength = map.testRouteLength(pf);
-                if (routeLength < pfp.getMaxLength()) {
-                    if (printMaze)
-                        map.printMaze();
-                    System.out.println(map.seed + " - " +  pf.getName() + ", route length " + routeLength + "  -->  https://sooslick.art/scpcbmap/index?seed=" + map.seed);
-                }
-            });
+            try {
+                MapExplorer map = SeedGenerator.generateMap(String.valueOf(i), SeedGenerator.SPEEDRUN_MOD);
+                pathFinders.forEach(pfp -> {
+                    PathFinder pf = pfp.getPathFinder();
+                    int routeLength = map.testRouteLength(pf);
+                    if (routeLength < pfp.getMaxLength()) {
+                        if (printMaze)
+                            map.printMaze();
+                        System.out.println(map.seed + " - " + pf.getName() + ", route length " + routeLength + "  -->  https://sooslick.art/scpcbmap/index?seed=" + map.seed);
+                    }
+                });
+            } catch (Exception e) {
+                System.out.println("Error generating seed " + i);
+            }
         }
     }
 

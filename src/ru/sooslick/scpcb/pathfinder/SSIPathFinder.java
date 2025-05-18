@@ -19,7 +19,7 @@ public class SSIPathFinder implements PathFinder {
         XY room914 = map.findRoom("914");
         XY room049 = map.findRoom("room049");
 
-        int startLength = CommonStartPathFinder.instance.calcRouteLength(map) * 2 + map.pathFind(room914, sl);
+        int startLength = CommonStartPathFinder.instance.calcRouteLength(map) + map.pathFind(room914, sl);
         int routeA = map.pathFind(sl, room008, room049, room106, cont);
         int routeB = map.pathFind(sl, room049, room008, room106, cont);
         int routeC = map.pathFind(sl, room049, room106, room008, cont);
