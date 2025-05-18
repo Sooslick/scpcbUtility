@@ -195,12 +195,14 @@ function buildMap() {
 			}
 		});
 
-		document.getElementById("c" + exitr.x + "-" + exitr.y).innerHTML = svgCreate(
-			"room2EXIT",
-			getRoomRotation("tunnel", exitr.angle),
-            exitr.dh,
-            exitr.dv
-		);
+		if (exitr != null) {
+			document.getElementById("c" + exitr.x + "-" + exitr.y).innerHTML = svgCreate(
+				"room2EXIT",
+				getRoomRotation("tunnel", exitr.angle),
+        	    exitr.dh,
+        	    exitr.dv
+			);
+		}
 
 		// create annotations
 		currentMap.rooms.forEach(r => {
