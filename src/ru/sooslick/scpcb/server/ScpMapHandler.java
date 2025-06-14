@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpHandler;
 import ru.sooslick.scpcb.SeedGenerator;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.function.Function;
@@ -19,12 +20,12 @@ public class ScpMapHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         lastActivity = System.currentTimeMillis();
         HashMap<String, String> queryParams = new HashMap<>();
-        String query = httpExchange.getRequestURI().getQuery();
+        String query = httpExchange.getRequestURI().getRawQuery();
         if (query != null) {
             for (String entry : query.split("&")) {
                 String[] kv = entry.split("=");
                 String k = kv[0].toLowerCase();
-                String v = kv.length > 1 ? kv[1] : null;
+                String v = kv.length > 1 ? URLDecoder.decode(kv[1]) : null;
                 queryParams.put(k, v);
             }
         }
