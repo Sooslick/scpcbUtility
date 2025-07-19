@@ -1,9 +1,15 @@
 package ru.sooslick.scpcb.pathfinder;
 
+import ru.sooslick.scpcb.map.ScpcbRoom;
+
 public class XY {
     public int x;
     public int y;
     public int steps;
+
+    public static XY of(ScpcbRoom r) {
+        return new XY((int) (r.x / 8), (int) (r.z / 8));
+    }
 
     public XY(int x, int y) {
         this(x, y, 0);

@@ -45,6 +45,6 @@ Existing Pathfinder classes and recommended scores:
 - `ru.sooslick.scpcb.pathfinder.SSIPathFinder:50` - Set Seed Intended A1/B1;
 - `ru.sooslick.scpcb.pathfinder.SSIA2PathFinder:52` - Set Seed Intended A2;
 - `ru.sooslick.scpcb.pathfinder.SSIB2PathFinder:55` - Set Seed Intended B2;
-- `ru.sooslick.scpcb.pathfinder.AnyPercentPathFinder:30` - Any% route (Out of Bounds)
+- `ru.sooslick.scpcb.pathfinder.AnyPercent914PathFinder:30` - Any% route (Out of Bounds)
 
 Other experimental pathfinders also may be available in `ru.sooslick.scpcb.pathfinder` package

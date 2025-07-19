@@ -30,13 +30,17 @@ public class MapExplorer {
     }
 
     public XY findRoom(String name) {
-        ScpcbRoom room = map.savedRooms.stream()
+        ScpcbRoom room = getRoom(name);
+        if (room == null)
+            return null;
+        return XY.of(room);
+    }
+
+    public ScpcbRoom getRoom(String name) {
+        return map.savedRooms.stream()
                 .filter(r -> name.equals(r.roomTemplate.name))
                 .findFirst()
                 .orElse(null);
-        if (room == null)
-            return null;
-        return new XY((int) (room.x / 8), (int) (room.z / 8));
     }
 
     public int pathFind(XY... points) {

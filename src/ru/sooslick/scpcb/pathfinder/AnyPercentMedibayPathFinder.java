@@ -2,7 +2,7 @@ package ru.sooslick.scpcb.pathfinder;
 
 import ru.sooslick.scpcb.MapExplorer;
 
-public class AnyPercentPathFinder implements PathFinder {
+public class AnyPercentMedibayPathFinder implements PathFinder {
     @Override
     public int calcRouteLength(MapExplorer map) {
         XY cont = map.findRoom("room2ccont");
@@ -23,6 +23,6 @@ public class AnyPercentPathFinder implements PathFinder {
 
     @Override
     public String getName() {
-        return "Any%";
+        return "Any% (Old route)";
     }
 }
