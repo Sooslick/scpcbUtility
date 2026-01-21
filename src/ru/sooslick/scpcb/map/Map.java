@@ -108,6 +108,11 @@ public class Map {
     ///////////////////////////////////////////
 
     private void setRoom(String roomName, int roomType, int pos, int minPos, int maxPos) {
+        if (maxPos < minPos) {
+//            System.out.println("Can't place " + roomName);
+            return;
+        }
+
 //        System.out.println("--- SETROOM: " + roomName.toUpperCase() + " ---");
         boolean looped = false;
         boolean canPlace = true;
