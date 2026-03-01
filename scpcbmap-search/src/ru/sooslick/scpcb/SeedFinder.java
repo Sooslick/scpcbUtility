@@ -1,5 +1,6 @@
 package ru.sooslick.scpcb;
 
+import ru.sooslick.scpcb.map.Map;
 import ru.sooslick.scpcb.pathfinder.PathFinder;
 import ru.sooslick.scpcb.pathfinder.PathFinderFactory;
 
@@ -24,13 +25,14 @@ public class SeedFinder {
     private static void search(List<PathFinderParams> pathFinders, int start, int end, boolean printMaze) {
         for (int i = start; i < end; i++) {
             try {
-                MapExplorer map = SeedGenerator.generateMap(String.valueOf(i), SeedGenerator.SPEEDRUN_MOD);
+                Map map = SeedGenerator.generateMap(String.valueOf(i), SeedGenerator.SPEEDRUN_MOD);     // todo get rid of int to string conversion
+                MapExplorer mapExplorer = new MapExplorer(null, i, map);
                 pathFinders.forEach(pfp -> {
                     PathFinder pf = pfp.getPathFinder();
-                    int routeLength = map.testRouteLength(pf);
+                    int routeLength = mapExplorer.testRouteLength(pf);
                     if (routeLength < pfp.getMaxLength()) {
                         if (printMaze)
-                            map.printMaze();
+                            mapExplorer.printMaze();
                         System.out.println(map.seed + " - " + pf.getName() + ", route length " + routeLength + "  -->  https://sooslick.art/scpcbmap/index?seed=" + map.seed);
                     }
                 });

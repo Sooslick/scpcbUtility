@@ -9,6 +9,8 @@ Features:
 
 ### Complile & launch
 
+> **_NOTE:_** I'm moving project to java 17 and adding build tools, so the following info is obsolete.
+
 All scripts use plain java 8. No project building tools like Maven or Gradle are used.
 
 Launch main method from your favorite IDE or from compiled .jar. Make sure your working directory is project root
@@ -34,17 +36,17 @@ Script supports following argline parameters:
   If you want multiple pathfinders, separate them by comma.
 
 Example command:  
-`java -cp scpcbmap.jar ru.sooslick.scpcb.SeedFinder --print-maze --start=10000 --end=20000 --path-finders=ru.sooslick.scpcb.pathfinder.SSPathFinder:42,ru.sooslick.scpcb.pathfinder.SSIPathFinder:66`  
+`java -cp scpcbmap.jar SeedFinder --print-maze --start=10000 --end=20000 --path-finders=SSPathFinder:42,SSIPathFinder:66`  
 This command will generate seeds from 10000 to 19999, printing each found seed.
 
 Existing Pathfinder classes and recommended scores:
-- `ru.sooslick.scpcb.pathfinder.SSPathFinder:30` - Set Seed Inbounds A1/B1 with PD route;
-- `ru.sooslick.scpcb.pathfinder.SSLegacyPathFinder:45` - Set Seed Inbounds A1/B1 with classic route;
-- `ru.sooslick.scpcb.pathfinder.SSA2PathFinder:35` - Set Seed Inbounds A2 with PD route;
-- `ru.sooslick.scpcb.pathfinder.SSB2PathFinder:35` - Set Seed Inbounds B2 with PD route;
-- `ru.sooslick.scpcb.pathfinder.SSIPathFinder:50` - Set Seed Intended A1/B1;
-- `ru.sooslick.scpcb.pathfinder.SSIA2PathFinder:52` - Set Seed Intended A2;
-- `ru.sooslick.scpcb.pathfinder.SSIB2PathFinder:55` - Set Seed Intended B2;
-- `ru.sooslick.scpcb.pathfinder.AnyPercent914PathFinder:30` - Any% route (Out of Bounds)
+- `SSPathFinder:30` - Set Seed Inbounds A1/B1 with PD route;
+- `SSLegacyPathFinder:45` - Set Seed Inbounds A1/B1 with classic route;
+- `SSA2PathFinder:35` - Set Seed Inbounds A2 with PD route;
+- `SSB2PathFinder:35` - Set Seed Inbounds B2 with PD route;
+- `SSIPathFinder:50` - Set Seed Intended A1/B1;
+- `SSIA2PathFinder:52` - Set Seed Intended A2;
+- `SSIB2PathFinder:55` - Set Seed Intended B2;
+- `AnyPercent914PathFinder:30` - Any% route (Out of Bounds)
 
 Other experimental pathfinders also may be available in `ru.sooslick.scpcb.pathfinder` package

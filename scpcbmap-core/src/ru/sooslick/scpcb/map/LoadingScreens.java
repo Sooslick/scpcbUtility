@@ -1,4 +1,4 @@
-package ru.sooslick.scpcb;
+package ru.sooslick.scpcb.map;
 
 import java.util.Arrays;
 

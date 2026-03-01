@@ -1,9 +1,8 @@
 package ru.sooslick.scpcb;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 public class SeedTester {
@@ -114,12 +113,10 @@ public class SeedTester {
         private final List<String> dictionary;
 
         private DictionarySeedPrinter() {
-            try {
-                dictionary = new ArrayList<>(
-                        Files.readAllLines(Paths.get("WL_DICT.txt")));
-            } catch (IOException e) {
-                throw new RuntimeException("bruh gimme acces to dictionary", e);
-            }
+            InputStream is = this.getClass().getResourceAsStream("WL_DICT.txt");
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            dictionary = br.lines().toList();
         }
 
         public void print(String seed) {

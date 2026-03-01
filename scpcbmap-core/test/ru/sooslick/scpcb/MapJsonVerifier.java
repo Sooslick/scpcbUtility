@@ -1,14 +1,13 @@
-package ru.sooslick.scpcb.map;
+package ru.sooslick.scpcb;
 
-import ru.sooslick.scpcb.MapExplorer;
-import ru.sooslick.scpcb.SeedGenerator;
+import ru.sooslick.scpcb.map.Map;
+import ru.sooslick.scpcb.map.ScpcbRoom;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +27,10 @@ public class MapJsonVerifier {
     }
 
     public void test() throws IOException {
-        byte[] json = Files.readAllBytes(Paths.get(pathJson));
+        InputStream is = this.getClass().getResourceAsStream(pathJson);
+        if (is == null)
+            throw new FileNotFoundException("Resource " + pathJson + " is not exist");
+        byte[] json = is.readAllBytes();
 
         // search "rooms" array
         int i = 19;
@@ -41,22 +43,30 @@ public class MapJsonVerifier {
             i = readRoom(json, i);
         }
 
-        AtomicInteger failures = new AtomicInteger();
-        MapExplorer pf = SeedGenerator.generateMap(seed);
-        expectedRooms.forEach(expectedRoom -> {
-            ScpcbRoom actualRoom = pf.grid[expectedRoom.x][expectedRoom.y];
+        int failures = 0;
+        Map map = SeedGenerator.generateMap(seed);
+        ScpcbRoom[][] grid = new ScpcbRoom[Map.MAP_WIDTH][Map.MAP_HEIGHT];
+        for (ScpcbRoom r : map.savedRooms) {
+            int x = (int) (r.x / 8);
+            int y = (int) (r.z / 8);
+            grid[x][y] = r;
+        }
+
+        for (RoomMeta expectedRoom : expectedRooms) {
+            ScpcbRoom actualRoom = grid[expectedRoom.x][expectedRoom.y];
             if (actualRoom == null) {
-                failures.getAndIncrement();
+                failures++;
                 System.out.printf("Expected room at %d:%d%n", expectedRoom.x, expectedRoom.y);
             } else if (!actualRoom.roomTemplate.name.equals(expectedRoom.name)) {
-                failures.getAndIncrement();
+                failures++;
                 System.out.printf("Expected %s at %d:%d but got %s%n", expectedRoom.name, expectedRoom.x, expectedRoom.y, actualRoom.roomTemplate.name);
             } else if (actualRoom.angle % 360 != expectedRoom.angle % 360) {
-                failures.getAndIncrement();
+                failures++;
                 System.out.printf("Wrong room rotation at %d:%d (%s)%n", expectedRoom.x, expectedRoom.y, expectedRoom.name);
             }
-        });
-        if (failures.get() == 0) {
+            // todo add test: doors, events, map constants
+        }
+        if (failures == 0) {
             System.out.println("\u001B[32mTests passed for seed '" + seed + "'\u001B[37m");
         } else {
             System.out.println("\u001B[31mDetected " + failures + " map errors for seed '" + seed + "'\u001B[37m");
@@ -97,33 +107,25 @@ public class MapJsonVerifier {
         throw new RuntimeException("testRegex failure");
     }
 
-    private static class RoomMeta {
-        private final String name;
-        private final int x;
-        private final int y;
-        private final int angle;
+    private record RoomMeta(String name, int x, int y, int angle) {}
 
-        public RoomMeta(String name, int x, int y, int angle) {
-            this.name = name;
-            this.x = x;
-            this.y = y;
-            this.angle = angle;
-        }
-    }
+    /////////////////////////
 
-
+    // todo pipeline mvn test
     public static void main(String[] args) throws IOException {
-        new MapJsonVerifier("tests/dollar.json", "$").test();
-        new MapJsonVerifier("tests/whitespace.json", " ").test();
-        new MapJsonVerifier("tests/6.json", "6").test();
-        new MapJsonVerifier("tests/K.json", "K").test();
-        new MapJsonVerifier("tests/446456054.json", "446456054").test();
-        new MapJsonVerifier("tests/990066099.json", "990066099").test();
-        new MapJsonVerifier("tests/bmu23i0.json", "bmu23i0").test();
-        new MapJsonVerifier("tests/x9mc.json", "x9mc").test();
-        new MapJsonVerifier("tests/2001011999.json", "2001011999").test();
-        new MapJsonVerifier("tests/557110973.json", "557110973").test();
-        new MapJsonVerifier("tests/n790.json", "n790").test();
-        new MapJsonVerifier("tests/220.json", "\\@").test();
+        new MapJsonVerifier("dollar.json", "$").test();
+        new MapJsonVerifier("whitespace.json", " ").test();
+        new MapJsonVerifier("6.json", "6").test();
+        new MapJsonVerifier("K.json", "K").test();
+        new MapJsonVerifier("446456054.json", "446456054").test();
+        new MapJsonVerifier("990066099.json", "990066099").test();
+        new MapJsonVerifier("bmu23i0.json", "bmu23i0").test();
+        new MapJsonVerifier("x9mc.json", "x9mc").test();
+        new MapJsonVerifier("2001011999.json", "2001011999").test();
+        new MapJsonVerifier("557110973.json", "557110973").test();
+        new MapJsonVerifier("n790.json", "n790").test();
+        new MapJsonVerifier("220.json", "\\@").test();
+        // TODO: add test 558272428 (PD exit tunnel check)
+        // TODO: add test 1480285 (106 in entrance by mistake)
     }
 }
