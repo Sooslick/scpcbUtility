@@ -12,7 +12,8 @@ public class Tester914 {
     private static final int COMP_TIME_LIMIT_MS = 1000;
 
     public static void main(String[] args) {
-        BlitzRandom.bbSeedRnd((int) System.currentTimeMillis());
+        BlitzRandom rng = new BlitzRandom();
+        rng.bbSeedRnd((int) System.currentTimeMillis());
         Map<Integer, Integer> results = new HashMap<>();
         int range = (ACHVS_MAX - 1) * DIFFICULTY_FACTOR - (ACHVS_CURR - 1) * 3;
         System.out.println("Setup:");
@@ -34,7 +35,7 @@ public class Tester914 {
             while (retry) {
                 // rolling cards until omni spawns
                 for (int j = 0; j < CARDS; j++) {
-                    if (BlitzRandom.bbRand(0, range) == 0) {
+                    if (rng.bbRand(0, range) == 0) {
                         retry = false;
                         break;
                     }

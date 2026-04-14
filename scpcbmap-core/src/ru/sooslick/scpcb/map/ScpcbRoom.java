@@ -1,19 +1,18 @@
 package ru.sooslick.scpcb.map;
 
+import ru.sooslick.scpcb.BlitzRandom;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import static ru.sooslick.scpcb.BlitzRandom.bbRand;
-import static ru.sooslick.scpcb.BlitzRandom.bbRnd;
 import static ru.sooslick.scpcb.map.Map.ROOM1;
 import static ru.sooslick.scpcb.map.Map.ROOM2;
 import static ru.sooslick.scpcb.map.Map.ROOM2C;
 import static ru.sooslick.scpcb.map.Map.ROOM3;
 import static ru.sooslick.scpcb.map.Map.ROOM4;
-import static ru.sooslick.scpcb.map.ScpcbDoor.createDoor;
 
 public class ScpcbRoom {
     private static final double ROOM_SCALE = 8d / 2048;
@@ -35,6 +34,9 @@ public class ScpcbRoom {
         }
     }
 
+    private final BlitzRandom rng;
+    private final ScpcbDoor.DoorFactory doors;
+
     public int zone;
     public double x, z;
     public int angle;
@@ -54,13 +56,18 @@ public class ScpcbRoom {
     public ScpcbEvent linkedEventNormal;
     public ScpcbEvent linkedEventKeter;
 
+    public ScpcbRoom(BlitzRandom rng, ScpcbDoor.DoorFactory doorFactory) {
+        this.rng = rng;
+        this.doors = doorFactory;
+    }
+
     public void fill() {
         switch (roomTemplate.name) {
             case "room860":
-                createDoor(false, 0);
-                createDoor(true, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 genForestGrid();
                 createItem();
                 createItem();
@@ -69,72 +76,72 @@ public class ScpcbRoom {
             case "room205":
             case "room2doors":
             case "lockroom3":
-                createDoor(true, 0);
-                createDoor(true, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
                 break;
             case "lockroom2":
                 for (int i = 0; i <= 5; i++) {
                     // random decals
-                    bbRand(2, 3);
-                    bbRnd(-392, 520);
-                    bbRnd(0, 0.001f);
-                    bbRnd(-392, 520);
-                    bbRnd(0, 360);
-                    bbRnd(0.3f, 0.6f);
+                    rng.bbRand(2, 3);
+                    rng.bbRnd(-392, 520);
+                    rng.bbRnd(0, 0.001f);
+                    rng.bbRnd(-392, 520);
+                    rng.bbRnd(0, 360);
+                    rng.bbRnd(0.3f, 0.6f);
 
-                    bbRand(15, 16);
-                    bbRnd(-392, 520);
-                    bbRnd(0, 0.001f);
-                    bbRnd(-392, 520);
-                    bbRnd(0, 360);
-                    bbRnd(0.1f, 0.6f);
+                    rng.bbRand(15, 16);
+                    rng.bbRnd(-392, 520);
+                    rng.bbRnd(0, 0.001f);
+                    rng.bbRnd(-392, 520);
+                    rng.bbRnd(0, 360);
+                    rng.bbRnd(0.1f, 0.6f);
 
-                    bbRand(15, 16);
-                    bbRnd(-0.5f, 0.5f);
-                    bbRnd(0, 0.001f);
-                    bbRnd(-0.5f, 0.5f);
-                    bbRnd(0, 360);
-                    bbRnd(0.1f, 0.6f);
+                    rng.bbRand(15, 16);
+                    rng.bbRnd(-0.5f, 0.5f);
+                    rng.bbRnd(0, 0.001f);
+                    rng.bbRnd(-0.5f, 0.5f);
+                    rng.bbRnd(0, 360);
+                    rng.bbRnd(0.1f, 0.6f);
                 }
                 break;
             case "gatea":
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 // this door probably may cause some issues with maps without gate A, but everything is fine rn
-                createDoor(false, 3);
+                doors.createDoor(false, 3);
                 break;
             case "gateaentrance":
-                createDoor(true, 3);
-                createDoor(false, 1);
+                doors.createDoor(true, 3);
+                doors.createDoor(false, 1);
                 break;
             case "exit1":
-                createDoor(false, 1);
-                createDoor(true, 3);
-                createDoor(false, 3);
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 1);
+                doors.createDoor(true, 3);
+                doors.createDoor(false, 3);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 break;
             case "roompj":
                 createItem();
                 createItem();
-                createDoor(true, 1);
+                doors.createDoor(true, 1);
                 break;
             case "room079":
-                createDoor(false, 1);
-                createDoor(false, 1);
-                createDoor(false, 0);
-                bbRnd(0, 360);
+                doors.createDoor(false, 1);
+                doors.createDoor(false, 1);
+                doors.createDoor(false, 0);
+                rng.bbRnd(0, 360);
                 break;
             case "checkpoint1":
             case "checkpoint2":
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 if (shape == ROOM1) {
-                    createDoor(false, 0);
+                    doors.createDoor(false, 0);
                     // My workaround for checkpoint rooms
                     // SCP:CB works with checkpoint as if they are ROOM2s, but with some extra code
                     // I'd simplified a lot of scp:cb code by making dead end checkpoints ROOM1,
@@ -143,25 +150,25 @@ public class ScpcbRoom {
                 }
                 break;
             case "room2testroom2":
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 createItem();
                 break;
             case "room2storage":
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 createItem();
                 createItem();
                 createItem();
                 break;
             case "room2sroom":
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 createItem();
                 createItem();
@@ -169,22 +176,22 @@ public class ScpcbRoom {
                 createItem();
                 break;
             case "room3offices":
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
                 break;
             case "room2shaft":
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 createItem();
                 createItem();
                 createItem();
                 createItem();
-                bbRnd(0, 360);
+                rng.bbRnd(0, 360);
                 break;
             case "room2poffices":
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 createItem();
                 createItem();
@@ -192,22 +199,22 @@ public class ScpcbRoom {
                 createItem();
                 break;
             case "room2sl":
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 break;
             case "room2poffices2":
-                createDoor(false, 0);
-                createDoor(false, 0);
-                bbRnd(0, 360);
-                bbRnd(0, 360);
-                bbRnd(0, 360);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                rng.bbRnd(0, 360);
+                rng.bbRnd(0, 360);
+                rng.bbRnd(0, 360);
                 createItem();
                 createItem();
                 createItem();
                 break;
             case "room2elevator":
-                createDoor(false, 3);
+                doors.createDoor(false, 3);
                 break;
             case "room2cafeteria":
                 createItem();
@@ -217,32 +224,32 @@ public class ScpcbRoom {
                 createItem();
                 break;
             case "room2nuke":
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(true, 3);
-                createDoor(false, 3);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(true, 3);
+                doors.createDoor(false, 3);
                 createItem();
                 createItem();
                 break;
             case "room2tunnel":
-                createDoor(true, 3);
-                createDoor(true, 3);
-                createDoor(false, 1);
-                bbRnd(0, 360);
+                doors.createDoor(true, 3);
+                doors.createDoor(true, 3);
+                doors.createDoor(false, 1);
+                rng.bbRnd(0, 360);
                 createItem();
                 break;
             case "008":
-                createDoor(true, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 createItem();
                 break;
             case "room035":
-                createDoor(true, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 createItem();
                 createItem();
@@ -250,22 +257,22 @@ public class ScpcbRoom {
                 createItem();
                 break;
             case "room513":
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 createItem();
                 createItem();
                 break;
             case "room966":
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 break;
             case "room3storage":
-                createDoor(true, 3);
-                createDoor(false, 3);
-                createDoor(true, 3);
-                createDoor(false, 3);
-                switch (bbRand(1, 3)) {
+                doors.createDoor(true, 3);
+                doors.createDoor(false, 3);
+                doors.createDoor(true, 3);
+                doors.createDoor(false, 3);
+                switch (rng.bbRand(1, 3)) {
                     case 1:
                         rndInfo = "Hand near nvgs";
                         break;
@@ -278,46 +285,46 @@ public class ScpcbRoom {
                 }
                 createItem();
                 createItem();
-                bbRnd(0, 360);
-                createDoor(false, 2);
-                createDoor(false, 2);
-                createDoor(false, 2);
-                createDoor(false, 2);
+                rng.bbRnd(0, 360);
+                doors.createDoor(false, 2);
+                doors.createDoor(false, 2);
+                doors.createDoor(false, 2);
+                doors.createDoor(false, 2);
                 break;
             case "room049":
-                createDoor(true, 3);
-                createDoor(false, 3);
-                createDoor(true, 3);
-                createDoor(false, 3);
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 2);
+                doors.createDoor(true, 3);
+                doors.createDoor(false, 3);
+                doors.createDoor(true, 3);
+                doors.createDoor(false, 3);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 2);
                 createItem();
                 createItem();
                 createItem();
-                createDoor(true, 1);
-                createDoor(false, 2);
-                createDoor(false, 2);
+                doors.createDoor(true, 1);
+                doors.createDoor(false, 2);
+                doors.createDoor(false, 2);
                 break;
             case "room012":
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 createItem();
-                bbRnd(0, 360);
+                rng.bbRnd(0, 360);
                 break;
             case "room2servers":
-                createDoor(false, 2);
-                createDoor(true, 0);
-                createDoor(true, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 2);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(false, 0);
                 break;
             case "room3servers":
                 createItem();
-                if (bbRand(1, 2) == 1)
+                if (rng.bbRand(1, 2) == 1)
                     createItem();
-                if (bbRand(1, 2) == 1)
+                if (rng.bbRand(1, 2) == 1)
                     createItem();
                 createItem();
                 break;
@@ -326,22 +333,22 @@ public class ScpcbRoom {
                 createItem();
                 break;
             case "testroom":
-                createDoor(false, 2);
-                createDoor(true, 0);
+                doors.createDoor(false, 2);
+                doors.createDoor(true, 0);
                 createItem();
                 break;
             case "room2closets":
                 createItem();
                 createItem();
                 createItem();
-                if (bbRand(1, 2) == 1)
+                if (rng.bbRand(1, 2) == 1)
                     createItem();
-                if (bbRand(1, 2) == 1)
+                if (rng.bbRand(1, 2) == 1)
                     createItem();
                 createItem();
                 createItem();
                 createItem();
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
                 break;
             case "room2offices":
                 createItem();
@@ -352,122 +359,122 @@ public class ScpcbRoom {
             case "room2offices2":
                 createItem();
                 createItem();
-                bbRand(1, 2);
+                rng.bbRand(1, 2);
                 createItem();   // if / else document
                 createItem();
-                bbRand(1, 4);
+                rng.bbRand(1, 4);
                 break;
             case "room2offices3":
-                bbRand(1, 2);
+                rng.bbRand(1, 2);
                 createItem();   // if / else document
                 createItem();
                 createItem();
                 createItem();
-                for (int i = 0; i <= bbRand(0, 1); i++)
+                for (int i = 0; i <= rng.bbRand(0, 1); i++)
                     createItem();
                 createItem();
-                if (bbRand(1, 2) == 1)
+                if (rng.bbRand(1, 2) == 1)
                     createItem();
-                if (bbRand(1, 2) == 1)
+                if (rng.bbRand(1, 2) == 1)
                     createItem();
-                createDoor(true, 0);
+                doors.createDoor(true, 0);
                 break;
             case "start":
-                createDoor(true, 1);
-                createDoor(false, 0);
-                createDoor(true, 0);
-                createDoor(false, 0);
-                createDoor(true, 0);
-                createDoor(false, 0);
-                bbRnd(0, 360);
-                bbRnd(0, 360);
+                doors.createDoor(true, 1);
+                doors.createDoor(false, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(false, 0);
+                rng.bbRnd(0, 360);
+                rng.bbRnd(0, 360);
                 break;
             case "room2scps":
-                createDoor(true, 0);
-                createDoor(true, 0);
-                createDoor(true, 0);
-                createDoor(true, 0);
-                createDoor(true, 0);
-                createDoor(true, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
                 createItem();
                 createItem();
                 createItem();
                 createItem();
                 createItem();
                 for (int i = 0; i <= 14; i++) {
-                    bbRand(15, 16);
-                    bbRand(1, 360);
+                    rng.bbRand(15, 16);
+                    rng.bbRand(1, 360);
                     if (i > 10)
-                        bbRnd(0.2f, 0.25f);
+                        rng.bbRnd(0.2f, 0.25f);
                     else
-                        bbRnd(0.1f, 0.17f);
+                        rng.bbRnd(0.1f, 0.17f);
                 }
                 break;
             case "endroom":
-                createDoor(false, 1);
+                doors.createDoor(false, 1);
                 break;
             case "endroomc":
-                createDoor(false, 2);
+                doors.createDoor(false, 2);
                 break;
             case "coffin":
-                createDoor(false, 1);
+                doors.createDoor(false, 1);
                 createItem();
                 createItem();
                 createItem();
                 break;
             case "914":
-                createDoor(false, 1);
-                createDoor(true, 0);
-                createDoor(true, 0);
+                doors.createDoor(false, 1);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
                 createItem();
                 createItem();
                 createItem();
                 break;
             case "173":
-                createDoor(false, 1);
-                bbRand(4, 5);
-                bbRnd(0, 360);
+                doors.createDoor(false, 1);
+                rng.bbRand(4, 5);
+                rng.bbRnd(0, 360);
                 for (int x = 0; x <= 1; x++)
                     for (int z = 0; z <= 1; z++) {
-                        bbRand(4, 6);
-                        bbRnd(-0.5f, 0.5f);
-                        bbRnd(0.001f, 0.0018f);
-                        bbRnd(-0.5f, 0.5f);
-                        bbRnd(0, 360);
-                        bbRnd(0.5f, 0.8f);
-                        bbRnd(0.8f, 1.0f);
+                        rng.bbRand(4, 6);
+                        rng.bbRnd(-0.5f, 0.5f);
+                        rng.bbRnd(0.001f, 0.0018f);
+                        rng.bbRnd(-0.5f, 0.5f);
+                        rng.bbRnd(0, 360);
+                        rng.bbRnd(0.5f, 0.8f);
+                        rng.bbRnd(0.8f, 1.0f);
                     }
-                createDoor(true, 0);
-                createDoor(true, 0);
-                createDoor(true, 0);
-                createDoor(true, 0);
-                createDoor(false, 0);
-                createDoor(true, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(true, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 for (int z = 0; z <= 1; z++) {
-                    createDoor(false, 0);
-                    createDoor(false, 0);
+                    doors.createDoor(false, 0);
+                    doors.createDoor(false, 0);
                     for (int x = 0; x <= 2; x++)
-                        createDoor(false, 0);
+                        doors.createDoor(false, 0);
                     for (int x = 0; x <= 4; x++)
-                        createDoor(false, 0);
+                        doors.createDoor(false, 0);
                 }
                 createItem();
                 break;
             case "room2ccont":
             case "room1162":
             case "room2offices4":
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 break;
             case "room106":
                 createItem();
                 createItem();
                 createItem();
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 break;
             case "room1archive":
                 List<String> items = new LinkedList<>();
@@ -475,12 +482,12 @@ public class ScpcbRoom {
                     for (int j = 0; j <= 2; j++) {
                         for (int k = 0; k <= 2; k++) {
                             String tempStr = "bat";
-                            int chance = bbRand(-10, 100);
+                            int chance = rng.bbRand(-10, 100);
                             if (chance < 0)
                                 break;
                             else if (chance < 40) {
                                 tempStr = "doc";
-                                switch (bbRand(1, 6)) {
+                                switch (rng.bbRand(1, 6)) {
                                     case 1:
                                         tempStr += "1123";
                                         break;
@@ -501,7 +508,7 @@ public class ScpcbRoom {
                                         break;
                                 }
                             } else if (chance < 45) {
-                                tempStr = "K" + bbRand(1, 2);
+                                tempStr = "K" + rng.bbRand(1, 2);
                             } else if (chance < 50)
                                 tempStr = "med";
                             else if (chance < 60)
@@ -513,25 +520,25 @@ public class ScpcbRoom {
                             else if (chance < 95)
                                 tempStr = "clipboard";
                             else {
-                                if (bbRand(1, 3) < 3)
+                                if (rng.bbRand(1, 3) < 3)
                                     tempStr = "K0";
                             }
                             if (tempStr != null)
                                 items.add(tempStr);
-                            bbRnd(-96, 96);
+                            rng.bbRnd(-96, 96);
                             createItem();
                         }
                     }
                 }
                 rndInfo = "Items: " + String.join(", ", items);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
                 break;
             case "room2test1074":
                 // wtf is this room?
-                createDoor(false, 3);
-                createDoor(true, 3);
-                createDoor(true, 3);
-                createDoor(false, 3);
+                doors.createDoor(false, 3);
+                doors.createDoor(true, 3);
+                doors.createDoor(true, 3);
+                doors.createDoor(false, 3);
                 createItem();
                 break;
             case "room1123":
@@ -539,37 +546,37 @@ public class ScpcbRoom {
                 createItem();
                 createItem();
                 createItem();
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 break;
             case "pocketdimension":
                 createItem();
-                createDoor(false, 0);
-                createDoor(false, 0);
-                bbRnd(0.8f, 0.8f);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                rng.bbRnd(0.8f, 0.8f);
                 for (int i = 1; i <= 8; i++) {
                     if (i < 6)
-                        bbRnd(0.5f, 0.5f);
+                        rng.bbRnd(0.5f, 0.5f);
                 }
                 break;
             case "room2servers2":
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
-                bbRand(0, 245);
+                rng.bbRand(0, 245);
                 break;
             case "room2gw":
             case "room2gw_b":
                 // ENDSHN, your code for these rooms is unreadable mess (i'm sorry)
                 if (roomTemplate.name.equals("room2gw_b"))
-                    bbRnd(0, 360);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                    rng.bbRnd(0, 360);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 if (roomTemplate.name.equals("room2gw")) {
                     boolean bd_temp = (room2gwBrokenDoor && room2gw_x == x && room2gw_z == z);
-                    if ((bbRand(1, 2) == 1 && !room2gwBrokenDoor) || bd_temp) {
+                    if ((rng.bbRand(1, 2) == 1 && !room2gwBrokenDoor) || bd_temp) {
                         room2gwBrokenDoor = true;
                         room2gw_x = x;
                         room2gw_z = z;
@@ -577,15 +584,15 @@ public class ScpcbRoom {
                 }
                 break;
             case "room3gw":
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 break;
             case "room2scps2":
-                createDoor(false, 0);
-                createDoor(false, 0);
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
+                doors.createDoor(false, 0);
                 createItem();
                 createItem();
                 createItem();
@@ -595,18 +602,18 @@ public class ScpcbRoom {
                 createItem();
                 createItem();
                 createItem();
-                createDoor(false, 0);
+                doors.createDoor(false, 0);
                 break;
             case "room2cpit":
-                createDoor(false, 2);
+                doors.createDoor(false, 2);
                 createItem();
                 break;
         }
 
         // Const MaxRoomLights% = 32
         for (int i = 0; i < Math.min(32, roomTemplate.lightsAmount); i++) {
-            bbRand(1, 360);
-            bbRand(1, 10);
+            rng.bbRand(1, 360);
+            rng.bbRand(1, 10);
         }
 
         // no rnd calls at CreateScreen, CreateWaypoint
@@ -700,8 +707,8 @@ public class ScpcbRoom {
 
         int door1pos, door2pos;
         int i, j;
-        door1pos = bbRand(3, 7);
-        door2pos = bbRand(3, 7);
+        door1pos = rng.bbRand(3, 7);
+        door2pos = rng.bbRand(3, 7);
 
         // weird 2dimension array declaration from original game
         int[] grid = new int[gridSize * gridSize + 1];
@@ -723,7 +730,7 @@ public class ScpcbRoom {
                 // determine whether to go forward or to the side
                 if (chance(deviationChance)) {
                     // pick a branch direction
-                    dir = 2 * bbRand(0, 1);
+                    dir = 2 * rng.bbRand(0, 1);
                     // make sure you have not passed max side distance
                     dir = turnIfDeviating(maxDeviationDistance, pathx, center, dir);
                     // VERY suspicious call here in original game - line 917
@@ -789,7 +796,7 @@ public class ScpcbRoom {
                 }
                 // create a branch at this spot
                 // determine if on left or on right
-                branchPos = 2 * bbRand(0, 1);
+                branchPos = 2 * rng.bbRand(0, 1);
                 // get leftmost or rightmost path in this row
                 int leftMost = gridSize;
                 int rightMost = 0;
@@ -820,7 +827,7 @@ public class ScpcbRoom {
                     i++;
                     if (chance(branchDieChance))
                         break;
-                    if (bbRand(0, 3) == 0) {    // have a higher chance to go up to confuse the player
+                    if (rng.bbRand(0, 3) == 0) {    // have a higher chance to go up to confuse the player
                         if (branchPos == 0)
                             newx--;
                         else
@@ -906,25 +913,25 @@ public class ScpcbRoom {
                                 int rgb = img.getRGB(lx, width - ly);
                                 int red = (rgb & 0x00ff0000) >> 16;
 
-                                if (red > bbRand(100, 260)) {
-                                    int roll = bbRand(0, 7);
+                                if (red > rng.bbRand(100, 260)) {
+                                    int roll = rng.bbRand(0, 7);
                                     // create a tree
                                     if (roll < 7) {
-                                        bbRnd(0.25f, 0.4f);
+                                        rng.bbRnd(0.25f, 0.4f);
 
                                         for (i = 0; i <= 3; i++) {
-                                            bbRnd(-20, 20);
+                                            rng.bbRnd(-20, 20);
                                         }
 
-                                        bbRnd(3.0f, 3.2f);
-                                        bbRnd(-5, 5);
-                                        bbRnd(0, 360.0f);
+                                        rng.bbRnd(3.0f, 3.2f);
+                                        rng.bbRnd(-5, 5);
+                                        rng.bbRnd(0, 360.0f);
                                     }
                                     // add a rock
                                     if (roll == 7) {
-                                        //bbRnd(0.01f,0.012f);
-                                        bbRnd(1, 2);
-                                        bbRnd(0, 360.0f);
+                                        //rng.bbRnd(0.01f,0.012f);
+                                        rng.bbRnd(1, 2);
+                                        rng.bbRnd(0, 360.0f);
                                     }
                                 }
                             }
@@ -950,7 +957,7 @@ public class ScpcbRoom {
     }
 
     private boolean chance(int prob) {
-        return bbRand(0, 100) <= prob;
+        return rng.bbRand(0, 100) <= prob;
     }
 
     private int turnIfDeviating(int maxDeviationDistance, int pathx, int center, int dir) {
@@ -983,7 +990,7 @@ public class ScpcbRoom {
     }
 
     protected void createItem() {
-        bbRand(1, 360); // just rotation ._.
+        rng.bbRand(1, 360); // just rotation ._.
     }
 
     public String toString() {

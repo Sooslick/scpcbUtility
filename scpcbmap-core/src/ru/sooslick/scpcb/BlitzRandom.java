@@ -1,6 +1,5 @@
 package ru.sooslick.scpcb;
 
-// todo remove static references
 public class BlitzRandom {
 
     static final int RND_A = 48271;
@@ -8,18 +7,18 @@ public class BlitzRandom {
     static final int RND_Q = 44488;
     static final int RND_R = 3399;
 
-    static int rnd_state;
+    int rnd_state;
 
-    public static void bbSeedRnd(int seed) {
+    public void bbSeedRnd(int seed) {
         seed &= 0x7fffffff;
         rnd_state = (seed != 0) ? seed : 1;
     }
 
-    public static int getRndState() {
+    public int getRndState() {
         return rnd_state;
     }
 
-    public static int bbRand(int from, int to) {
+    public int bbRand(int from, int to) {
         if (to < from) {
             int a = from;
             from = to;
@@ -28,11 +27,11 @@ public class BlitzRandom {
         return (int) (rnd() * (to - from + 1)) + from;
     }
 
-    public static double bbRnd(float from, float to) {
+    public double bbRnd(float from, float to) {
         return rnd() * (to - from) + from;
     }
 
-    private static double rnd() {
+    private double rnd() {
         rnd_state = RND_A * (rnd_state % RND_Q) - RND_R * (rnd_state / RND_Q);
         if (rnd_state < 0) rnd_state += RND_M;
         return (rnd_state & 65535) / 65536.0f + (.5f / 65536.0f);

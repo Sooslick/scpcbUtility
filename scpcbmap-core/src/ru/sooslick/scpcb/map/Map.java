@@ -5,10 +5,6 @@ import ru.sooslick.scpcb.BlitzRandom;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static ru.sooslick.scpcb.BlitzRandom.bbRand;
-import static ru.sooslick.scpcb.BlitzRandom.bbRnd;
-import static ru.sooslick.scpcb.BlitzRandom.bbSeedRnd;
-
 public class Map {
 
     public static final int ROOM1 = 1;
@@ -21,6 +17,10 @@ public class Map {
     public static final int MAP_HEIGHT = 18;
     public static final int MT_SIZE = 19;
     public static final int ZONE_AMOUNT = 3;
+
+    // rng things
+    private final BlitzRandom rng = new BlitzRandom();
+    private final ScpcbDoor.DoorFactory doors = new ScpcbDoor.DoorFactory(rng);
 
     // maze
     private final int[][] mapTemp = new int[Map.MAP_WIDTH + 1][Map.MAP_HEIGHT + 1];
@@ -52,7 +52,7 @@ public class Map {
     }
 
     private void createMap(int seed) {
-        bbSeedRnd(seed);
+        rng.bbSeedRnd(seed);
         generateMaze();
         countRooms();
         // make sure we have at least 5 room1 in each zone
@@ -65,16 +65,16 @@ public class Map {
         createRooms();
         createDoors();
 
-        state106 = bbRand(12, 17);
+        state106 = rng.bbRand(12, 17);
         createDecals();
-        playerAngle = bbRand(160, 200);
+        playerAngle = rng.bbRand(160, 200);
 
-        int savedState = BlitzRandom.getRndState();
-        Events events = new Events(savedRooms, false);
+        int savedState = rng.getRndState();
+        Events events = new Events(savedRooms, false, rng);
         savedEventsNormal = events.createEvents();
 
-        BlitzRandom.bbSeedRnd(savedState);
-        events = new Events(savedRooms, true);
+        rng.bbSeedRnd(savedState);
+        events = new Events(savedRooms, true, rng);
         savedEventsKeter = events.createEvents();
 
         savedEventsNormal.forEach(e -> e.room.linkedEventNormal = e);
@@ -137,7 +137,7 @@ public class Map {
     }
 
     private ScpcbRoom createRoom(int zone, int roomShape, int x, int z, String name) {
-        ScpcbRoom r = new ScpcbRoom();
+        ScpcbRoom r = new ScpcbRoom(rng, doors);
         r.shape = roomShape;
 
         r.zone = zone;
@@ -171,7 +171,7 @@ public class Map {
             }
         }
 
-        int randomRoom = bbRand(1, temp);
+        int randomRoom = rng.bbRand(1, temp);
         temp = 0;
         for (ScpcbRoomTemplate rt : ScpcbRoomTemplate.roomTemplates) {
             for (int i = 0; i <= 4; i++) {
@@ -341,7 +341,7 @@ public class Map {
         int temp = 0;
         do {
             // generate horizontal line
-            width = bbRand(10, 15);
+            width = rng.bbRand(10, 15);
 
             if (x > Map.MAP_WIDTH * 0.6)
                 width = -width;
@@ -360,18 +360,18 @@ public class Map {
                 mapTemp[i][y] = 1;
 
             // generate vertical connections
-            height = bbRand(3, 4);
+            height = rng.bbRand(3, 4);
             if (y - height < 1)
                 height = y - 1;
 
-            int yHallways = bbRand(4, 5);
+            int yHallways = rng.bbRand(4, 5);
 
             if (getZone(y - height) != getZone(y - height + 1))
                 height--;
 
             for (int i = 1; i <= yHallways; i++) {
 
-                int x2 = Math.max(2, Math.min(Map.MAP_WIDTH - 2, bbRand(x, x + width - 1)));
+                int x2 = Math.max(2, Math.min(Map.MAP_WIDTH - 2, rng.bbRand(x, x + width - 1)));
                 while (mapTemp[x2 - 1][y - 1] != 0 || mapTemp[x2][y - 1] != 0 || mapTemp[x2 + 1][y - 1] != 0)
                     x2++;
 
@@ -380,12 +380,12 @@ public class Map {
                     if (i == 1) {
                         // make sure that we generate at least one connection to next horizontal line
                         tempHeight = height;
-                        if (bbRand(1, 2) == 1)
+                        if (rng.bbRand(1, 2) == 1)
                             x2 = x;
                         else
                             x2 = x + width;
                     } else
-                        tempHeight = bbRand(1, height);
+                        tempHeight = rng.bbRand(1, height);
 
                     for (int y2 = y - tempHeight; y2 <= y; y2++) {
                         if (getZone(y2) != getZone(y2 + 1))
@@ -676,7 +676,7 @@ public class Map {
         setRoom("room1123", Map.ROOM2, (int) (Math.floor(0.7 * room2Amount[0])), minPos, maxPos);
         setRoom("room2elevator", Map.ROOM2, (int) (Math.floor(0.85 * room2Amount[0])), minPos, maxPos);
 
-        mapRoom[Map.ROOM3][(int) Math.floor(bbRnd(0.2f, 0.8f) * room3Amount[0])] = "room3storage";
+        mapRoom[Map.ROOM3][(int) Math.floor(rng.bbRnd(0.2f, 0.8f) * room3Amount[0])] = "room3storage";
 
         mapRoom[Map.ROOM2C][(int) Math.floor(0.5 * room2cAmount[0])] = "room1162";
 
@@ -783,7 +783,7 @@ public class Map {
                                 if (mapRoom[Map.ROOM2][mapRoomID[Map.ROOM2]] != null)
                                     mapName = mapRoom[Map.ROOM2][mapRoomID[Map.ROOM2]];
                                 r = createRoom(zone, Map.ROOM2, x * 8, y * 8, mapName);
-                                if (bbRand(1, 2) == 1) {
+                                if (rng.bbRand(1, 2) == 1) {
                                     //System.out.println(r.roomTemplate.name + " random angle: 90");
                                     r.angle = 90;
                                 } else {
@@ -795,7 +795,7 @@ public class Map {
                                 if (mapRoom[Map.ROOM2][mapRoomID[Map.ROOM2]] != null)
                                     mapName = mapRoom[Map.ROOM2][mapRoomID[Map.ROOM2]];
                                 r = createRoom(zone, Map.ROOM2, x * 8, y * 8, mapName);
-                                if (bbRand(1, 2) == 1) {
+                                if (rng.bbRand(1, 2) == 1) {
                                     //System.out.println(r.roomTemplate.name + " random angle: 180");
                                     r.angle = 180;
                                 } else {
@@ -914,7 +914,7 @@ public class Map {
                     if (shouldSpawnDoor) {
                         if (x < Map.MAP_WIDTH) {
                             if (mapTemp[x + 1][y] > 0) {
-                                d = new ScpcbDoor(Math.max(bbRand(-3, 1), 0) > 0, type);
+                                d = doors.createDoor(Math.max(rng.bbRand(-3, 1), 0) > 0, type);
                                 r.adjDoorRight = d;
                             }
                         }
@@ -944,7 +944,7 @@ public class Map {
                     if (shouldSpawnDoor) {
                         if (x < Map.MAP_HEIGHT) {
                             if (mapTemp[x][y + 1] > 0) {
-                                d = new ScpcbDoor(Math.max(bbRand(-3, 1), 0) > 0, type);
+                                d = doors.createDoor(Math.max(rng.bbRand(-3, 1), 0) > 0, type);
                                 r.adjDoorBottom = d;
                             }
                         }
@@ -970,34 +970,34 @@ public class Map {
     }
 
     private void randomDecals() {
-        if (bbRand(1, 4) == 1) {
-            bbRand(2, 3);
-            bbRnd(-2, 2);
-            bbRnd(-2, 2);
-            bbRand(0, 360);
-            bbRnd(0.1f, 0.4f);
-            bbRnd(0.85f, 0.95f);
+        if (rng.bbRand(1, 4) == 1) {
+            rng.bbRand(2, 3);
+            rng.bbRnd(-2, 2);
+            rng.bbRnd(-2, 2);
+            rng.bbRand(0, 360);
+            rng.bbRnd(0.1f, 0.4f);
+            rng.bbRnd(0.85f, 0.95f);
         }
-        if (bbRand(1, 4) == 1) {
-            bbRnd(-2, 2);
-            bbRnd(-2, 2);
-            bbRand(0, 360);
-            bbRnd(0.5f, 0.7f);
-            bbRnd(0.7f, 0.85f);
+        if (rng.bbRand(1, 4) == 1) {
+            rng.bbRnd(-2, 2);
+            rng.bbRnd(-2, 2);
+            rng.bbRand(0, 360);
+            rng.bbRnd(0.5f, 0.7f);
+            rng.bbRnd(0.7f, 0.85f);
         }
     }
 
     private void createTunnels() {
         int[] grid = new int[MT_SIZE * MT_SIZE];
-        bbSeedRnd(seed);
+        rng.bbSeedRnd(seed);
 
         // 0 = right
         // 1 = up
         // 2 = left
         // 3 = down
-        int dir = bbRand(0, 1) << 1;
-        int ix = MT_SIZE / 2 + bbRand(-2, 2);
-        int iy = MT_SIZE / 2 + bbRand(-2, 2);
+        int dir = rng.bbRand(0, 1) << 1;
+        int ix = MT_SIZE / 2 + rng.bbRand(-2, 2);
+        int iy = MT_SIZE / 2 + rng.bbRand(-2, 2);
         grid[ix + (iy * MT_SIZE)] = 1;
         if (dir == 2) {
             grid[(ix + 1) + (iy * MT_SIZE)] = 1;
@@ -1008,7 +1008,7 @@ public class Map {
         int count = 2;
         int turns = 0;
         while (count < 100 && turns++ < 100) {
-            int tempInt = bbRand(1, 5) << bbRand(1, 2);
+            int tempInt = rng.bbRand(1, 5) << rng.bbRand(1, 2);
             for (int i = 1; i <= tempInt; i++) {
 
                 boolean tempInt2 = true;    // Regalis??? hello
@@ -1049,7 +1049,7 @@ public class Map {
                     break;
             }
 
-            dir += (bbRand(0, 1) << 1) - 1;
+            dir += (rng.bbRand(0, 1) << 1) - 1;
             if (dir < 0)
                 dir += 4;
             else if (dir > 3)
@@ -1076,7 +1076,7 @@ public class Map {
                     maxX = ix;
                     if (grid[ix + 1 + ((iy + 1) * MT_SIZE)] < 3 && grid[ix + 1 + ((iy - 1) * MT_SIZE)] < 3) {
                         canRetry = true;
-                        if (bbRand(0, 1) == 1) {
+                        if (rng.bbRand(0, 1) == 1) {
                             grid[ix + 1 + ((iy) * MT_SIZE)] = grid[ix + 1 + ((iy) * MT_SIZE)] + 1;
                             grid[ix + ((iy) * MT_SIZE)] = 7;
                             canRetry = false;
@@ -1164,8 +1164,8 @@ public class Map {
     }
 
     private void defineLoadingScreen() {
-        bbSeedRnd(seed);
-        loadingScreen = LoadingScreens.find(bbRand(1, 32));
+        rng.bbSeedRnd(seed);
+        loadingScreen = LoadingScreens.find(rng.bbRand(1, 32));
     }
 
     private void reportOverlaps() {

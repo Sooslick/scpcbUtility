@@ -1,21 +1,22 @@
 package ru.sooslick.scpcb.map;
 
+import ru.sooslick.scpcb.BlitzRandom;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import static ru.sooslick.scpcb.BlitzRandom.bbRand;
-import static ru.sooslick.scpcb.BlitzRandom.bbRnd;
 
 public class Events {
 
     private final Set<ScpcbRoom> rooms;
     private final boolean keterMode;
+    private final BlitzRandom rng;
 
     private final LinkedHashSet<ScpcbEvent> savedEvents = new LinkedHashSet<>();
 
-    public Events(Set<ScpcbRoom> rooms, boolean keterMode) {
+    public Events(Set<ScpcbRoom> rooms, boolean keterMode, BlitzRandom random) {
         this.rooms = rooms;
         this.keterMode = keterMode;
+        this.rng = random;
     }
 
     LinkedHashSet<ScpcbEvent> createEvents() {
@@ -26,7 +27,7 @@ public class Events {
 
         // the chance for 173 appearing in the first lockroom is about 66%
         // there's a 30% chance that it appears in the later lockrooms
-        if (bbRand(1, 3) < 3)
+        if (rng.bbRand(1, 3) < 3)
             createEvent("lockroom173", "lockroom", 0);
         createEvent("lockroom173", "lockroom", 0, 0.3f, 0.5f);
 
@@ -34,15 +35,15 @@ public class Events {
         createEvent("1048a", "room2", 0, 1.0f);
         createEvent("room2storage", "room2storage", 0);
         createEvent("lockroom096", "lockroom2", 0);
-        createEvent("endroom106", "endroom", bbRand(0, 1));
+        createEvent("endroom106", "endroom", rng.bbRand(0, 1));
         createEvent("room2poffices2", "room2poffices2", 0);
         createEvent("room2fan", "room2_2", 0, 1.0f);
         createEvent("room2elevator2", "room2elevator", 0);
-        createEvent("room2elevator", "room2elevator", bbRand(1, 2));
+        createEvent("room2elevator", "room2elevator", rng.bbRand(1, 2));
         createEvent("room3storage", "room3storage", 0, 0);
         createEvent("tunnel2smoke", "tunnel2", 0, 0.2f);
 
-        createEvent("tunnel2", "tunnel2", bbRand(0, 2), 0);
+        createEvent("tunnel2", "tunnel2", rng.bbRand(0, 2), 0);
         createEvent("tunnel2", "tunnel2", 0, 0, 0.2f);
 
         // 173 appears in half of the "room2doors" -rooms
@@ -60,13 +61,13 @@ public class Events {
         createEvent("room3tunnel", "room3tunnel", 0, 0.08f);
         createEvent("room4", "room4", 0);
 
-        if (bbRand(1, 5) < 5) {
-            switch (bbRand(1, 3)) {
+        if (rng.bbRand(1, 5) < 5) {
+            switch (rng.bbRand(1, 3)) {
                 case 1:
-                    createEvent("682roar", "tunnel", bbRand(0, 2), 0);
+                    createEvent("682roar", "tunnel", rng.bbRand(0, 2), 0);
                     break;
                 case 2:
-                    createEvent("682roar", "room3pit", bbRand(0, 2), 0);
+                    createEvent("682roar", "room3pit", rng.bbRand(0, 2), 0);
                     break;
                 case 3:
                     createEvent("682roar", "room2z3", 0, 0);
@@ -78,7 +79,7 @@ public class Events {
         createEvent("room2tesla", "room2tesla", 0, 0.9f);
         createEvent("room2nuke", "room2nuke", 0, 0);
 
-        if (bbRand(1, 5) < 5)
+        if (rng.bbRand(1, 5) < 5)
             createEvent("coffin106", "coffin", 0, 0);
         else
             createEvent("coffin", "coffin", 0, 0);
@@ -89,14 +90,14 @@ public class Events {
         createEvent("room3door", "room3", 0, 0.1f);
         createEvent("room3door", "room3tunnel", 0, 0.1f);
 
-        if (bbRand(1, 2) == 1) {
-            createEvent("106victim", "room3", bbRand(1, 2));
-            createEvent("106sinkhole", "room3_2", bbRand(2, 3));
+        if (rng.bbRand(1, 2) == 1) {
+            createEvent("106victim", "room3", rng.bbRand(1, 2));
+            createEvent("106sinkhole", "room3_2", rng.bbRand(2, 3));
         } else {
-            createEvent("106victim", "room3_2", bbRand(1, 2));
-            createEvent("106sinkhole", "room3", bbRand(2, 3));
+            createEvent("106victim", "room3_2", rng.bbRand(1, 2));
+            createEvent("106sinkhole", "room3", rng.bbRand(2, 3));
         }
-        createEvent("106sinkhole", "room4", bbRand(1, 2));
+        createEvent("106sinkhole", "room4", rng.bbRand(1, 2));
 
         createEvent("room079", "room079", 0, 0);
         createEvent("room049", "room049", 0, 0);
@@ -110,7 +111,7 @@ public class Events {
         createEvent("buttghost", "room2toilets", 0, 0);
         createEvent("toiletguard", "room2toilets", 1, 0);
 
-        createEvent("room2pipes106", "room2pipes", bbRand(0, 3));
+        createEvent("room2pipes106", "room2pipes", rng.bbRand(0, 3));
         createEvent("room2pit", "room2pit", 0, 0.4f, 0.4f);
         createEvent("testroom", "testroom", 0);
         createEvent("room2tunnel", "room2tunnel", 0);
@@ -140,7 +141,7 @@ public class Events {
         createEvent("room2shaft", "room2shaft", 0);
         createEvent("room1lifts", "room1lifts", 0);
 
-        createEvent("room2gw_b", "room2gw_b", bbRand(0, 1));
+        createEvent("room2gw_b", "room2gw_b", rng.bbRand(0, 1));
 
         createEvent("096spawn", "room4pit", 0, 0.6f, 0.2f);
         createEvent("096spawn", "room3pit", 0, 0.6f, 0.2f);
@@ -200,7 +201,7 @@ public class Events {
                         }
                     }
 
-                    double rndValue = bbRnd(0.0f, 1.0f);
+                    double rndValue = rng.bbRnd(0.0f, 1.0f);
 //                    System.out.println("event prob test: " + rndValue + " < " + prob);
                     if (rndValue < realProb && !temp) {
 //                        System.out.println("Created event " + event);
