@@ -369,6 +369,8 @@ function createAnnotation(name, x, y) {
         case "914": text = "914"; break;
         case "room2sl": text = "CAMS"; break;
         case "roompj": text = "372"; break;
+        case "room012": text = "012"; break;
+        case "room2scps": text = "714"; break;
         case "room2scps2": text = "1499"; break;
         case "room2storage": text = "K1"; break;
         case "room1123": text = "1123"; break;
@@ -384,6 +386,10 @@ function createAnnotation(name, x, y) {
         case "room2ccont": text = "EC"; break;
         case "exit1": text = "B"; break;
         case "gateaentrance": text = "A"; break;
+        case "room2toilets": text = "WC"; break;
+        case "room2sroom": text = "K5"; break;
+        case "room2shaft": text = "K3"; break;
+        case "room2cafeteria": text = "294"; break;
     }
 
     if (text == null)
