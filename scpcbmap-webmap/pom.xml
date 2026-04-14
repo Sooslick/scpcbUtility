@@ -19,17 +19,17 @@
 
     <build>
         <sourceDirectory>src</sourceDirectory>
-        <resources>
-            <resource>
-                <directory>frontend</directory>
-            </resource>
-        </resources>
     </build>
 
     <dependencies>
         <dependency>
             <groupId>ru.sooslick.apps</groupId>
             <artifactId>scpcbmap-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.sooslick.apps</groupId>
+            <artifactId>scpcbmap-search</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
