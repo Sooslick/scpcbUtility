@@ -19,6 +19,13 @@ for (let i = 0; i <= 18; i++) {
 mapWrapper.addEventListener('contextmenu', function(evt) {
 	evt.preventDefault();
 }, false);
+addEventListener("popstate", (event) => {
+	nullMap();
+	buildMap(event.state);
+	document.getElementById("prompt").value = currentMap.seedString
+	document.getElementById("seed").value = currentMap.seedValue
+	updateShareLink();
+});
 
 mapWrapper = document.getElementById("table-pd");
 for (let i = 0; i <= 18; i++) {
@@ -90,7 +97,7 @@ function createMap() {
         query+= "?random";
 
     let xhr = new XMLHttpRequest();
-	xhr.onload = buildMap;
+	xhr.onload = readMapResponse;
 	xhr.ontimeout = unableRequestMap;
 	xhr.addEventListener("error", unableRequestMap);
 	xhr.timeout = 6000;
@@ -129,8 +136,8 @@ function nullMap() {
     document.getElementById("room-info").hidden = true;
 }
 
-function buildMap() {
-    loading = false;
+function readMapResponse() {
+	loading = false;
     document.getElementById("loading-gif").hidden = true;
     if (this.status != 200) {
     	let errtxt = document.getElementById("error-text");
@@ -138,82 +145,85 @@ function buildMap() {
         errtxt.innerHTML = "Something is broken, DM @Sooslick in Discord";
         return;
     }
-	if (this.status == 200) {
-		try {
-			currentMap = JSON.parse(this.responseText);
-		} catch (jumpscare) {
-			let errtxt = document.getElementById("error-text");
+    if (this.status == 200) {
+    	try {
+    		currentMap = JSON.parse(this.responseText);
+    	} catch (jumpscare) {
+    		let errtxt = document.getElementById("error-text");
             errtxt.hidden = false;
             errtxt.innerHTML = "Unable to create seed, DM @Sooslick in Discord";
             return;
+    	}
+
+    	// create link
+        updateShareLink();
+        history.pushState(currentMap, "", link);
+        buildMap(currentMap);
+    }
+}
+
+function buildMap(map) {
+	currentMap = map;
+
+	// show blocks
+    document.getElementById("map").hidden = false;
+    document.getElementById("map-share").hidden = false;
+    document.getElementById("map-pd").style.display = 'inline-block';
+    document.getElementById("map-forest").style.display = 'inline-block';
+    document.getElementById("map-info").hidden = false;
+    document.getElementById("room-info").hidden = false;
+
+    // fill meta
+	document.getElementById("seedString").innerHTML = currentMap.seedString
+	document.getElementById("seedValue").innerHTML = currentMap.seedValue
+	document.getElementById("state106").innerHTML = currentMap.state106
+	document.getElementById("statePlayer").innerHTML = currentMap.angle
+	document.getElementById("loadingScreen").innerHTML = currentMap.loadingScreen
+
+	// fill main grid
+	currentMap.rooms.forEach(r => {
+	    let cellId = "c" + r.x + "-" + r.y;
+	    let svg = svgCreate(
+	    	getRoomImage(r.name, r.en, r.ek),
+	    	getRoomRotation(r.name, r.angle),
+	    	r.dh,
+	    	r.dv
+	    );
+
+		let td = document.getElementById(cellId);
+		td.innerHTML = svg;
+
+		if (r.name == "room2tunnel")
+		    buildTunnel(r.info)
+		else if (r.name == "room860")
+		    buildForest(r.info)
+		else if (r.name == "tunnel") {
+			if (exitr == null)
+				exitr = r;
+		    else if (r.y > exitr.y || (r.y == exitr.y && r.x <= exitr.x)) {
+		        exitr = r;
+		    }
 		}
+	});
 
-		// show blocks
-        document.getElementById("map").hidden = false;
-        document.getElementById("map-share").hidden = false;
-        document.getElementById("map-pd").style.display = 'inline-block';
-        document.getElementById("map-forest").style.display = 'inline-block';
-        document.getElementById("map-info").hidden = false;
-        document.getElementById("room-info").hidden = false;
-
-        // fill meta
-		document.getElementById("seedString").innerHTML = currentMap.seedString
-		document.getElementById("seedValue").innerHTML = currentMap.seedValue
-		document.getElementById("state106").innerHTML = currentMap.state106
-		document.getElementById("statePlayer").innerHTML = currentMap.angle
-		document.getElementById("loadingScreen").innerHTML = currentMap.loadingScreen
-
-		// create link
-		if (currentMap.seedString)
-		    link = "https://sooslick.art/scpcbmap/?prompt=" + encodeURIComponent(currentMap.seedString);
-		else
-		    link = "https://sooslick.art/scpcbmap/?seed=" + currentMap.seedValue;
-
-		// fill main grid
-		currentMap.rooms.forEach(r => {
-		    let cellId = "c" + r.x + "-" + r.y;
-		    let svg = svgCreate(
-		    	getRoomImage(r.name, r.en, r.ek),
-		    	getRoomRotation(r.name, r.angle),
-		    	r.dh,
-		    	r.dv
-		    );
-
-			let td = document.getElementById(cellId);
-			td.innerHTML = svg;
-
-			if (r.name == "room2tunnel")
-			    buildTunnel(r.info)
-			else if (r.name == "room860")
-			    buildForest(r.info)
-			else if (r.name == "tunnel") {
-				if (exitr == null)
-					exitr = r;
-			    else if (r.y > exitr.y || (r.y == exitr.y && r.x <= exitr.x)) {
-			        exitr = r;
-			    }
-			}
-		});
-
-		if (exitr != null) {
-			document.getElementById("c" + exitr.x + "-" + exitr.y).innerHTML = svgCreate(
-				"room2EXIT",
-				getRoomRotation("tunnel", exitr.angle),
-        	    exitr.dh,
-        	    exitr.dv
-			);
-		}
-
-		// create annotations
-		currentMap.rooms.forEach(r => {
-			createAnnotation(r.name, r.x, r.y);
-		});
-
-		// scroll into viewport
-		setTimeout(function() {
-		    window.scroll({top: 185, left: 0, behavior: 'smooth'});
-        }, 150);
+	if (exitr != null) {
+		document.getElementById("c" + exitr.x + "-" + exitr.y).innerHTML = svgCreate(
+			"room2EXIT",
+			getRoomRotation("tunnel", exitr.angle),
+       	    exitr.dh,
+       	    exitr.dv
+		);
 	}
+
+	// create annotations
+	currentMap.rooms.forEach(r => {
+		createAnnotation(r.name, r.x, r.y);
+	});
+
+	// scroll into viewport
+	setTimeout(function() {
+		window.scroll({top: 185, left: 0, behavior: 'smooth'});
+	}, 150);
 }
 
 function buildTunnel(info) {
@@ -445,6 +455,15 @@ function updateOverlaps(newOverlaps) {
 function shareMap() {
     document.getElementById("copied-text").hidden = false;
     navigator.clipboard.writeText(link);
+}
+
+function updateShareLink() {
+	let searchParams = new URLSearchParams();
+	if (currentMap.seedString)
+       	searchParams.set("prompt", currentMap.seedString)
+    else
+        searchParams.set("seed", currentMap.seedValue);
+    link = window.location.origin + window.location.pathname + "?" + searchParams.toString();
 }
 
 function loadFromQuery() {
