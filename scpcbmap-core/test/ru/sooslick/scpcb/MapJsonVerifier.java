@@ -27,9 +27,10 @@ public class MapJsonVerifier {
     }
 
     public void test() throws IOException {
-        InputStream is = this.getClass().getResourceAsStream(pathJson);
+        String testpath = pathJson.startsWith("/") ? pathJson : "/" + pathJson;
+        InputStream is = this.getClass().getResourceAsStream(testpath);
         if (is == null)
-            throw new FileNotFoundException("Resource " + pathJson + " is not exist");
+            throw new FileNotFoundException("Resource " + testpath + " is not exist");
         byte[] json = is.readAllBytes();
 
         // search "rooms" array

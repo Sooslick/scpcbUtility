@@ -1,5 +1,6 @@
 package ru.sooslick.scpcb;
 
+// todo remove static references
 public class BlitzRandom {
 
     static final int RND_A = 48271;
