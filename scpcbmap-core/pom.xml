@@ -7,7 +7,7 @@
     <parent>
         <artifactId>scpcb-utility</artifactId>
         <groupId>ru.sooslick.apps</groupId>
-        <version>1.5-dev</version>
+        <version>1.5</version>
     </parent>
 
     <artifactId>scpcbmap-core</artifactId>

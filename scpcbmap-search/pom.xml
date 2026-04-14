@@ -7,7 +7,7 @@
     <parent>
         <groupId>ru.sooslick.apps</groupId>
         <artifactId>scpcb-utility</artifactId>
-        <version>1.5-dev</version>
+        <version>1.5</version>
     </parent>
 
     <artifactId>scpcbmap-search</artifactId>
@@ -17,10 +17,6 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
-    <build>
-        <sourceDirectory>src</sourceDirectory>
-    </build>
-
     <dependencies>
         <dependency>
             <groupId>ru.sooslick.apps</groupId>
@@ -28,5 +24,32 @@
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.sooslick.scpcb.SeedFinder</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <mainClass>ru.sooslick.scpcb.SeedFinder</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

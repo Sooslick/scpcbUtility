@@ -15,6 +15,11 @@ public class SeedFinder {
 
     public static void main(String[] args) throws ReflectiveOperationException {
         HashMap<String, String> params = CommandLineArgumentParser.parse(args);
+        if (params.containsKey("--list-path-finders")) {
+            PathFinderFactory.detectPathFinders();
+            return;
+        }
+
         List<PathFinderParams> pfs = parse(params.getOrDefault("--path-finders", "ru.sooslick.scpcb.pathfinder.SSPathFinder:40"));
         int start = Integer.parseInt(params.getOrDefault("--start", "1"));
         int end = Integer.parseInt(params.getOrDefault("--end", "2147483647"));

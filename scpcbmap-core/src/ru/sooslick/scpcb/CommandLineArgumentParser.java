@@ -12,6 +12,7 @@ public class CommandLineArgumentParser {
             String v = parts.length > 1 ? parts[1] : null;
             params.put(k, v);
         }
+        System.out.println("Parsed " + args.length + " CLI arguments: " + params);
         return params;
     }
 }

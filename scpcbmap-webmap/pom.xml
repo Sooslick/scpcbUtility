@@ -7,7 +7,7 @@
     <parent>
         <artifactId>scpcb-utility</artifactId>
         <groupId>ru.sooslick.apps</groupId>
-        <version>1.5-dev</version>
+        <version>1.5</version>
     </parent>
 
     <artifactId>scpcbmap-webmap</artifactId>
@@ -16,10 +16,6 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
-
-    <build>
-        <sourceDirectory>src</sourceDirectory>
-    </build>
 
     <dependencies>
         <dependency>
@@ -33,5 +29,19 @@
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <mainClass>ru.sooslick.scpcb.server.ServerMain</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
