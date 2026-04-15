@@ -83,6 +83,7 @@ public class Map {
         createTunnels();
         defineLoadingScreen();
 
+        findPDExitTunnel();
         reportOverlaps();
     }
 
@@ -1184,6 +1185,15 @@ public class Map {
                     r1.addOverlap(r2);
                     r2.addOverlap(r1);
                 }
+            }
+        }
+    }
+
+    private void findPDExitTunnel() {
+        for (ScpcbRoom r : savedRooms) {
+            if ("tunnel".equals(r.roomTemplate.name)) {
+                r.rndInfo = "Pocket Dimension exit";
+                return;
             }
         }
     }

@@ -9,7 +9,7 @@ import java.util.function.Function;
  */
 public class SeedGenerator {
 
-    public static final Function<String, Integer> V1311 = (seed) -> generateSeedNumber(seed.toCharArray());
+    public static final Function<String, Integer> V1311 = SeedGenerator::generateSeedNumber;
     public static final Function<String, Integer> SPEEDRUN_MOD = Integer::parseInt;
 
     /**
@@ -19,6 +19,15 @@ public class SeedGenerator {
      */
     public static Map generateMap(String randomSeed) {
         return generateMap(randomSeed, V1311);
+    }
+
+    /**
+     * Create a vanilla SCP:CB v1.3.11 map using direct seeding
+     *
+     * @param randomSeed seed number
+     */
+    public static Map generateMap(int randomSeed) {
+        return new Map(randomSeed);
     }
 
     /**
@@ -46,5 +55,15 @@ public class SeedGenerator {
             shift = (shift + 1) % 24;
         }
         return tmp;
+    }
+
+    /**
+     * transforms user input to 1.3.11 seed number
+     *
+     * @param seed user input string
+     * @return actual seed number
+     */
+    public static int generateSeedNumber(String seed) {
+        return generateSeedNumber(seed.toCharArray());
     }
 }

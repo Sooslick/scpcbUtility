@@ -37,7 +37,8 @@ Index page: http://localhost:1499/frontend/
 SeedFinder is bruteforce script that will generate every possible seed and analyze routes using various pathfinders.
 Script supports following argline parameters:
 - `--start` - seed number to start from (inclusive);
-- `--end` - seed number to stop (exclusive);
+- `--end` - seed number to stop (inclusive);
+- `--seed` - single seed to analyze (if present then --start and --end will be ignored);
 - `--print-maze` - draw map to console like S-NAV;
 - `--path-finders` - PathFinder java class that will perform map analysis, and threshold route length, separated by colon.
   Example value: `fully.qualified.Classname:123`.

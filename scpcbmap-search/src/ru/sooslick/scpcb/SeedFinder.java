@@ -24,13 +24,20 @@ public class SeedFinder {
         int start = Integer.parseInt(params.getOrDefault("--start", "1"));
         int end = Integer.parseInt(params.getOrDefault("--end", "2147483647"));
         boolean printMaze = params.containsKey("--print-maze");
+
+        if (params.containsKey("--seed")) {
+            System.out.println("Analyzing single seed");
+            start = Integer.parseInt(params.get("--seed"));
+            end = start;
+            pfs.forEach(pf -> pf.maxLength = Integer.MAX_VALUE);
+        }
         search(pfs, start, end, printMaze);
     }
 
     private static void search(List<PathFinderParams> pathFinders, int start, int end, boolean printMaze) {
-        for (int i = start; i < end; i++) {
+        for (int i = start; i <= end; i++) {
             try {
-                Map map = SeedGenerator.generateMap(String.valueOf(i), SeedGenerator.SPEEDRUN_MOD);     // todo get rid of int to string conversion
+                Map map = SeedGenerator.generateMap(i);
                 MapExplorer mapExplorer = new MapExplorer(null, i, map);
                 pathFinders.forEach(pfp -> {
                     PathFinder pf = pfp.getPathFinder();

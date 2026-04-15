@@ -1,7 +1,6 @@
 package ru.sooslick.scpcb.pathfinder;
 
 import ru.sooslick.scpcb.MapExplorer;
-import ru.sooslick.scpcb.map.ScpcbRoom;
 
 public class SSA2PathFinder implements PathFinder {
     @Override
@@ -29,7 +28,7 @@ public class SSA2PathFinder implements PathFinder {
     }
 
     private int calcBestHcz(MapExplorer map, XY room106, XY room008, XY cont) {
-        XY tunnel = scanTunnel(map);
+        XY tunnel = map.findPDExit();
 
         int route106 = calcHcz(map, room106, room106, room008, cont);
         int routeTunnel = calcHcz(map, tunnel, room106, room008, cont);
@@ -53,28 +52,5 @@ public class SSA2PathFinder implements PathFinder {
                         map.pathFind(startPoint, room008, room106, cont)
                 );
         }
-    }
-
-    private XY scanTunnel(MapExplorer map) {
-        int savedY = 0;
-        int savedX = 0;
-
-        for (ScpcbRoom room : map.map.savedRooms) {
-            if (!"tunnel".equals(room.roomTemplate.name))
-                continue;
-            int y = (int) (room.z / 8);
-            if (y < savedY)
-                continue;
-
-            int x = (int) (room.x / 8);
-            if (y == savedY && x > savedX)
-                continue;
-
-            savedY = y;
-            savedX = x;
-        }
-        if (savedX == 0 && savedY == 0)
-            return null;
-        return new XY(savedX, savedY);
     }
 }

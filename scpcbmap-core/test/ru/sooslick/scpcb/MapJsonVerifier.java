@@ -18,10 +18,15 @@ public class MapJsonVerifier {
     private static final Pattern ANGLE_PATTERN = Pattern.compile("\"angle\":([0-9]*)");
 
     private final String pathJson;
-    private final String seed;
+    private final int seed;
     private final LinkedList<RoomMeta> expectedRooms = new LinkedList<>();
 
     public MapJsonVerifier(String pathJson, String seed) {
+        this.pathJson = pathJson;
+        this.seed = SeedGenerator.generateSeedNumber(seed);
+    }
+
+    public MapJsonVerifier(String pathJson, int seed) {
         this.pathJson = pathJson;
         this.seed = seed;
     }
@@ -114,19 +119,22 @@ public class MapJsonVerifier {
 
     // todo pipeline mvn test
     public static void main(String[] args) throws IOException {
-        new MapJsonVerifier("dollar.json", "$").test();
+        new MapJsonVerifier("dollar.json", "$").test();                 // various input characters
         new MapJsonVerifier("whitespace.json", " ").test();
         new MapJsonVerifier("6.json", "6").test();
         new MapJsonVerifier("K.json", "K").test();
-        new MapJsonVerifier("446456054.json", "446456054").test();
+        new MapJsonVerifier("446456054.json", "446456054").test();      // various well-known seeds
         new MapJsonVerifier("990066099.json", "990066099").test();
         new MapJsonVerifier("bmu23i0.json", "bmu23i0").test();
         new MapJsonVerifier("x9mc.json", "x9mc").test();
         new MapJsonVerifier("2001011999.json", "2001011999").test();
         new MapJsonVerifier("557110973.json", "557110973").test();
-        new MapJsonVerifier("n790.json", "n790").test();
-        new MapJsonVerifier("220.json", "\\@").test();
-        // TODO: add test 558272428 (PD exit tunnel check)
-        // TODO: add test 1480285 (106 in entrance by mistake)
+        new MapJsonVerifier("n790.json", "n790").test();                // room2c merge
+        new MapJsonVerifier("220.json", "\\@").test();                  // room rotation above 360
+        new MapJsonVerifier("558272428.json", 558272428).test();        // PD Exit tunnel swapped
+        new MapJsonVerifier("1480285.json", 1480285).test();            // no HCZ room1s
+        new MapJsonVerifier("1227883421.json", 1227883421).test();
+        new MapJsonVerifier("5740247.json", 5740247).test();            // 079 entrance
+        new MapJsonVerifier("263284380.json", 263284380).test();        // 914 hcz
     }
 }

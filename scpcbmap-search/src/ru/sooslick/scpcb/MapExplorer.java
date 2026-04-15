@@ -40,6 +40,14 @@ public class MapExplorer {
                 .orElse(null);
     }
 
+    public XY findPDExit() {
+        for (ScpcbRoom room : map.savedRooms) {
+            if ("tunnel".equals(room.roomTemplate.name) && room.rndInfo.startsWith("Pocket"))
+                return new XY((int) (room.x / 8), (int) (room.z / 8));
+        }
+        return null;
+    }
+
     public int pathFind(XY... points) {
         int length = 0;
         for (int i = 1; i < points.length; i++) {

@@ -1,6 +1,5 @@
 let currentMap = null;
 let loading = false;
-let exitr = null;
 let savedOverlaps = null;
 let link = null;
 
@@ -114,7 +113,6 @@ function unableRequestMap() {
 
 function nullMap() {
     currentMap = null;
-    exitr = null;
 
     for (let i = 0; i <= 18; i++)
         for (let j = 0; j <= 18; j++) {
@@ -184,7 +182,7 @@ function buildMap(map) {
 	currentMap.rooms.forEach(r => {
 	    let cellId = "c" + r.x + "-" + r.y;
 	    let svg = svgCreate(
-	    	getRoomImage(r.name, r.en, r.ek),
+	    	getRoomImage(r),
 	    	getRoomRotation(r.name, r.angle),
 	    	r.dh,
 	    	r.dv
@@ -197,23 +195,7 @@ function buildMap(map) {
 		    buildTunnel(r.info)
 		else if (r.name == "room860")
 		    buildForest(r.info)
-		else if (r.name == "tunnel") {
-			if (exitr == null)
-				exitr = r;
-		    else if (r.y > exitr.y || (r.y == exitr.y && r.x <= exitr.x)) {
-		        exitr = r;
-		    }
-		}
 	});
-
-	if (exitr != null) {
-		document.getElementById("c" + exitr.x + "-" + exitr.y).innerHTML = svgCreate(
-			"room2EXIT",
-			getRoomRotation("tunnel", exitr.angle),
-       	    exitr.dh,
-       	    exitr.dv
-		);
-	}
 
 	// create annotations
 	currentMap.rooms.forEach(r => {
@@ -280,7 +262,12 @@ function getRoomInfo(x, y) {
     });
 }
 
-function getRoomImage(name, en, ek) {
+function getRoomImage(room) {
+	let info = room.info;
+	if (info != null && info.startsWith("Pocket"))
+		return "room2EXIT";
+
+	let name = room.name;
     switch (name) {
         case "tunnel":
         case "tunnel2": return "room2";
@@ -321,11 +308,10 @@ function getRoomImage(name, en, ek) {
         case "lockroom2":
         case "lockroom3":
         case "room1162": return "room2C";
-        case "room3gw":
-        case "room3servers2":
         case "room513":
         case "room966": return "room3L";
         case "room3gw":
+        case "room3servers2":
         case "room3storage": return "room3R";
         case "room205": return "room1";
         case "room1archive": return "room1K";
@@ -333,6 +319,8 @@ function getRoomImage(name, en, ek) {
         case "coffin": return "room1PD";
     }
 
+	let en = room.en;
+	let ek = room.ek;
     if (en == null)
         en = "";
     if (ek == null)
