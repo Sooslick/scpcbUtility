@@ -67,6 +67,9 @@ td:hover {
 td.overlap {
     background: #622;
 }
+td.locked {
+	background: #141;
+}
 td img {
     filter: invert();
 }
@@ -187,4 +190,12 @@ button:hover {
 .data-invalid {
 	background: rgba(128, 0, 0, 0.3) !important;
 	border-color: rgba(128, 0, 0, 1) !important;
+}
+
+.clickable:hover {
+	cursor: pointer;
+	background: rgba(255, 255, 255, 0.2);
+}
+.clickable:active {
+	background: rgba(255, 255, 255, 0.1);
 }

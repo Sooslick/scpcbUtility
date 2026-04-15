@@ -30,7 +30,7 @@
         </div>
         <div id="page-meta" class="map-component">
             <div class="page-meta-line">SCP: Containment Breach v1.3.11 map</div>
-            <div class="page-meta-line">App version: v1.5 // 260414</div>
+            <div class="page-meta-line">App version: v1.5 // 260415</div>
             <div class="page-meta-line">Created by <a id="sooslick-link" href="https://sooslick.art/">@Sooslick</a> for speedrunning community</div>
             <br/>
             <div class="page-meta-line">Download game: <a id="scpcbgame-link" href="https://www.scpcbgame.com/">Official website</a></div>
@@ -44,7 +44,10 @@
             </div>
             <button onclick="shareMap()" id="map-share" hidden>COPY LINK</button>
             <div id="copied-text" class="input-hint" hidden>Copied to clipboard</div>
-            <div id="error-text" class="input-hint" hidden>Service seems to be unavailable. DM @Sooslick in Discord
+            <div id="error-text" class="input-hint" hidden>
+                <span>Service seems to be unavailable. DM </span>
+                <span id="discord-id" class="clickable" onclick="copyContent('discord-id')">@Sooslick</span>
+                <span>in Discord.</span>
             </div>
         </div>
         <div class="map-column">
@@ -52,11 +55,11 @@
                 <div class="meta-head">Map metadata</div>
                 <div class="info-line" id="seedString-container">
                     <span id="seedString-label">Seed string:</span>
-                    <span id="seedString"></span>
+                    <span id="seedString" class="clickable" onclick="copyContent('seedString')"></span>
                 </div>
                 <div class="info-line" id="seedValue-container">
                     <span id="seedValue-label">Seed number:</span>
-                    <span id="seedValue"></span>
+                    <span id="seedValue" class="clickable" onclick="copyContent('seedValue')"></span>
                 </div>
                 <div class="info-line" id="loadingScreen-container">
                     <span id="loadingScreen-label">Loading screen:</span>
@@ -82,6 +85,10 @@
                 <div class="info-line" id="room-event-container">
                     <span id="room-event-label">Events:</span>
                     <span id="room-event"></span>
+                </div>
+                <div class="info-line" id="room-tele-container">
+                    <span id="room-tele-label">Teleport command:</span>
+                    <span id="room-tele" class="clickable" onclick="copyContent('room-tele')"></span>
                 </div>
                 <div class="info-line" id="rnd-info-container">
                     <span id="rnd-info-label">Extra info:</span>

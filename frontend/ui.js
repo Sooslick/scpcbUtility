@@ -2,6 +2,8 @@ let currentMap = null;
 let loading = false;
 let savedOverlaps = null;
 let link = null;
+let lockedX = -1;
+let lockedY = -1;
 
 let mapWrapper = document.getElementById("map-table");
 for (let i = 0; i <= 18; i++) {
@@ -10,6 +12,7 @@ for (let i = 0; i <= 18; i++) {
 		let td = document.createElement("td");
 		td.setAttribute("id", "c" + (18 - j) + "-" + i);
 		td.setAttribute("onmouseover", "getRoomInfo(" + (18 - j) + "," + i + ")");
+		td.setAttribute("onclick", "lockRoomInfo(" + (18 - j) + "," + i + ")");
 		tr.appendChild(td);
 	}
 	tr.style.background = getLineBackground(i);
@@ -124,6 +127,8 @@ function nullMap() {
         for (let j = 0; j < 10; j++)
             document.getElementById("f" + i + "-" + j).style.background = null;
 
+	unlockCell();
+
     document.getElementById("map").hidden = true;
     document.getElementById("map-share").hidden = true;
     document.getElementById("error-text").hidden = true;
@@ -132,6 +137,11 @@ function nullMap() {
     document.getElementById("map-forest").style.display = 'none';
     document.getElementById("map-info").hidden = true;
     document.getElementById("room-info").hidden = true;
+
+    document.getElementById("room").innerHTML = "";
+    document.getElementById("room-event").innerHTML = "";
+    document.getElementById("room-tele").innerHTML = "";
+    document.getElementById("rnd-info").innerHTML = "";
 }
 
 function readMapResponse() {
@@ -240,11 +250,14 @@ function buildForest(info) {
 function getRoomInfo(x, y) {
     if (currentMap == null)
         return;
+    if (lockedX >= 0 && lockedY >= 0)
+        return;
     updateOverlaps(null);   // I can optimize this call but I'm a bit lazy to do this
     currentMap.rooms.forEach(r => {
         if (r.x == x && r.y == y) {
         	updateOverlaps(r.overlaps);
 		    document.getElementById("room").innerHTML = r.name;
+		    document.getElementById("room-tele").innerHTML = "tele " + (r.x * 8) + " 1 " + (r.y * 8);
             let en = r.en == null ? "-" : r.en;
             let ek = r.ek == null ? "-" : r.ek;
             if (en == ek) {
@@ -260,6 +273,36 @@ function getRoomInfo(x, y) {
 		        document.getElementById("rnd-info").innerHTML = r.info;
 		}
     });
+}
+
+function lockRoomInfo(x, y) {
+	if (currentMap == null)
+        return;
+	if (lockedX == x && lockedY == y) {
+		unlockCell();
+		return;
+	}
+	if (lockedX >=0 && lockedY >= 0)
+		unlockCell();
+	getRoomInfo(x, y);
+	lockCell(x, y);
+}
+
+function lockCell(x, y) {
+	let probablyCell = document.getElementById("c" + x + "-" + y);
+	if (probablyCell != null) {
+		probablyCell.classList.add("locked")
+    	lockedX = x;
+    	lockedY = y;
+    }
+}
+
+function unlockCell() {
+	let probablyCell = document.getElementById("c" + lockedX + "-" + lockedY);
+	if (probablyCell != null)
+		probablyCell.classList.remove("locked")
+	lockedX = -1;
+    lockedY = -1;
 }
 
 function getRoomImage(room) {
@@ -448,8 +491,35 @@ function updateOverlaps(newOverlaps) {
 }
 
 function shareMap() {
-    document.getElementById("copied-text").hidden = false;
     navigator.clipboard.writeText(link);
+    showCopiedText();
+}
+
+function copyContent(id) {
+	let tp = document.getElementById(id);
+    if (tp.innerHTML.length > 0) {
+    	navigator.clipboard.writeText(tp.innerHTML);
+    	showCopiedText();
+    }
+}
+
+let showTextIntervalId = -1;
+function showCopiedText() {
+	let animatedText = document.getElementById("copied-text")
+    animatedText.style.transition = "none";
+    animatedText.style.color = "rgb(250, 250, 250)";
+    animatedText.hidden = false;
+
+    if (showTextIntervalId >= 0)
+    	clearTimeout(showTextIntervalId);
+    showTextIntervalId = setTimeout(hideCopiedText, 9000);
+    setTimeout(() => {animatedText.style.transition = "color 8s ease-in";}, 100);
+    setTimeout(() => {animatedText.style.color = "rgb(0, 0, 0)";}, 1000);
+}
+
+function hideCopiedText() {
+	document.getElementById("copied-text").hidden = true;
+	showTextIntervalId = -1;
 }
 
 function updateShareLink() {
