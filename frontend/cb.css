@@ -1,6 +1,7 @@
 body {
     margin: 0;
 	background: repeating-linear-gradient(0deg, black, black 3px, #222 3px, #222 6px);
+	background-color: #202020;
 	color: white;
 	font-family: 'Courier New';
 }

@@ -284,31 +284,35 @@ function getRoomImage(name, en, ek) {
     switch (name) {
         case "tunnel":
         case "tunnel2": return "room2";
+        case "room2offices3":
         case "room2closets": return "room2CLOSETS";
         case "room012":
-        case "room2shaft":
-        case "room2scps2": return "room2MASK";
+        case "room2scps2":
+        case "room2servers2":
+        case "room2shaft": return "room2MASK";
         case "room2poffices": return "room2CODE";
         case "room049":
         case "room2tunnel": return "room2E";
         case "checkpoint1":
         case "checkpoint2":
         case "testroom":
-        case "room860":
         case "room2doors":
         case "room2gw":
-        case "room2servers": return "room2L";
-        case "room2storage":
-        case "room2scps": return "room2SCP";
+        case "room2servers":
+        case "room860": return "room2L";
+        case "room2poffices2":
+        case "room2scps":
+        case "room2storage": return "room2SCP";
         case "medibay":
         case "room1123":
-        case "room2testroom2":
         case "room2cafeteria":
-        case "room2sl": return "room2SL";
+        case "room2sl":
+        case "room2testroom2": return "room2SL";
         case "room2tesla":
         case "room2tesla_hcz":
         case "room2tesla_lcz": return "room2T";
         case "room2nuke":
+        case "room2offices4":
         case "room2sroom":
         case "room2toilets": return "room2WC";
         case "room2_4":
@@ -317,6 +321,7 @@ function getRoomImage(name, en, ek) {
         case "lockroom2":
         case "lockroom3":
         case "room1162": return "room2C";
+        case "room3gw":
         case "room3servers2":
         case "room513":
         case "room966": return "room3L";
@@ -357,15 +362,17 @@ function getRoomRotation(name, angle) {
     let a = angle % 180 == 0 ? angle - 180 : angle;
     switch (name) {
         case "medibay":
-        case "room2cafeteria":
-        case "room2scps2":
-        case "room2testroom2":
-        case "room2closets":
-        case "room2shaft":
-        case "room2poffices":
-        case "room2pit":
+        case "room012":
         case "room2_4":
-        case "room012": return a + 180;
+        case "room2cafeteria":
+        case "room2closets":
+        case "room2offices4":
+        case "room2pit":
+        case "room2poffices":
+        case "room2scps2":
+        case "room2servers2":
+        case "room2shaft":
+        case "room2testroom2": return a + 180;
         default: return a;
     }
 }
