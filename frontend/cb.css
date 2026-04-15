@@ -199,3 +199,19 @@ button:hover {
 .clickable:active {
 	background: rgba(255, 255, 255, 0.1);
 }
+
+#copyrights-placeholder {
+	height: 40px;
+}
+#copyrights-wrapper {
+	height: 0px;
+}
+#copyrights {
+	margin: auto;
+	text-align: center;
+	position: relative;
+	bottom: 20px;
+}
+#copyrights a {
+	color: #aaa;
+}
