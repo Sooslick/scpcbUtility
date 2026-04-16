@@ -214,7 +214,7 @@ function buildMap(map) {
 
 	// scroll into viewport
 	setTimeout(function() {
-		window.scroll({top: 185, left: 0, behavior: 'smooth'});
+		window.scroll({top: 225, left: 0, behavior: 'smooth'});
 	}, 150);
 }
 

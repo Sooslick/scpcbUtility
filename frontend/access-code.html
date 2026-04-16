@@ -1,0 +1,52 @@
+<!doctype html>
+<HTML>
+<HEAD>
+    <TITLE>SCP: Containment Breach map</TITLE>
+    <meta charset='utf-8'/>
+    <meta http-equiv='Content-Type' content='text/html'/>
+    <meta name='author' content='Sooslick'/>
+    <meta name='description' content='SCP: Containment Breach code calculator for Maintenance Tunnels and Dr. Maynard office'/>
+    <meta name='theme-color' content='#202020'/>
+    <link rel="stylesheet" href="cb.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</HEAD>
+<BODY>
+<div id="wrapper">
+    <div id="nav-wrapper">
+        <div id="navigation">
+            <a href="index.html">Seed previewer</a>
+            <a href="seed-picker.html">Ranked seeds</a>
+            <a href="access-code.html" class="nav-selected">Code calculator</a>
+        </div>
+    </div>
+    <div id="header" data-nosnippet>
+        <div id="inputs" class="map-component">
+            <div class="input-line" id="pj-container">
+                <span><input id="pj" autocomplete="off" oninput="updatePj()"/></span>
+                <span id="pj-label">Tunnels code</span>
+            </div>
+            <div class="input-hint" id="pj-hint">Access code from SCP-372 document</div>
+
+            <div class="input-line" id="pd-container">
+                <span><input id="pd" autocomplete="off" oninput="updatePd()"/></span>
+                <span id="pd-label">Maynard code</span>
+            </div>
+            <div class="input-hint" id="pd-hint">Access code from Burnt note</div>
+        </div>
+        <div id="page-meta" class="map-component">
+            <div class="page-meta-line">Dr. Maynard code calculator</div>
+            <div class="page-meta-line">App version: v1.5 // 260416</div>
+            <div class="page-meta-line">Created by <a id="sooslick-link" href="https://sooslick.art/">@Sooslick</a> for speedrunning community</div>
+            <br/>
+            <div class="page-meta-line">Download game: <a id="scpcbgame-link" href="https://www.scpcbgame.com/">Official website</a></div>
+            <div class="page-meta-line">Download Speedrun Mod: <a id="mod-link" href="https://github.com/forxandknives/SCPCB-Speedrun-Mod/releases">Github link</a></div>
+        </div>
+    </div>
+    <div id="copyrights-placeholder"></div>
+</div>
+<div id="copyrights-wrapper">
+    <div id="copyrights" class="input-hint">© The content of this page is licensed under <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 License</a></div>
+</div>
+<script src="accesscode.js"></script>
+</BODY>
+</HTML>
