@@ -20,8 +20,8 @@ public class ServerMain {
             System.out.println("Unable to start HTTP server: " + e.getMessage());
             return;
         }
-        ScpMapHandler handler = new ScpMapHandler();
-        server.createContext("/map", handler);
+        server.createContext("/map", new ScpMapHandler());
+        server.createContext("/rank-seed", new ScpRankedSeedHandler());
         server.createContext("/", new ScpStatusHandler());
         if (ServerProperties.FRONTEND_ENABLE)
             server.createContext("/frontend/", new ScpWebHandler());
@@ -38,8 +38,7 @@ public class ServerMain {
             } catch (InterruptedException e) {
                 alive = false;
             }
-            long lastActivity = handler.getLastRequestTime();
-            long idleTime = System.currentTimeMillis() - lastActivity;
+            long idleTime = System.currentTimeMillis() - RateLimiter.lastActivity;
             System.out.println(LocalDateTime.now() + " " + idleTime + "ms since last activity");
             if (ServerProperties.IDLE_LIMIT > 0 && idleTime > ServerProperties.IDLE_LIMIT)
                 alive = false;

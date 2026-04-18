@@ -40,6 +40,7 @@ Script supports following argline parameters:
 - `--end` - seed number to stop (inclusive);
 - `--seed` - single seed to analyze (if present then --start and --end will be ignored);
 - `--print-maze` - draw map to console like S-NAV;
+- `--print-json` - print json output to console (like /map web endpoint do);
 - `--path-finders` - PathFinder java class that will perform map analysis, and threshold route length, separated by colon.
   Example value: `fully.qualified.Classname:123`.
   If you want multiple pathfinders, separate them by comma;

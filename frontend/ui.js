@@ -23,10 +23,12 @@ mapWrapper.addEventListener('contextmenu', function(evt) {
 }, false);
 addEventListener("popstate", (event) => {
 	nullMap();
-	buildMap(event.state);
-	document.getElementById("prompt").value = currentMap.seedString
-	document.getElementById("seed").value = currentMap.seedValue
-	updateShareLink();
+	if (typeof event.state.seedValue !== 'undefined') {
+		buildMap(event.state);
+		document.getElementById("prompt").value = currentMap.seedString
+		document.getElementById("seed").value = currentMap.seedValue
+		updateShareLink();
+	}
 });
 
 mapWrapper = document.getElementById("table-pd");
@@ -110,7 +112,7 @@ function createMap() {
 function unableRequestMap() {
 	let errortext = document.getElementById("error-text");
     errortext.hidden = false;
-    errortext.innerHTML = "Service seems to be unavailable. DM @Sooslick in Discord";
+    errortext.innerHTML = "<span>Service seems to be unavailable. DM </span><span id=\"discord-id\" class=\"clickable\" onclick=\"copyContent('discord-id')\">@Sooslick</span><span> in Discord.</span>";
     loading = false;
 }
 
@@ -150,7 +152,10 @@ function readMapResponse() {
     if (this.status != 200) {
     	let errtxt = document.getElementById("error-text");
         errtxt.hidden = false;
-        errtxt.innerHTML = "Something is broken, DM @Sooslick in Discord";
+        if (this.status == 429)
+        	errtxt.innerHTML = "Too many requests";
+        else
+        	errtxt.innerHTML = "<span>Something on server is broken, DM </span><span id=\"discord-id\" class=\"clickable\" onclick=\"copyContent('discord-id')\">@Sooslick</span><span> in Discord.</span>";
         return;
     }
     if (this.status == 200) {
@@ -159,7 +164,7 @@ function readMapResponse() {
     	} catch (jumpscare) {
     		let errtxt = document.getElementById("error-text");
             errtxt.hidden = false;
-            errtxt.innerHTML = "Unable to create seed, DM @Sooslick in Discord";
+            errtxt.innerHTML = "<span>Unable to create seed, DM </span><span id=\"discord-id\" class=\"clickable\" onclick=\"copyContent('discord-id')\">@Sooslick</span><span> in Discord.</span>";
             return;
     	}
 
@@ -493,33 +498,6 @@ function updateOverlaps(newOverlaps) {
 function shareMap() {
     navigator.clipboard.writeText(link);
     showCopiedText();
-}
-
-function copyContent(id) {
-	let tp = document.getElementById(id);
-    if (tp.innerHTML.length > 0) {
-    	navigator.clipboard.writeText(tp.innerHTML);
-    	showCopiedText();
-    }
-}
-
-let showTextIntervalId = -1;
-function showCopiedText() {
-	let animatedText = document.getElementById("copied-text")
-    animatedText.style.transition = "none";
-    animatedText.style.color = "rgb(250, 250, 250)";
-    animatedText.hidden = false;
-
-    if (showTextIntervalId >= 0)
-    	clearTimeout(showTextIntervalId);
-    showTextIntervalId = setTimeout(hideCopiedText, 9000);
-    setTimeout(() => {animatedText.style.transition = "color 8s ease-in";}, 100);
-    setTimeout(() => {animatedText.style.color = "rgb(0, 0, 0)";}, 1000);
-}
-
-function hideCopiedText() {
-	document.getElementById("copied-text").hidden = true;
-	showTextIntervalId = -1;
 }
 
 function updateShareLink() {

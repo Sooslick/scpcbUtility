@@ -2,8 +2,12 @@ package ru.sooslick.scpcb.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import ru.sooslick.scpcb.MapExplorer;
+import ru.sooslick.scpcb.SeedFinder;
 import ru.sooslick.scpcb.SeedGenerator;
 import ru.sooslick.scpcb.map.Map;
+import ru.sooslick.scpcb.pathfinder.CommonStartPathFinder;
+import ru.sooslick.scpcb.pathfinder.RankedPathFinder;
+import ru.sooslick.scpcb.pathfinder.SSPathFinder;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -11,9 +15,12 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.function.Function;
 
-public class ScpMapHandler extends AbstractRatedHandler {
+public class ScpRankedSeedHandler extends AbstractRatedHandler {
 
     private static final Random random = new Random();
+    private static final RankedPathFinder rpf = new RankedPathFinder();
+    private static final SSPathFinder sspf = new SSPathFinder();
+    private static final SeedFinder.PathFinderParams pfp = new SeedFinder.PathFinderParams(rpf, 450);
 
     @Override
     protected void respond(HttpExchange httpExchange) throws IOException {
@@ -30,6 +37,7 @@ public class ScpMapHandler extends AbstractRatedHandler {
 
         String seed = null;
         Function<String, Integer> method = null;
+        boolean searchMode = false;
         // vanilla seed prompt
         if (queryParams.containsKey("prompt")) {
             seed = queryParams.get("prompt");
@@ -46,13 +54,9 @@ public class ScpMapHandler extends AbstractRatedHandler {
         }
         // bro gimme cool map
         else if (queryParams.containsKey("random")) {
-            if (random.nextBoolean()) {
-                seed = String.valueOf(random.nextInt(Integer.MAX_VALUE));
-                method = SeedGenerator.SPEEDRUN_MOD;
-            } else {
-                seed = randomPrompt();
-                method = SeedGenerator.V1311;
-            }
+            seed = String.valueOf(random.nextInt(Integer.MAX_VALUE));
+            method = SeedGenerator.SPEEDRUN_MOD;
+            searchMode = true;
         }
 
         if (seed == null) {
@@ -63,21 +67,24 @@ public class ScpMapHandler extends AbstractRatedHandler {
         int seedNumber = method.apply(seed);
         System.out.printf("User prompt: %s (%s)%n", seed, seedNumber);
         try {
+            if (searchMode) {
+                int start = random.nextInt(Integer.MAX_VALUE - 200);
+                int end = start + 200;
+                seed = String.valueOf(SeedFinder.search(pfp, start, end));
+            }
+
             Map map = SeedGenerator.generateMap(seed, method);
             MapExplorer pf = new MapExplorer(seed, method.apply(seed), map);
-            String out = pf.exportJson();
+
+            int estimate = pf.testRouteLength(rpf);
+            int routeInbounds = pf.testRouteLength(sspf);
+            int routeLcz = pf.testRouteLength(CommonStartPathFinder.instance);
+
+            String out = buildResponse(pf, estimate, routeInbounds, routeLcz);
             answer(httpExchange, out, 200);
         } catch (Exception e) {
             answer(httpExchange, "Map generator failed to create map " + seed, 500);
         }
-    }
-
-    private String randomPrompt() {
-        StringBuilder sb = new StringBuilder();
-        int max = random.nextInt(12) + 4;
-        for (int i = 0; i < max; i++)
-            sb.append((char) (random.nextInt(96) + 32));
-        return sb.toString();
     }
 
     private boolean validatePrompt(String s) {
@@ -96,5 +103,10 @@ public class ScpMapHandler extends AbstractRatedHandler {
             return false;
         }
         return true;
+    }
+
+    private String buildResponse(MapExplorer map, int estimate, int inbounds, int lcz) {
+        return "{\"seedString\":\"%s\",\"seedValue\":%d,\"loadingScreen\":\"%s\",\"estimate\":%d,\"routeLength\":%d,\"lcz\":%d}"
+                .formatted(map.prompt, map.seed, map.map.loadingScreen, estimate, inbounds, lcz);
     }
 }

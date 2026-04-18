@@ -1,0 +1,104 @@
+<!doctype html>
+<HTML>
+<HEAD>
+    <TITLE>SCP: Containment Breach map</TITLE>
+    <meta charset='utf-8'/>
+    <meta http-equiv='Content-Type' content='text/html'/>
+    <meta name='author' content='Sooslick'/>
+    <meta name='description' content='Random seed picker for SCP: Containment Breach v1.3.11'/>
+    <meta name='theme-color' content='#202020'/>
+    <link rel="stylesheet" href="cb.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</HEAD>
+<BODY>
+<div id="wrapper">
+    <div id="nav-wrapper">
+        <div id="navigation">
+            <a href="index.html">Seed previewer</a>
+            <a href="seed-picker.html" class="nav-selected">Ranked seeds</a>
+            <a href="access-code.html">Code calculator</a>
+        </div>
+    </div>
+    <div id="header" data-nosnippet>
+        <div id="inputs" class="map-component">
+            <div class="input-line" id="prompt-container">
+                <span><input id="prompt" autocomplete="off" oninput="updatePrompt()"/></span>
+                <span id="prompt-label">Vanilla game seed</span>
+            </div>
+            <div class="input-hint" id="prompt-hint">Up to 15 ASCII characters</div>
+            <div class="input-line" id="seed-container">
+                <span><input id="seed" autocomplete="off" oninput="updateSeed()"/></span>
+                <span id="seed-label">Speedrun Mod seed</span>
+            </div>
+            <div class="input-hint" id="seed-hint">Number in range 1, 2147483647</div>
+            <div class="input-hint" id="blank-hint">Leave fields blank for random seed</div>
+            <button id="generate" onclick="findMap()">TEST SEED</button>
+            <img id="loading-gif" src="load.gif" hidden/>
+        </div>
+        <div id="page-meta" class="map-component">
+            <div class="page-meta-line">SCP: Containment Breach v1.3.11 seed picker</div>
+            <div class="page-meta-line">App version: v1.5 // 260416</div>
+            <div class="page-meta-line">Created by <a id="sooslick-link" href="https://sooslick.art/">@Sooslick</a> for speedrunning community</div>
+            <br/>
+            <div class="page-meta-line">Download game: <a id="scpcbgame-link" href="https://www.scpcbgame.com/">Official website</a></div>
+            <div class="page-meta-line">Download Speedrun Mod: <a id="mod-link" href="https://github.com/forxandknives/SCPCB-Speedrun-Mod/releases">Github link</a></div>
+        </div>
+    </div>
+    <div id="map-block">
+        <div class="map-column">
+            <div id="map-info" class="map-component" hidden>
+                <div class="meta-head">Map metadata</div>
+                <div class="info-line" id="seedString-container">
+                    <span id="seedString-label">Seed string:</span>
+                    <span id="seedString" class="clickable" onclick="copyContent('seedString')"></span>
+                </div>
+                <div class="info-line" id="seedValue-container">
+                    <span id="seedValue-label">Seed number:</span>
+                    <span id="seedValue" class="clickable" onclick="copyContent('seedValue')"></span>
+                </div>
+                <div class="info-line" id="loadingScreen-container">
+                    <span id="loadingScreen-label">Loading screen:</span>
+                    <span id="loadingScreen"></span>
+                </div>
+            </div>
+            <div id="ranked-info" class="map-component" hidden>
+                <div class="meta-head">Ranked info</div>
+                <div class="info-line" id="estimate-container">
+                    <span id="estimate-label">Estimated Ranked time:</span>
+                    <span id="estimate"></span>
+                    <span class="hidden-hint" id="estimate-hint"><span class="hidden-hint-text">Very rough estimate, based on average room traversing time on Safe difficulty. Random events and NPC threats are not taken into account</span></span>
+                </div>
+                <div class="info-line" id="inbounds-container">
+                    <span id="inbounds-label">Inbounds% route length:</span>
+                    <span id="inbounds"></span>
+                    <span class="hidden-hint" id="inbounds-hint"><span class="hidden-hint-text">Minimal amount of rooms required to beat the game with Omni & Strange Bottle route</span></span>
+                </div>
+                <div class="info-line" id="lcz-container">
+                    <span id="lcz-label">LCZ route length:</span>
+                    <span id="lcz"></span>
+                    <span class="hidden-hint" id="lcz-hint"><span class="hidden-hint-text">Minimal amount of rooms required to reach SCP-914 from start</span></span>
+                </div>
+                <br/>
+                <div class="info-line">
+                    <a id="map-link" href="index.html" class="clickable">View map</a>
+                </div>
+            </div>
+            <div class="ranked-component">
+                <div id="copied-text" class="input-hint" hidden>Copied to clipboard</div>
+                <div id="error-text" class="input-hint" hidden>
+                    <span>Service seems to be unavailable. DM </span>
+                    <span id="discord-id" class="clickable" onclick="copyContent('discord-id')">@Sooslick</span>
+                    <span>in Discord.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="copyrights-placeholder"></div>
+</div>
+<div id="copyrights-wrapper">
+    <div id="copyrights" class="input-hint">© The content of this page is licensed under <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 License</a></div>
+</div>
+<script src="form.js"></script>
+<script src="ranked.js"></script>
+</BODY>
+</HTML>

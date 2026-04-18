@@ -24,6 +24,7 @@ public class SeedFinder {
         int start = Integer.parseInt(params.getOrDefault("--start", "1"));
         int end = Integer.parseInt(params.getOrDefault("--end", "2147483647"));
         boolean printMaze = params.containsKey("--print-maze");
+        boolean printJson = params.containsKey("--print-json");
 
         if (params.containsKey("--seed")) {
             System.out.println("Analyzing single seed");
@@ -31,10 +32,10 @@ public class SeedFinder {
             end = start;
             pfs.forEach(pf -> pf.maxLength = Integer.MAX_VALUE);
         }
-        search(pfs, start, end, printMaze);
+        search(pfs, start, end, printMaze, printJson);
     }
 
-    private static void search(List<PathFinderParams> pathFinders, int start, int end, boolean printMaze) {
+    public static void search(List<PathFinderParams> pathFinders, int start, int end, boolean printMaze, boolean printJson) {
         for (int i = start; i <= end; i++) {
             try {
                 Map map = SeedGenerator.generateMap(i);
@@ -45,6 +46,8 @@ public class SeedFinder {
                     if (routeLength < pfp.getMaxLength()) {
                         if (printMaze)
                             mapExplorer.printMaze();
+                        if (printJson)
+                            mapExplorer.exportJson();
                         System.out.println(map.seed + " - " + pf.getName() + ", route length " + routeLength + "  -->  https://sooslick.art/scpcbmap/index?seed=" + map.seed);
                     }
                 });
@@ -54,9 +57,30 @@ public class SeedFinder {
         }
     }
 
+    public static int search(PathFinderParams pathFinderParams, int start, int end) {
+        int minFoundLength = Integer.MAX_VALUE;
+        int savedSeed = -1;
+        for (int i = start; i <= end; i++) {
+            try {
+                Map map = SeedGenerator.generateMap(i);
+                MapExplorer mapExplorer = new MapExplorer(null, i, map);
+                int routeLength = mapExplorer.testRouteLength(pathFinderParams.getPathFinder());
+                if (routeLength < pathFinderParams.getMaxLength())
+                    return map.seed;
+                else if (routeLength < minFoundLength) {
+                    minFoundLength = routeLength;
+                    savedSeed = map.seed;
+                }
+            } catch (Exception e) {
+                System.out.println("Error generating seed " + i);
+            }
+        }
+        return savedSeed;
+    }
+
     private static List<PathFinderParams> parse(String arg) throws ReflectiveOperationException {
         List<PathFinderParams> pfList = new LinkedList<>();
-        String[] pfstrings  = arg.split(",");
+        String[] pfstrings = arg.split(",");
         for (String pfstring : pfstrings) {
             String[] pfp = pfstring.trim().split(":");
             pfList.add(new PathFinderParams(PathFinderFactory.createInstance(pfp[0]), Integer.parseInt(pfp[1])));
@@ -64,7 +88,7 @@ public class SeedFinder {
         return pfList;
     }
 
-    private static class PathFinderParams {
+    public static class PathFinderParams {
         PathFinder pathFinder;
         int maxLength;
 
