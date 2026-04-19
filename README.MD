@@ -26,6 +26,8 @@ Launch tests via `MapJsonVerifier` main method to quick check everything is OK. 
 Launch app with following command:
 `mvn exec:java -pl scpcbmap-webmap`
 
+Or build .jar using `mvn compile assembly:single -pl scpcbmap-webmap`, and then simply launch .jar-file
+
 Or launch main method in `ru.sooslick.scpcb.server.ServerMain` from your IDE. Class is located in `scpcbmap-webmap` module.
 
 Server will be available at port 1499 by default (unless other port is specified in `server.properties`).
