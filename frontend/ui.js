@@ -524,7 +524,7 @@ function loadFromQuery() {
         createMap();
         return;
     } else if ("prompt" == kv[0]) {
-        document.getElementById("prompt").value = decodeURIComponent(kv[1]);
+        document.getElementById("prompt").value = decodeURIComponent(kv[1].replaceAll("+", "%20"));		// workaround for " " being encoded as "+" which is decoded as "+"
         createMap();
         return;
     }
