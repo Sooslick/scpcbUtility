@@ -57,27 +57,6 @@ public class SeedFinder {
         }
     }
 
-    public static int search(PathFinderParams pathFinderParams, int start, int end) {
-        int minFoundLength = Integer.MAX_VALUE;
-        int savedSeed = -1;
-        for (int i = start; i <= end; i++) {
-            try {
-                Map map = SeedGenerator.generateMap(i);
-                MapExplorer mapExplorer = new MapExplorer(null, i, map);
-                int routeLength = mapExplorer.testRouteLength(pathFinderParams.getPathFinder());
-                if (routeLength < pathFinderParams.getMaxLength())
-                    return map.seed;
-                else if (routeLength < minFoundLength) {
-                    minFoundLength = routeLength;
-                    savedSeed = map.seed;
-                }
-            } catch (Exception e) {
-                System.out.println("Error generating seed " + i);
-            }
-        }
-        return savedSeed;
-    }
-
     private static List<PathFinderParams> parse(String arg) throws ReflectiveOperationException {
         List<PathFinderParams> pfList = new LinkedList<>();
         String[] pfstrings = arg.split(",");

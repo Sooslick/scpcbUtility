@@ -85,8 +85,8 @@ function updateFields(response) {
 	document.getElementById("loadingScreen").innerHTML = response.loadingScreen
 
 	document.getElementById("estimate").innerHTML = roundEstimate(response.estimate);
-	document.getElementById("inbounds").innerHTML = response.routeLength + " rooms";
-	document.getElementById("lcz").innerHTML = response.lcz + " rooms";
+	//document.getElementById("inbounds").innerHTML = response.routeLength + " rooms";
+	//document.getElementById("lcz").innerHTML = response.lcz + " rooms";
 	document.getElementById("map-link").setAttribute("href", "index.html?seed=" + response.seedValue);
 }
 

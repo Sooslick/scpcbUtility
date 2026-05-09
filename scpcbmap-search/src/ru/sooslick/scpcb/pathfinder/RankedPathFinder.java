@@ -33,6 +33,31 @@ public class RankedPathFinder extends AbstractWeightedPathfinder {
         return "Ranked game";
     }
 
+    public boolean is939blocking(MapExplorer map) {
+        XY start = map.findRoom("start");
+        XY closets = map.findRoom("room2closets");
+        XY testroom2 = map.findRoom("room2testroom2");
+        XY room914 = map.findRoom("914");
+        XY room939 = map.findRoom("room3storage");
+
+        NodeWeights[][] weights = calcWeights(map.grid);
+        int test1 = pathFind(weights, start, room939, closets, testroom2, room914);
+        int test2 = pathFind(weights, start, closets, room939, testroom2, room914);
+        int test3 = pathFind(weights, start, closets, testroom2, room939, room914);
+        int bestTest = Math.min(Math.min(test1, test2), test3);
+
+        int defaultRoute = pathFind(weights, start, closets, testroom2, room914);
+        return defaultRoute >= bestTest;
+    }
+
+    public boolean gateACloseProximity(MapExplorer map) {
+        XY gateA = map.findRoom("gateaentrance");
+        XY cont = map.findRoom("room2ccont");
+        if (gateA == null || cont == null)
+            return false;
+        return map.pathFind(gateA, cont) < 5;
+    }
+
     private int calcBeforePD(NodeWeights[][] weights, MapExplorer map) {
         XY start = map.findRoom("start");
         XY closets = map.findRoom("room2closets");
