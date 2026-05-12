@@ -104,6 +104,15 @@ public class ScpRankedSeedHandler extends AbstractRatedHandler {
                 MapExplorer pf = new MapExplorer(seed, method.apply(seed), map);
                 int estimate = pf.testRouteLength(rpf);
                 bestSeed = new RankedSeed(map.seed, map, pf, estimate);
+
+                if (pf.findRoom("room2ccont") == null)
+                    bestSeed.issues = bestSeed.issues + "cont;";
+                if (map.savedRooms.stream().noneMatch(r -> r.rndInfo != null && r.rndInfo.contains("Pocket Dimension exit")))
+                    bestSeed.issues = bestSeed.issues + "PD;";
+                if (rpf.gateACloseProximity(pf))
+                    bestSeed.issues = bestSeed.issues + "MTF;";
+                if (rpf.is939blocking(pf))
+                    bestSeed.issues = bestSeed.issues + "939;";
             }
 
             String out = buildResponse(bestSeed);
@@ -133,8 +142,8 @@ public class ScpRankedSeedHandler extends AbstractRatedHandler {
 
     private String buildResponse(RankedSeed rs) {
         System.out.printf("Ranked return: %s (%s)%n", rs.mapExplorer.prompt, rs.seed);
-        return "{\"seedString\":\"%s\",\"seedValue\":%d,\"loadingScreen\":\"%s\",\"estimate\":%d}"
-                .formatted(rs.mapExplorer.prompt, rs.seed, rs.map.loadingScreen, rs.rankedEstimate);
+        return "{\"seedString\":\"%s\",\"seedValue\":%d,\"loadingScreen\":\"%s\",\"estimate\":%d,\"issues\":\"%s\"}"
+                .formatted(rs.mapExplorer.prompt, rs.seed, rs.map.loadingScreen, rs.rankedEstimate, rs.issues);
     }
 
     private static class RankedSeed {
@@ -142,6 +151,7 @@ public class ScpRankedSeedHandler extends AbstractRatedHandler {
         Map map;
         MapExplorer mapExplorer;
         int rankedEstimate;
+        String issues = "";
 
         RankedSeed(int seed, Map map, MapExplorer mapExplorer, int rankedEstimate) {
             this.seed = seed;

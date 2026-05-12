@@ -15,9 +15,7 @@ function findMap() {
 
     loading = true;
     document.getElementById("loading-gif").hidden = false;
-
     document.getElementById("map-info").hidden = true;
-    document.getElementById("ranked-info").hidden = true;
 
     let query = "";
     let prompt = document.getElementById("prompt").value;
@@ -69,28 +67,27 @@ function readMapResponse() {
     	} catch (jumpscare) {
     		let errtxt = document.getElementById("error-text");
             errtxt.hidden = false;
-            errtxt.innerHTML = "<span>Something on this page is broken, DM </span><span id=\"discord-id\" class=\"clickable\" onclick=\"copyContent('discord-id')\">@Sooslick</span><span>in Discord.</span>";
+            errtxt.innerHTML = "<span>Something on this page is broken, DM </span><span id=\"discord-id\" class=\"clickable\" onclick=\"copyContent('discord-id')\">@Sooslick</span><span> in Discord.</span>";
             return;
     	}
     }
 }
 
 function updateFields(response) {
-    document.getElementById("map-info").hidden = false;
-    document.getElementById("ranked-info").hidden = false;
-
-    // fill meta
 	document.getElementById("seedString").innerHTML = response.seedString
 	document.getElementById("seedValue").innerHTML = response.seedValue
 	document.getElementById("loadingScreen").innerHTML = response.loadingScreen
 
 	document.getElementById("estimate").innerHTML = roundEstimate(response.estimate);
-	//document.getElementById("inbounds").innerHTML = response.routeLength + " rooms";
-	//document.getElementById("lcz").innerHTML = response.lcz + " rooms";
+	document.getElementById("extra").innerHTML = describeIssues(response.issues);
 	document.getElementById("map-link").setAttribute("href", "index.html?seed=" + response.seedValue);
+
+    document.getElementById("map-info").hidden = false;
 }
 
 function roundEstimate(seconds) {
+	if (seconds > 9000)
+		return "∞";
 	let round = Math.ceil(seconds / 15) * 15;
 	return Math.floor(round / 60) + "m " + pad(round % 60) + "s";
 }
@@ -100,4 +97,19 @@ function pad(num) {
     	return "0" + num.toString();
     else
     	return num.toString();
+}
+
+function describeIssues(issues) {
+	if (!issues)
+		return "-";
+	if (issues.includes("cont"))
+		return "Seed is not beatable";
+	let strings = new Array();
+	if (issues.includes("939"))
+		strings.push("Path to SCP-914 is obstructed");
+	if (issues.includes("PD"))
+		strings.push("No instant PD exit");
+	if (issues.includes("MTF"))
+		strings.push("MTF units can camp electrical room");
+	return strings.join(", ")
 }
