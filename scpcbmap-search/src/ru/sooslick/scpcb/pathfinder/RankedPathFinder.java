@@ -1,6 +1,7 @@
 package ru.sooslick.scpcb.pathfinder;
 
 import ru.sooslick.scpcb.MapExplorer;
+import ru.sooslick.scpcb.map.ScpcbRoom;
 
 public class RankedPathFinder extends AbstractWeightedPathfinder {
     @Override
@@ -56,6 +57,23 @@ public class RankedPathFinder extends AbstractWeightedPathfinder {
         if (gateA == null || cont == null)
             return false;
         return map.pathFind(gateA, cont) < 5;
+    }
+
+    public boolean hasUnbeatableOverlap(MapExplorer map) {
+        ScpcbRoom r = map.getRoom("room079");
+        XY room079 = map.findRoom("room079");
+
+        if (room079 == null)
+            return false;
+
+        XY relative = switch (r.angle % 360) {
+            case 90 -> room079.getRelative(-1, +1);
+            case 0 -> room079.getRelative(+1, +1);
+            case 270 -> room079.getRelative(+1, -1);
+            default -> room079.getRelative(-1, -1);
+        };
+        ScpcbRoom r2 = map.getRoomAt(relative);
+        return r2 != null && r2.roomTemplate.name.equals("room106") && r2.angle - r.angle == 90;
     }
 
     private int calcBeforePD(NodeWeights[][] weights, MapExplorer map) {

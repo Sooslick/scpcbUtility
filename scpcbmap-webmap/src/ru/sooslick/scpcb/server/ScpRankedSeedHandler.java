@@ -5,7 +5,6 @@ import ru.sooslick.scpcb.MapExplorer;
 import ru.sooslick.scpcb.SeedGenerator;
 import ru.sooslick.scpcb.map.Map;
 import ru.sooslick.scpcb.pathfinder.RankedPathFinder;
-import ru.sooslick.scpcb.pathfinder.SSPathFinder;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -18,9 +17,8 @@ public class ScpRankedSeedHandler extends AbstractRatedHandler {
 
     private static final Random random = new Random();
     private static final RankedPathFinder rpf = new RankedPathFinder();
-    private static final SSPathFinder sspf = new SSPathFinder();
-    private static final int rankedThreshold = 570;                 // todo move to config
-    private static final int rankedSearchRange = 50;
+    private static final int rankedThreshold = ServerProperties.RANKED_SEARCH_THRESHOLD;
+    private static final int rankedSearchRange = ServerProperties.RANKED_SEARCH_RANGE;
 
     @Override
     protected void respond(HttpExchange httpExchange) throws IOException {
@@ -88,6 +86,8 @@ public class ScpRankedSeedHandler extends AbstractRatedHandler {
                         // redflag #4: 939 blocker
                         if (rpf.is939blocking(mapExplorer))
                             continue;
+                        if (rpf.hasUnbeatableOverlap(mapExplorer))
+                            continue;
 
                         bestSeed = new RankedSeed(i, map, mapExplorer, routeLength);
                         break;
@@ -107,12 +107,16 @@ public class ScpRankedSeedHandler extends AbstractRatedHandler {
 
                 if (pf.findRoom("room2ccont") == null)
                     bestSeed.issues = bestSeed.issues + "cont;";
+                if (pf.findRoom("room079") == null)
+                    bestSeed.issues = bestSeed.issues + "079;";
                 if (map.savedRooms.stream().noneMatch(r -> r.rndInfo != null && r.rndInfo.contains("Pocket Dimension exit")))
                     bestSeed.issues = bestSeed.issues + "PD;";
                 if (rpf.gateACloseProximity(pf))
                     bestSeed.issues = bestSeed.issues + "MTF;";
                 if (rpf.is939blocking(pf))
                     bestSeed.issues = bestSeed.issues + "939;";
+                if (rpf.hasUnbeatableOverlap(pf))
+                    bestSeed.issues = bestSeed.issues + "106;";
             }
 
             String out = buildResponse(bestSeed);

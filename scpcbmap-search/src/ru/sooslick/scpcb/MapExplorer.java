@@ -40,6 +40,10 @@ public class MapExplorer {
                 .orElse(null);
     }
 
+    public ScpcbRoom getRoomAt(XY xy) {
+        return grid[xy.x][xy.y];
+    }
+
     public XY findPDExit() {
         for (ScpcbRoom room : map.savedRooms) {
             if ("tunnel".equals(room.roomTemplate.name) && room.rndInfo.startsWith("Pocket"))

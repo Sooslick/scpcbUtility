@@ -79,7 +79,10 @@ function updateFields(response) {
 	document.getElementById("loadingScreen").innerHTML = response.loadingScreen
 
 	document.getElementById("estimate").innerHTML = roundEstimate(response.estimate);
-	document.getElementById("extra").innerHTML = describeIssues(response.issues);
+	if (response.seedValue == 2147483647)
+		document.getElementById("extra").innerHTML = "You don't want to play this map in ranked, believe me";
+	else
+		document.getElementById("extra").innerHTML = describeIssues(response.issues);
 	document.getElementById("map-link").setAttribute("href", "index.html?seed=" + response.seedValue);
 
     document.getElementById("map-info").hidden = false;
@@ -102,7 +105,7 @@ function pad(num) {
 function describeIssues(issues) {
 	if (!issues)
 		return "-";
-	if (issues.includes("cont"))
+	if (issues.includes("cont") || issues.includes("079"))
 		return "Seed is not beatable";
 	let strings = new Array();
 	if (issues.includes("939"))
@@ -111,5 +114,7 @@ function describeIssues(issues) {
 		strings.push("No instant PD exit");
 	if (issues.includes("MTF"))
 		strings.push("MTF units can camp electrical room");
+	if (issues.includes("106"))
+		strings.push("SCP-079 has inescapable overlap with SCP-106");
 	return strings.join(", ")
 }
