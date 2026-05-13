@@ -119,22 +119,27 @@ public class MapJsonVerifier {
 
     // todo pipeline mvn test
     public static void main(String[] args) throws IOException {
-        new MapJsonVerifier("dollar.json", "$").test();                 // various input characters
-        new MapJsonVerifier("whitespace.json", " ").test();
-        new MapJsonVerifier("6.json", "6").test();
-        new MapJsonVerifier("K.json", "K").test();
-        new MapJsonVerifier("446456054.json", "446456054").test();      // various well-known seeds
-        new MapJsonVerifier("990066099.json", "990066099").test();
-        new MapJsonVerifier("bmu23i0.json", "bmu23i0").test();
-        new MapJsonVerifier("x9mc.json", "x9mc").test();
-        new MapJsonVerifier("2001011999.json", "2001011999").test();
-        new MapJsonVerifier("557110973.json", "557110973").test();
-        new MapJsonVerifier("n790.json", "n790").test();                // room2c merge
-        new MapJsonVerifier("220.json", "\\@").test();                  // room rotation above 360
-        new MapJsonVerifier("558272428.json", 558272428).test();        // PD Exit tunnel swapped
-        new MapJsonVerifier("1480285.json", 1480285).test();            // no HCZ room1s
-        new MapJsonVerifier("1227883421.json", 1227883421).test();
-        new MapJsonVerifier("5740247.json", 5740247).test();            // 079 entrance
-        new MapJsonVerifier("263284380.json", 263284380).test();        // 914 hcz
+        // 1.3.11
+        new MapJsonVerifier("1311/dollar.json", "$").test();                 // various input characters
+        new MapJsonVerifier("1311/whitespace.json", " ").test();
+        new MapJsonVerifier("1311/6.json", "6").test();
+        new MapJsonVerifier("1311/K.json", "K").test();
+        new MapJsonVerifier("1311/446456054.json", "446456054").test();      // various well-known seeds
+        new MapJsonVerifier("1311/990066099.json", "990066099").test();
+        new MapJsonVerifier("1311/bmu23i0.json", "bmu23i0").test();
+        new MapJsonVerifier("1311/x9mc.json", "x9mc").test();
+        new MapJsonVerifier("1311/2001011999.json", "2001011999").test();
+        new MapJsonVerifier("1311/557110973.json", "557110973").test();
+        new MapJsonVerifier("1311/n790.json", "n790").test();                // room2c merge
+        new MapJsonVerifier("1311/220.json", "\\@").test();                  // room rotation above 360
+        new MapJsonVerifier("1311/558272428.json", 558272428).test();        // PD Exit tunnel swapped
+        new MapJsonVerifier("1311/1480285.json", 1480285).test();            // no HCZ room1s
+        new MapJsonVerifier("1311/1227883421.json", 1227883421).test();
+        new MapJsonVerifier("1311/5740247.json", 5740247).test();            // 079 entrance
+        new MapJsonVerifier("1311/263284380.json", 263284380).test();        // 914 hcz
+
+        // 1.3.12
+        // todo: impl 1312 tests
+        // "1312-453918283.json"
     }
 }

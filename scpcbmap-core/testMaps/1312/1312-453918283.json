@@ -1,0 +1,884 @@
+{
+    "seedString": "",
+    "seedValue": 453918283,
+    "state106": 16,
+    "angle": 175,
+    "loadingScreen": "Mobile Task Forces",
+    "rooms": [
+        {
+            "name": "room079",
+            "x": 2,
+            "y": 7,
+            "angle": 90,
+            "dh": 1,
+            "en": "room079",
+            "ek": "room079"
+        },
+        {
+            "name": "room2ccont",
+            "x": 3,
+            "y": 5,
+            "angle": 90,
+            "dh": 0,
+            "dv": 0,
+            "en": "room2ccont",
+            "ek": "room2ccont",
+            "overlaps": "3-6,4-4"
+        },
+        {
+            "name": "checkpoint2",
+            "x": 3,
+            "y": 6,
+            "angle": 0,
+            "dv": 0,
+            "en": "checkpoint",
+            "ek": "checkpoint",
+            "overlaps": "3-5"
+        },
+        {
+            "name": "room966",
+            "x": 3,
+            "y": 7,
+            "angle": 270,
+            "dv": 0,
+            "en": "room966",
+            "ek": "room966"
+        },
+        {
+            "name": "tunnel2",
+            "x": 3,
+            "y": 8,
+            "angle": 0,
+            "dv": 0,
+            "en": "room2pipes106",
+            "ek": "room2pipes106"
+        },
+        {
+            "name": "room3pit",
+            "x": 3,
+            "y": 9,
+            "angle": 90,
+            "dh": 0,
+            "dv": 0,
+            "en": "room3pitduck",
+            "ek": "room3pitduck"
+        },
+        {
+            "name": "room2tesla_hcz",
+            "x": 3,
+            "y": 10,
+            "angle": 0,
+            "dv": 0,
+            "en": "room2tesla",
+            "ek": "room2tesla"
+        },
+        {
+            "name": "room2pit",
+            "x": 3,
+            "y": 11,
+            "angle": 180,
+            "dv": 0,
+            "en": "room2pit",
+            "ek": "room2pit"
+        },
+        {
+            "name": "checkpoint1",
+            "x": 3,
+            "y": 12,
+            "angle": 0,
+            "dv": 0,
+            "en": "checkpoint",
+            "ek": "checkpoint"
+        },
+        {
+            "name": "room1162",
+            "x": 3,
+            "y": 13,
+            "angle": 0,
+            "dh": 0,
+            "en": "room1162",
+            "ek": "room1162"
+        },
+        {
+            "name": "exit1",
+            "x": 4,
+            "y": 1,
+            "angle": 180,
+            "dv": 1,
+            "en": "exit1",
+            "ek": "exit1"
+        },
+        {
+            "name": "room2poffices2",
+            "x": 4,
+            "y": 2,
+            "angle": 0,
+            "dv": 0,
+            "en": "room2poffices2",
+            "ek": "room2poffices2"
+        },
+        {
+            "name": "room2offices4",
+            "x": 4,
+            "y": 3,
+            "angle": 0,
+            "dv": 0
+        },
+        {
+            "name": "room2toilets",
+            "x": 4,
+            "y": 4,
+            "angle": 0,
+            "dv": 0,
+            "en": "room2cafeteria",
+            "ek": "room2cafeteria",
+            "overlaps": "3-5,4-5"
+        },
+        {
+            "name": "room3gw",
+            "x": 4,
+            "y": 5,
+            "angle": 0,
+            "dh": 0,
+            "overlaps": "4-4"
+        },
+        {
+            "name": "room049",
+            "x": 4,
+            "y": 9,
+            "angle": 270,
+            "dh": 0,
+            "en": "room049",
+            "ek": "room049"
+        },
+        {
+            "name": "room3",
+            "x": 4,
+            "y": 13,
+            "angle": 180,
+            "dh": 0,
+            "dv": 0,
+            "en": "106victim",
+            "ek": "106victim"
+        },
+        {
+            "name": "room1archive",
+            "x": 4,
+            "y": 14,
+            "angle": 0,
+            "en": "room205",
+            "ek": "room205"
+        },
+        {
+            "name": "914",
+            "x": 4,
+            "y": 16,
+            "angle": 90,
+            "dh": 0,
+            "en": "914",
+            "ek": "914"
+        },
+        {
+            "name": "room3z3",
+            "x": 5,
+            "y": 5,
+            "angle": 180,
+            "dh": 0,
+            "dv": 2
+        },
+        {
+            "name": "checkpoint2",
+            "x": 5,
+            "y": 6,
+            "angle": 0,
+            "dv": 0,
+            "en": "checkpoint",
+            "ek": "checkpoint"
+        },
+        {
+            "name": "room3tunnel",
+            "x": 5,
+            "y": 7,
+            "angle": 90,
+            "dh": 1,
+            "dv": 0,
+            "en": "096spawn",
+            "ek": "096spawn"
+        },
+        {
+            "name": "room2pipes2",
+            "x": 5,
+            "y": 8,
+            "angle": 180,
+            "dv": 0,
+            "en": "096spawn",
+            "ek": "096spawn",
+            "info": "Pocket Dimension exit"
+        },
+        {
+            "name": "room4tunnels",
+            "x": 5,
+            "y": 9,
+            "angle": 0,
+            "dh": 1,
+            "dv": 1,
+            "en": "room4tunnels",
+            "ek": "room4tunnels"
+        },
+        {
+            "name": "room2tunnel",
+            "x": 5,
+            "y": 10,
+            "angle": 180,
+            "dv": 0,
+            "en": "room2tunnel",
+            "ek": "room2tunnel",
+            "info": "tunnels=...................|...................|...................|...................|...........XXEXXXX.|...........X.....X.|...........XXXXXXX.|.................X.|.XXXXX..XXXXXXXXXX.|.X...X.....X...X.X.|HXXXXX.....X...X.X.|.X...X.....X...X.X.|.X...XXXXXXXXXXXXX.|.X...X.....X...X.X.|.X...X.....XXXXXXX.|.X...X.....X...X.X.|.XXXXXXXXXXXXEXXXX.|...................|...................|"
+        },
+        {
+            "name": "room2pipes2",
+            "x": 5,
+            "y": 11,
+            "angle": 180,
+            "dv": 0
+        },
+        {
+            "name": "checkpoint1",
+            "x": 5,
+            "y": 12,
+            "angle": 0,
+            "dv": 0,
+            "en": "checkpoint",
+            "ek": "checkpoint"
+        },
+        {
+            "name": "room3_2",
+            "x": 5,
+            "y": 13,
+            "angle": 0,
+            "dh": 1
+        },
+        {
+            "name": "room2closets",
+            "x": 5,
+            "y": 16,
+            "angle": 270,
+            "dh": 0,
+            "en": "room2closets",
+            "ek": "room2closets"
+        },
+        {
+            "name": "endroom",
+            "x": 6,
+            "y": 3,
+            "angle": 180,
+            "dv": 0
+        },
+        {
+            "name": "room2cafeteria",
+            "x": 6,
+            "y": 4,
+            "angle": 180,
+            "dv": 0
+        },
+        {
+            "name": "room3servers",
+            "x": 6,
+            "y": 5,
+            "angle": 0,
+            "dh": 0,
+            "en": "room3servers",
+            "ek": "room3servers"
+        },
+        {
+            "name": "008",
+            "x": 6,
+            "y": 7,
+            "angle": 270,
+            "en": "008",
+            "ek": "008"
+        },
+        {
+            "name": "tunnel",
+            "x": 6,
+            "y": 9,
+            "angle": 270,
+            "dh": 0,
+            "en": "room2tesla",
+            "ek": "room2tesla"
+        },
+        {
+            "name": "room3storage",
+            "x": 6,
+            "y": 13,
+            "angle": 180,
+            "dh": 1,
+            "dv": 0
+        },
+        {
+            "name": "room205",
+            "x": 6,
+            "y": 14,
+            "angle": 0,
+            "en": "endroom106",
+            "ek": "endroom106"
+        },
+        {
+            "name": "room2testroom2",
+            "x": 6,
+            "y": 16,
+            "angle": 270,
+            "dh": 0,
+            "en": "testroom173",
+            "ek": "testroom173"
+        },
+        {
+            "name": "room2sroom",
+            "x": 7,
+            "y": 5,
+            "angle": 90,
+            "dh": 0,
+            "en": "room2offices035",
+            "ek": "room2offices035"
+        },
+        {
+            "name": "room035",
+            "x": 7,
+            "y": 8,
+            "angle": 180,
+            "dv": 0,
+            "en": "coffin106",
+            "ek": "coffin106"
+        },
+        {
+            "name": "room4tunnels",
+            "x": 7,
+            "y": 9,
+            "angle": 0,
+            "dh": 1,
+            "dv": 0,
+            "en": "096spawn",
+            "ek": "096spawn"
+        },
+        {
+            "name": "room2pipes",
+            "x": 7,
+            "y": 10,
+            "angle": 180,
+            "dv": 1,
+            "en": "room2tesla",
+            "ek": "room2tesla"
+        },
+        {
+            "name": "room2nuke",
+            "x": 7,
+            "y": 11,
+            "angle": 0,
+            "dv": 0,
+            "en": "room2nuke",
+            "ek": "room2nuke"
+        },
+        {
+            "name": "checkpoint1",
+            "x": 7,
+            "y": 12,
+            "angle": 0,
+            "dv": 0,
+            "en": "checkpoint",
+            "ek": "checkpoint"
+        },
+        {
+            "name": "room3_2",
+            "x": 7,
+            "y": 13,
+            "angle": 0,
+            "dh": 0,
+            "en": "room3storage",
+            "ek": "room3storage",
+            "info": "Hand behind crates"
+        },
+        {
+            "name": "room2scps",
+            "x": 7,
+            "y": 16,
+            "angle": 90,
+            "dh": 0
+        },
+        {
+            "name": "endroom",
+            "x": 8,
+            "y": 4,
+            "angle": 180,
+            "dv": 0
+        },
+        {
+            "name": "room3z3",
+            "x": 8,
+            "y": 5,
+            "angle": 0,
+            "dh": 0,
+            "en": "room_gw",
+            "ek": "room_gw"
+        },
+        {
+            "name": "coffin",
+            "x": 8,
+            "y": 7,
+            "angle": 90,
+            "dh": 0,
+            "en": "room035",
+            "ek": "room035"
+        },
+        {
+            "name": "room2tesla_hcz",
+            "x": 8,
+            "y": 9,
+            "angle": 90,
+            "dh": 0,
+            "en": "room2tesla",
+            "ek": "room2tesla"
+        },
+        {
+            "name": "room2",
+            "x": 8,
+            "y": 13,
+            "angle": 90,
+            "dh": 0,
+            "en": "1048a",
+            "ek": "1048a"
+        },
+        {
+            "name": "room2storage",
+            "x": 8,
+            "y": 16,
+            "angle": 270,
+            "dh": 1,
+            "en": "room2storage",
+            "ek": "room2storage"
+        },
+        {
+            "name": "room3offices",
+            "x": 9,
+            "y": 5,
+            "angle": 180,
+            "dh": 1,
+            "dv": 0
+        },
+        {
+            "name": "checkpoint2",
+            "x": 9,
+            "y": 6,
+            "angle": 0,
+            "dv": 0,
+            "en": "checkpoint",
+            "ek": "checkpoint"
+        },
+        {
+            "name": "room3pit",
+            "x": 9,
+            "y": 7,
+            "angle": 270,
+            "dv": 0,
+            "en": "096spawn",
+            "ek": "096spawn"
+        },
+        {
+            "name": "room2pipes",
+            "x": 9,
+            "y": 8,
+            "angle": 0,
+            "dv": 0,
+            "en": "room2pit",
+            "ek": "room2pit"
+        },
+        {
+            "name": "room3z2",
+            "x": 9,
+            "y": 9,
+            "angle": 0,
+            "dh": 0,
+            "en": "room3pit1048",
+            "ek": "room3pit1048"
+        },
+        {
+            "name": "room2elevator",
+            "x": 9,
+            "y": 13,
+            "angle": 90,
+            "dh": 0,
+            "en": "room2elevator2",
+            "ek": "room2elevator2"
+        },
+        {
+            "name": "room3_2",
+            "x": 9,
+            "y": 16,
+            "angle": 180,
+            "dh": 0,
+            "dv": 0
+        },
+        {
+            "name": "start",
+            "x": 9,
+            "y": 17,
+            "angle": 0,
+            "en": "alarm",
+            "ek": "alarm",
+            "overlaps": "12-17"
+        },
+        {
+            "name": "endroom",
+            "x": 10,
+            "y": 2,
+            "angle": 180,
+            "dv": 0
+        },
+        {
+            "name": "room860",
+            "x": 10,
+            "y": 3,
+            "angle": 180,
+            "dv": 0,
+            "en": "room860",
+            "ek": "room860",
+            "info": "forest=......X...|......X...|......H...|......X...|......XX..|.......H..|......XX..|......X..X|.....XXXHX|.....X....|"
+        },
+        {
+            "name": "room2servers2",
+            "x": 10,
+            "y": 4,
+            "angle": 0,
+            "dv": 0
+        },
+        {
+            "name": "room3servers2",
+            "x": 10,
+            "y": 5,
+            "angle": 0,
+            "dh": 0,
+            "en": "room3servers",
+            "ek": "room3servers"
+        },
+        {
+            "name": "room2pit",
+            "x": 10,
+            "y": 9,
+            "angle": 90,
+            "dh": 0,
+            "en": "tunnel2smoke",
+            "ek": "tunnel2smoke"
+        },
+        {
+            "name": "room3",
+            "x": 10,
+            "y": 13,
+            "angle": 180,
+            "dh": 0,
+            "dv": 1
+        },
+        {
+            "name": "room2scps2",
+            "x": 10,
+            "y": 14,
+            "angle": 0,
+            "dv": 2,
+            "en": "room2scps2",
+            "ek": "room2scps2"
+        },
+        {
+            "name": "room2sl",
+            "x": 10,
+            "y": 15,
+            "angle": 0,
+            "dv": 0,
+            "en": "room2sl",
+            "ek": "room2sl"
+        },
+        {
+            "name": "room3_2",
+            "x": 10,
+            "y": 16,
+            "angle": 0,
+            "dh": 0
+        },
+        {
+            "name": "room2poffices",
+            "x": 11,
+            "y": 5,
+            "angle": 90,
+            "dh": 0
+        },
+        {
+            "name": "room2shaft",
+            "x": 11,
+            "y": 9,
+            "angle": 270,
+            "dh": 0,
+            "en": "room2shaft",
+            "ek": "room2shaft"
+        },
+        {
+            "name": "checkpoint1",
+            "x": 11,
+            "y": 12,
+            "angle": 0,
+            "dv": 0,
+            "en": "checkpoint",
+            "ek": "checkpoint"
+        },
+        {
+            "name": "room3_2",
+            "x": 11,
+            "y": 13,
+            "angle": 0,
+            "dh": 0
+        },
+        {
+            "name": "room2_3",
+            "x": 11,
+            "y": 16,
+            "angle": 270,
+            "dh": 0,
+            "en": "room2fan",
+            "ek": "room2fan"
+        },
+        {
+            "name": "room3z3",
+            "x": 12,
+            "y": 5,
+            "angle": 180,
+            "dh": 1,
+            "dv": 0
+        },
+        {
+            "name": "checkpoint2",
+            "x": 12,
+            "y": 6,
+            "angle": 0,
+            "dv": 0,
+            "en": "checkpoint",
+            "ek": "checkpoint"
+        },
+        {
+            "name": "tunnel2",
+            "x": 12,
+            "y": 7,
+            "angle": 180,
+            "dv": 0,
+            "ek": "room2pit"
+        },
+        {
+            "name": "room2servers",
+            "x": 12,
+            "y": 8,
+            "angle": 180,
+            "dv": 1,
+            "en": "room2servers",
+            "ek": "room2servers"
+        },
+        {
+            "name": "room513",
+            "x": 12,
+            "y": 9,
+            "angle": 0,
+            "dh": 1
+        },
+        {
+            "name": "room2",
+            "x": 12,
+            "y": 13,
+            "angle": 90,
+            "dh": 0,
+            "en": "room2tesla",
+            "ek": "room2tesla"
+        },
+        {
+            "name": "roompj",
+            "x": 12,
+            "y": 15,
+            "angle": 180,
+            "dv": 0,
+            "en": "room1archive",
+            "ek": "room1archive",
+            "info": "Items: doc682, clipboard, doc682, doc939, doc079"
+        },
+        {
+            "name": "room3",
+            "x": 12,
+            "y": 16,
+            "angle": 0,
+            "dh": 0,
+            "dv": 0
+        },
+        {
+            "name": "gateaentrance",
+            "x": 13,
+            "y": 1,
+            "angle": 180,
+            "dv": 0,
+            "en": "gateaentrance",
+            "ek": "gateaentrance",
+            "overlaps": "13-2"
+        },
+        {
+            "name": "room2offices2",
+            "x": 13,
+            "y": 2,
+            "angle": 0,
+            "dv": 0,
+            "en": "room2offices2",
+            "ek": "room2offices2",
+            "overlaps": "13-1"
+        },
+        {
+            "name": "medibay",
+            "x": 13,
+            "y": 3,
+            "angle": 180,
+            "dv": 0,
+            "en": "medibay",
+            "ek": "medibay"
+        },
+        {
+            "name": "room2offices",
+            "x": 13,
+            "y": 4,
+            "angle": 180,
+            "dv": 0
+        },
+        {
+            "name": "room3z3",
+            "x": 13,
+            "y": 5,
+            "angle": 0,
+            "dh": 1
+        },
+        {
+            "name": "room3tunnel",
+            "x": 13,
+            "y": 9,
+            "angle": 180,
+            "dh": 0,
+            "dv": 0,
+            "en": "682roar",
+            "ek": "096spawn"
+        },
+        {
+            "name": "room2tesla_hcz",
+            "x": 13,
+            "y": 10,
+            "angle": 0,
+            "dv": 0,
+            "en": "tunnel2",
+            "ek": "096spawn"
+        },
+        {
+            "name": "room2pipes2",
+            "x": 13,
+            "y": 11,
+            "angle": 0,
+            "dv": 1,
+            "en": "room2pit",
+            "ek": "room2pit"
+        },
+        {
+            "name": "checkpoint1",
+            "x": 13,
+            "y": 12,
+            "angle": 0,
+            "dv": 1,
+            "en": "checkpoint",
+            "ek": "checkpoint"
+        },
+        {
+            "name": "room3_2",
+            "x": 13,
+            "y": 13,
+            "angle": 0,
+            "dh": 0,
+            "en": "106sinkhole",
+            "ek": "106sinkhole"
+        },
+        {
+            "name": "room2gw_b",
+            "x": 13,
+            "y": 16,
+            "angle": 90,
+            "dh": 0,
+            "en": "room2gw_b",
+            "ek": "room2gw_b"
+        },
+        {
+            "name": "room1lifts",
+            "x": 14,
+            "y": 5,
+            "angle": 270,
+            "en": "room1lifts",
+            "ek": "room1lifts"
+        },
+        {
+            "name": "tunnel2",
+            "x": 14,
+            "y": 9,
+            "angle": 270,
+            "dh": 0
+        },
+        {
+            "name": "lockroom3",
+            "x": 14,
+            "y": 13,
+            "angle": 180,
+            "dv": 0
+        },
+        {
+            "name": "room1123",
+            "x": 14,
+            "y": 14,
+            "angle": 0,
+            "dv": 0,
+            "en": "room1123",
+            "ek": "room1123"
+        },
+        {
+            "name": "room012",
+            "x": 14,
+            "y": 15,
+            "angle": 180,
+            "dv": 0,
+            "en": "room012",
+            "ek": "room012"
+        },
+        {
+            "name": "lockroom",
+            "x": 14,
+            "y": 16,
+            "angle": 270,
+            "en": "lockroom173",
+            "ek": "lockroom173"
+        },
+        {
+            "name": "testroom",
+            "x": 15,
+            "y": 9,
+            "angle": 90,
+            "dh": 0,
+            "en": "testroom",
+            "ek": "testroom"
+        },
+        {
+            "name": "room106",
+            "x": 16,
+            "y": 8,
+            "angle": 180,
+            "dv": 0,
+            "en": "room106",
+            "ek": "room106"
+        },
+        {
+            "name": "room2cpit",
+            "x": 16,
+            "y": 9,
+            "angle": 270
+        }
+    ]
+}
