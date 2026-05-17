@@ -81,7 +81,7 @@ public class ScpMapHandler extends AbstractRatedHandler {
     }
 
     private boolean validatePrompt(String s) {
-        if (s.isEmpty() || s.length() > 15)
+        if (s == null || s.isEmpty() || s.length() > 15)
             return false;
         for (char c : s.toCharArray())
             if (c < 32 || c >= 128)
