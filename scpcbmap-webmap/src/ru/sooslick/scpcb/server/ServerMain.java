@@ -22,14 +22,15 @@ public class ServerMain {
         }
         server.createContext("/api/map", new ScpMapHandler());
         server.createContext("/api/rank-seed", new ScpRankedSeedHandler());
-        server.createContext("/", new ScpStatusHandler());
         if (ServerProperties.FRONTEND_ENABLE)
-            server.createContext("/frontend/", new ScpWebHandler());
+            server.createContext("/", new ScpWebHandler());
+        else
+            server.createContext("/", new ScpStatusHandler());
         ExecutorService exec = Executors.newFixedThreadPool(8);
         server.setExecutor(exec);
         server.start();
 
-        System.out.printf("http://localhost:%s/%s%n", ServerProperties.SERVER_PORT, ServerProperties.FRONTEND_ENABLE ? "frontend/index.html" : "");
+        System.out.printf("http://localhost:%s/%s%n", ServerProperties.SERVER_PORT, ServerProperties.FRONTEND_ENABLE ? "index.html" : "");
 
         boolean alive = true;
         while (alive) {

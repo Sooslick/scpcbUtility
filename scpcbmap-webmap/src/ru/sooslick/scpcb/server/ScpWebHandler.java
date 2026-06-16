@@ -13,10 +13,10 @@ public class ScpWebHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String reqPath = httpExchange.getRequestURI().getPath();
-        if ("/frontend/".equals(reqPath))
-            reqPath = "/frontend/index.html";
+        if ("/".equals(reqPath))
+            reqPath = "/index.html";
 
-        String fpath = reqPath.substring(1);
+        String fpath = "frontend" + reqPath;
         File f = new File(fpath);
         if (!f.exists()) {
             String answer = "404.";
