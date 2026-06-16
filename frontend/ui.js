@@ -105,7 +105,7 @@ function createMap() {
 	xhr.ontimeout = unableRequestMap;
 	xhr.addEventListener("error", unableRequestMap);
 	xhr.timeout = 6000;
-	xhr.open('GET', '/map' + query, true);
+	xhr.open('GET', '/api/map' + query, true);
 	xhr.send();
 }
 

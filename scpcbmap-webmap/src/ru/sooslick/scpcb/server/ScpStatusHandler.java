@@ -8,7 +8,7 @@ import java.io.IOException;
 public class ScpStatusHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange e) throws IOException {
-        byte[] answer = "Sooslick was there".getBytes();
+        byte[] answer = "SCP:CB WebMap version v1.5.2-260616".getBytes();
         e.sendResponseHeaders(200, answer.length);
         e.getResponseBody().write(answer);
         e.close();

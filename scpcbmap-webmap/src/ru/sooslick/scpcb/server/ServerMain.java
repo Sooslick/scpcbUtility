@@ -20,8 +20,8 @@ public class ServerMain {
             System.out.println("Unable to start HTTP server: " + e.getMessage());
             return;
         }
-        server.createContext("/map", new ScpMapHandler());
-        server.createContext("/rank-seed", new ScpRankedSeedHandler());
+        server.createContext("/api/map", new ScpMapHandler());
+        server.createContext("/api/rank-seed", new ScpRankedSeedHandler());
         server.createContext("/", new ScpStatusHandler());
         if (ServerProperties.FRONTEND_ENABLE)
             server.createContext("/frontend/", new ScpWebHandler());

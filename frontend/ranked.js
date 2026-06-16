@@ -37,7 +37,7 @@ function findMap() {
 	xhr.ontimeout = unableRequestMap;
 	xhr.addEventListener("error", unableRequestMap);
 	xhr.timeout = 6000;
-	xhr.open('GET', '/rank-seed' + query, true);
+	xhr.open('GET', '/api/rank-seed' + query, true);
 	xhr.send();
 }
 
