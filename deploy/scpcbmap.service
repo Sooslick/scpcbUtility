@@ -1,0 +1,11 @@
+[Unit]
+After=network.target
+Description=SCPCB Web Map
+StartLimitIntervalSec=0
+
+[Service]
+ExecStart=java -jar scpcbmap-webmap.jar
+Restart=always
+RestartSec=60
+User=nginx
+WorkingDirectory=/path/to/repo/scpcbUtility

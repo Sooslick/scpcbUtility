@@ -32,7 +32,7 @@ Or launch main method in `ru.sooslick.scpcb.server.ServerMain` from your IDE. Cl
 
 Server will be available at port 1499 by default (unless other port is specified in `server.properties`).
 
-Index page: http://localhost:1499/frontend/
+Index page: http://localhost:1499/index.html
 
 ### Seed finder
 
