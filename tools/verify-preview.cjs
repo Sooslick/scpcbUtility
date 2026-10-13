@@ -58,6 +58,10 @@ async function main() {
     assert(ue.rooms.some(r => r.name === 'room009' && r.shape === 4));
     assert(ue.rooms.every(r => r.description && !r.en && !r.ek));
     assert(!('state106' in ue) && !('loadingScreen' in ue));
+    const transition = await request('game=ue-classic&scp005=1&prompt=review19');
+    const checkpoint = transition.rooms.find(r => r.x === 4 && r.y === 6);
+    assert(checkpoint);
+    assert.notEqual(checkpoint.dv, 2, 'UE row 6 uses heavy doors, which cannot auto-close');
     const third = await request('game=ue-classic&scp005=3&prompt=446456054');
     assert.notDeepEqual(ue.rooms, third.rooms);
     assert.deepEqual((await request('game=ue-classic&scp005=1&prompt=446456054')).rooms, ue.rooms);

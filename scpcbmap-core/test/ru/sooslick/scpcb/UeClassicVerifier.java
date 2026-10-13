@@ -12,6 +12,10 @@ public class UeClassicVerifier {
         assert map.savedRooms.stream().anyMatch(r -> r.roomTemplate.name.equals("room914")) : "UE SCP-914 missing";
         assert map.savedRooms.stream().noneMatch(r -> r.roomTemplate.name.equals("start")) : "Vanilla rooms leaked into UE";
         assert map.savedRooms.stream().anyMatch(r -> r.roomTemplate.name.equals("room009") && r.roomTemplate.shape == Map.ROOM3);
+        Map transitionMap = SeedGenerator.generateUeMap("review19", 1);
+        var transitionRoom = transitionMap.savedRooms.stream().filter(r -> r.x == 32 && r.z == 48).findFirst().orElseThrow();
+        assert transitionRoom.adjDoorBottom == null || transitionRoom.adjDoorBottom.getJsonValue() != 2
+                : "UE row 6 uses heavy doors, which cannot auto-close";
         String[] seeds = {"446456054", "990066099", "n790", "bmu23i0", "x9mc", "2001011999", "K", "$", " ", "a=b&c+d", "000000000000000", "abcdefghijklmno"};
         for (String seed : seeds) {
             for (int location = 1; location <= 3; location++) {

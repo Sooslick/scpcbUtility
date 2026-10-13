@@ -989,7 +989,8 @@ public class Map {
         for (int y = Map.MAP_HEIGHT; y >= 0; y--) {
             if (y < iZoneTransition1 - 1)
                 zone = 3;
-            else if (y >= iZoneTransition1 && y < iZoneTransition0)
+            else if (ultimate ? y >= iZoneTransition1 - 1 && y < iZoneTransition0 - 1
+                    : y >= iZoneTransition1 && y < iZoneTransition0)
                 zone = 2;
             else
                 zone = 1;
