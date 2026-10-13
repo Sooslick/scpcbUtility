@@ -7,6 +7,7 @@ import ru.sooslick.scpcb.map.Map;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.function.Function;
@@ -21,10 +22,27 @@ public class ScpMapHandler extends AbstractRatedHandler {
         String query = httpExchange.getRequestURI().getRawQuery();
         if (query != null) {
             for (String entry : query.split("&")) {
-                String[] kv = entry.split("=");
+                String[] kv = entry.split("=", 2);
                 String k = kv[0].toLowerCase();
-                String v = kv.length > 1 ? URLDecoder.decode(kv[1]) : null;
+                String v = kv.length > 1 ? URLDecoder.decode(kv[1], StandardCharsets.UTF_8) : null;
                 queryParams.put(k, v);
+            }
+        }
+
+        String game = queryParams.getOrDefault("game", "vanilla");
+        if (!"vanilla".equals(game) && !"ue-classic".equals(game)) {
+            answer(httpExchange, "Unknown game.", 400);
+            return;
+        }
+        boolean ultimate = "ue-classic".equals(game);
+        int scp005 = 1;
+        if (ultimate) {
+            try {
+                scp005 = Integer.parseInt(queryParams.getOrDefault("scp005", "1"));
+                if (scp005 < 1 || scp005 > 3) throw new IllegalArgumentException();
+            } catch (IllegalArgumentException e) {
+                answer(httpExchange, "Bad SCP-005 location.", 400);
+                return;
             }
         }
 
@@ -34,20 +52,28 @@ public class ScpMapHandler extends AbstractRatedHandler {
         if (queryParams.containsKey("prompt")) {
             seed = queryParams.get("prompt");
             method = SeedGenerator.V1311;
-            if (!validatePrompt(seed))
+            if (!validatePrompt(seed)) {
                 answer(httpExchange, "Bad prompt.", 400);
+                return;
+            }
         }
         // speedrun mod
         else if (queryParams.containsKey("seed")) {
+            if (ultimate) {
+                answer(httpExchange, "UE Classic requires a seed prompt.", 400);
+                return;
+            }
             seed = queryParams.get("seed");
             method = SeedGenerator.SPEEDRUN_MOD;
-            if (!validateSeed(seed))
+            if (!validateSeed(seed)) {
                 answer(httpExchange, "Bad seed.", 400);
+                return;
+            }
         }
         // bro gimme cool map
         else if (queryParams.containsKey("random")) {
-            if (random.nextBoolean()) {
-                seed = String.valueOf(random.nextInt(Integer.MAX_VALUE));
+            if (!ultimate && random.nextBoolean()) {
+                seed = String.valueOf(random.nextInt(Integer.MAX_VALUE - 1) + 1);
                 method = SeedGenerator.SPEEDRUN_MOD;
             } else {
                 seed = randomPrompt();
@@ -63,11 +89,12 @@ public class ScpMapHandler extends AbstractRatedHandler {
         int seedNumber = method.apply(seed);
         System.out.printf("User prompt: %s (%s)%n", seed, seedNumber);
         try {
-            Map map = SeedGenerator.generateMap(seed, method);
+            Map map = ultimate ? SeedGenerator.generateUeMap(seed, scp005) : SeedGenerator.generateMap(seed, method);
             MapExplorer pf = new MapExplorer(seed, method.apply(seed), map);
             String out = pf.exportJson();
             answer(httpExchange, out, 200);
         } catch (Exception e) {
+            e.printStackTrace();
             answer(httpExchange, "Map generator failed to create map " + seed, 500);
         }
     }

@@ -29,6 +29,8 @@ public class ScpcbRoomTemplate {
     public int commonness;
     public boolean disableDecals;
     public boolean disableOverlapCheck;
+    public boolean ultimate;
+    public String description;
 
     private float minX, minY, minZ;
     private float maxX, maxY, maxZ;

@@ -3,6 +3,7 @@ package ru.sooslick.scpcb.map;
 import ru.sooslick.scpcb.BlitzRandom;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Map {
@@ -45,9 +46,21 @@ public class Map {
     public String loadingScreen;
 
     public int seed;
+    public final boolean ultimate;
+    public final int scp005;
+    private final List<ScpcbRoomTemplate> templates;
 
     public Map(int seed) {
+        this(seed, false, 1);
+    }
+
+    public Map(int seed, boolean ultimate, int scp005) {
+        if (scp005 < 1 || scp005 > 3)
+            throw new IllegalArgumentException("SCP-005 location must be 1, 2 or 3");
         this.seed = seed;
+        this.ultimate = ultimate;
+        this.scp005 = scp005;
+        this.templates = ultimate ? UeClassicRooms.TEMPLATES : ScpcbRoomTemplate.roomTemplates;
         createMap(seed);
     }
 
@@ -60,10 +73,20 @@ public class Map {
         // make sure we have room2c and room4 in each zone
         enrichRoom2c4s();
 
-        mapRoom = new String[Map.ROOM4 + 1][room2Amount[0] + room2Amount[1] + room2Amount[2] + 3];
-        defineRooms();
+        int roomSlots = room2Amount[0] + room2Amount[1] + room2Amount[2] + 3;
+        mapRoom = new String[Map.ROOM4 + 1][ultimate ? Math.max(55, roomSlots) : roomSlots];
+        if (ultimate) defineUeRooms();
+        else defineRooms();
         createRooms();
         createDoors();
+
+        if (ultimate) {
+            // shortcut: UE events/initial NPC state are outside this room preview; port InitNewGame and Event_System to expose them.
+            savedEventsNormal = Set.of();
+            savedEventsKeter = Set.of();
+            reportOverlaps();
+            return;
+        }
 
         state106 = rng.bbRand(12, 17);
         createDecals();
@@ -138,7 +161,7 @@ public class Map {
     }
 
     private ScpcbRoom createRoom(int zone, int roomShape, int x, int z, String name) {
-        ScpcbRoom r = new ScpcbRoom(rng, doors);
+        ScpcbRoom r = new ScpcbRoom(rng, doors, scp005);
         r.shape = roomShape;
 
         r.zone = zone;
@@ -148,7 +171,8 @@ public class Map {
 
         if (name != null && name.length() > 0) {
             name = name.toLowerCase();
-            ScpcbRoomTemplate rt = ScpcbRoomTemplate.findByName(name);
+            String roomName = name;
+            ScpcbRoomTemplate rt = templates.stream().filter(t -> t.name.equals(roomName)).findFirst().orElse(null);
             if (rt != null) {
                 r.roomTemplate = rt;
                 r.fill();
@@ -160,7 +184,7 @@ public class Map {
         }
 
         int temp = 0;
-        for (ScpcbRoomTemplate rt : ScpcbRoomTemplate.roomTemplates) {
+        for (ScpcbRoomTemplate rt : templates) {
 
             for (int i = 0; i <= 4; i++) {
                 if (rt.zone[i] == zone) {
@@ -174,7 +198,7 @@ public class Map {
 
         int randomRoom = rng.bbRand(1, temp);
         temp = 0;
-        for (ScpcbRoomTemplate rt : ScpcbRoomTemplate.roomTemplates) {
+        for (ScpcbRoomTemplate rt : templates) {
             for (int i = 0; i <= 4; i++) {
                 if (rt.zone[i] == zone && rt.shape == roomShape) {
                     temp += rt.commonness;
@@ -201,7 +225,7 @@ public class Map {
         boolean isIntersecting = false;
 
         // Just skip it when it would try to check for the checkpoints
-        if (r.roomTemplate.name.contains("checkpoint") || r.roomTemplate.name.equalsIgnoreCase("start"))
+        if (r.roomTemplate.name.contains("checkpoint") || r.roomTemplate.name.equalsIgnoreCase("start") || r.roomTemplate.name.equals("room173"))
             return;
 
         //System.out.println("////////////////////");
@@ -254,7 +278,7 @@ public class Map {
                 if (r.roomTemplate.shape == r2.roomTemplate.shape &&
                         r.zone == r2.zone &&
                         !r2.roomTemplate.name.contains("checkpoint") &&
-                        !r2.roomTemplate.name.equals("start")) {
+                        !r2.roomTemplate.name.equals("start") && !r2.roomTemplate.name.equals("room173")) {
                     double x = r.x / 8;
                     double y = r.z / 8;
                     int rot = r.angle;
@@ -311,6 +335,8 @@ public class Map {
     }
 
     private boolean checkRoomOverlap(ScpcbRoom r1, ScpcbRoom r2) {
+        if (ultimate && (r1.maxY <= r2.minY || r1.minY >= r2.maxY))
+            return false;
         if (r1.maxX <= r2.minX || r1.maxZ <= r2.minZ)
             return false;
 
@@ -737,6 +763,86 @@ public class Map {
         mapRoom[Map.ROOM3][r3 + (int) (Math.floor(0.5 * room3Amount[2]))] = "room3offices";
     }
 
+    // CreateMap's mandatory-room schedule in UE Classic v5.5.4.1 (source order matters).
+    private void defineUeRooms() {
+        int minPos = 1, maxPos = room1Amount[0] - 1;
+        mapRoom[ROOM1][0] = "room173";
+        setRoom("room372", ROOM1, (int) Math.floor(0.1 * room1Amount[0]), minPos, maxPos);
+        setRoom("room005", ROOM1, (int) Math.floor(0.3 * room1Amount[0]), minPos, maxPos);
+        setRoom("room914", ROOM1, (int) Math.floor(0.35 * room1Amount[0]), minPos, maxPos);
+        setRoom("room205", ROOM1, (int) Math.floor(0.5 * room1Amount[0]), minPos, maxPos);
+        setRoom("room1archive", ROOM1, (int) Math.floor(0.6 * room1Amount[0]), minPos, maxPos);
+        mapRoom[ROOM2C][0] = "lockroom";
+        maxPos = room2Amount[0] - 1;
+        mapRoom[ROOM2][0] = "room2closets";
+        setRoom("room2testroom2", ROOM2, (int) Math.floor(0.1 * room2Amount[0]), minPos, maxPos);
+        setRoom("room2posters", ROOM2, (int) Math.floor(0.15 * room2Amount[0]), minPos, maxPos);
+        setRoom("room2scps3", ROOM2, (int) Math.floor(0.2 * room2Amount[0]), minPos, maxPos);
+        setRoom("room447", ROOM2, (int) Math.floor(0.25 * room2Amount[0]), minPos, maxPos);
+        setRoom("room2scps", ROOM2, (int) Math.floor(0.3 * room2Amount[0]), minPos, maxPos);
+        setRoom("room2storage", ROOM2, (int) Math.floor(0.35 * room2Amount[0]), minPos, maxPos);
+        setRoom("room2gw_b", ROOM2, (int) Math.floor(0.4 * room2Amount[0]), minPos, maxPos);
+        setRoom("room2sl", ROOM2, (int) Math.floor(0.5 * room2Amount[0]), minPos, maxPos);
+        setRoom("room012", ROOM2, (int) Math.floor(0.55 * room2Amount[0]), minPos, maxPos);
+        setRoom("room2scps2", ROOM2, (int) Math.floor(0.6 * room2Amount[0]), minPos, maxPos);
+        setRoom("medibay2", ROOM2, (int) Math.floor(0.7 * room2Amount[0]), minPos, maxPos);
+        setRoom("room1123", ROOM2, (int) Math.floor(0.75 * room2Amount[0]), minPos, maxPos);
+        setRoom("room2elevator", ROOM2, (int) Math.floor(0.85 * room2Amount[0]), minPos, maxPos);
+        mapRoom[ROOM3][(int) Math.floor(rng.bbRnd(0.2f, 0.8f) * room3Amount[0])] = "room3storage";
+        mapRoom[ROOM3][(int) Math.floor(0.9 * room3Amount[0])] = "room3scps";
+        mapRoom[ROOM2C][(int) Math.floor(0.2 * room2cAmount[0])] = "room066";
+        mapRoom[ROOM2C][(int) Math.floor(0.5 * room2cAmount[0])] = "room1162";
+        mapRoom[ROOM4][(int) Math.floor(0.3 * room4Amount[0])] = "room4info";
+
+        minPos = room1Amount[0]; maxPos = minPos + room1Amount[1] - 1;
+        setRoom("room079", ROOM1, minPos + (int) Math.floor(0.15 * room1Amount[1]), minPos, maxPos);
+        setRoom("room106", ROOM1, minPos + (int) Math.floor(0.2 * room1Amount[1]), minPos, maxPos);
+        setRoom("room096", ROOM1, minPos + (int) Math.floor(0.3 * room1Amount[1]), minPos, maxPos);
+        setRoom("room035", ROOM1, minPos + (int) Math.floor(0.5 * room1Amount[1]), minPos, maxPos);
+        setRoom("room895", ROOM1, minPos + (int) Math.floor(0.6 * room1Amount[1]), minPos, maxPos);
+        minPos = room2Amount[0]; maxPos = minPos + room2Amount[1] - 1;
+        mapRoom[ROOM2][minPos + (int) Math.floor(0.15 * room2Amount[1])] = "room409";
+        mapRoom[ROOM2][minPos + (int) Math.floor(0.3 * room2Amount[1])] = "room2nuke";
+        setRoom("room2tunnel", ROOM2, minPos + (int) Math.floor(0.4 * room2Amount[1]), minPos, maxPos);
+        setRoom("room049", ROOM2, minPos + (int) Math.floor(0.45 * room2Amount[1]), minPos, maxPos);
+        setRoom("room008", ROOM2, minPos + (int) Math.floor(0.5 * room2Amount[1]), minPos, maxPos);
+        setRoom("room2shaft", ROOM2, minPos + (int) Math.floor(0.6 * room2Amount[1]), minPos, maxPos);
+        setRoom("room2testroom", ROOM2, minPos + (int) Math.floor(0.7 * room2Amount[1]), minPos, maxPos);
+        setRoom("room2servers", ROOM2, minPos + (int) Math.floor(0.9 * room2Amount[1]), minPos, maxPos);
+        mapRoom[ROOM2][minPos + (int) Math.floor(0.8 * room2Amount[1])] = "room457";
+        mapRoom[ROOM3][room3Amount[0] + (int) Math.floor(0.3 * room3Amount[1])] = "room513";
+        mapRoom[ROOM3][room3Amount[0] + (int) Math.floor(0.4 * room3Amount[1])] = "room009";
+        mapRoom[ROOM3][room3Amount[0] + (int) Math.floor(0.6 * room3Amount[1])] = "room966";
+        mapRoom[ROOM2C][room2cAmount[0] + (int) Math.floor(0.2 * room2cAmount[1])] = "room650";
+        mapRoom[ROOM2C][room2cAmount[0] + (int) Math.floor(0.64 * room2cAmount[1])] = "room2cpit";
+
+        int totalRoom1 = room1Amount[0] + room1Amount[1] + room1Amount[2];
+        mapRoom[ROOM1][totalRoom1 - 3] = "gateb";
+        mapRoom[ROOM1][totalRoom1 - 2] = "gateaentrance";
+        mapRoom[ROOM1][totalRoom1 - 1] = "room1office";
+        mapRoom[ROOM1][room1Amount[0] + room1Amount[1]] = "room1lifts";
+        minPos = room2Amount[0] + room2Amount[1]; maxPos = minPos + room2Amount[2] - 1;
+        mapRoom[ROOM2][minPos + (int) Math.floor(0.1 * room2Amount[2])] = "room2poffices";
+        setRoom("room2cafeteria", ROOM2, minPos + (int) Math.floor(0.2 * room2Amount[2]), minPos, maxPos);
+        setRoom("room2sroom", ROOM2, minPos + (int) Math.floor(0.35 * room2Amount[2]), minPos, maxPos);
+        mapRoom[ROOM2][minPos + (int) Math.floor(0.35 * room2Amount[2])] = "room2bio";
+        setRoom("room2servers2", ROOM2, minPos + (int) Math.floor(0.4 * room2Amount[2]), minPos, maxPos);
+        setRoom("room2offices", ROOM2, minPos + (int) Math.floor(0.45 * room2Amount[2]), minPos, maxPos);
+        setRoom("room2offices4", ROOM2, minPos + (int) Math.floor(0.5 * room2Amount[2]), minPos, maxPos);
+        mapRoom[ROOM2][minPos + (int) Math.floor(0.55 * room2Amount[2])] = "room2offices5";
+        setRoom("room860", ROOM2, minPos + (int) Math.floor(0.6 * room2Amount[2]), minPos, maxPos);
+        setRoom("medibay", ROOM2, minPos + (int) Math.floor(0.7 * room2Amount[2]), minPos, maxPos);
+        setRoom("room2poffices2", ROOM2, minPos + (int) Math.floor(0.8 * room2Amount[2]), minPos, maxPos);
+        setRoom("room2offices2", ROOM2, minPos + (int) Math.floor(0.9 * room2Amount[2]), minPos, maxPos);
+        mapRoom[ROOM2C][room2cAmount[0] + room2cAmount[1]] = "room2ccont";
+        mapRoom[ROOM2C][room2cAmount[0] + room2cAmount[1] + 1] = "lockroom2";
+        int base = room3Amount[0] + room3Amount[1];
+        mapRoom[ROOM3][base + (int) Math.floor(0.3 * room3Amount[2])] = "room3servers";
+        mapRoom[ROOM3][base + (int) Math.floor(0.5 * room3Amount[2])] = "room3servers2";
+        mapRoom[ROOM3][base + (int) Math.floor(0.7 * room3Amount[2])] = "room3offices";
+        mapRoom[ROOM3][base + (int) Math.floor(0.9 * room3Amount[2])] = "room3offices2";
+    }
+
     private void createRooms() {
         int zone, connections;
         int[] mapRoomID = new int[Map.ROOM4 + 1];
@@ -849,10 +955,14 @@ public class Map {
             }
         }
 
-        createRoom(0, Map.ROOM1, 500, 500, "gatea");
+        ScpcbRoom gatea = createRoom(0, Map.ROOM1, ultimate ? (MAP_WIDTH - 1) * 8 : 500, ultimate ? 8 : 500, "gatea");
+        if (ultimate) {
+            savedRooms.add(gatea);
+        }
         mapRoomID[Map.ROOM1]++;
 
-        createRoom(0, Map.ROOM1, (Map.MAP_WIDTH - 1) * 8, (Map.MAP_HEIGHT - 1) * 8, "pocketdimension");
+        ScpcbRoom pd = createRoom(0, Map.ROOM1, (Map.MAP_WIDTH - 1) * 8, (Map.MAP_HEIGHT - 1) * 8, "pocketdimension");
+        if (ultimate) savedRooms.add(pd);
         mapRoomID[Map.ROOM1]++;
 
         // intro skipped (although "173" room contains some Rnd calls, intro banned by speedrun rules)
@@ -863,6 +973,10 @@ public class Map {
 
         savedRooms.forEach(this::preventRoomOverlap);
         savedRooms.remove(r);   /// remove 1499 from the map after overlap check
+        if (ultimate) {
+            savedRooms.remove(gatea);
+            savedRooms.remove(pd);
+        }
     }
 
     private void createDoors() {

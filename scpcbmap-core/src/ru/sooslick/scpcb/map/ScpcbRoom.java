@@ -36,6 +36,7 @@ public class ScpcbRoom {
 
     private final BlitzRandom rng;
     private final ScpcbDoor.DoorFactory doors;
+    private final int scp005;
 
     public int zone;
     public double x, z;
@@ -46,8 +47,8 @@ public class ScpcbRoom {
     public ScpcbDoor adjDoorBottom;
     public ScpcbDoor adjDoorRight;
 
-    public double minX, minZ;
-    public double maxX, maxZ;
+    public double minX, minY, minZ;
+    public double maxX, maxY, maxZ;
     int extentsAngle;
     MeshExtents extents;
 
@@ -57,12 +58,20 @@ public class ScpcbRoom {
     public ScpcbEvent linkedEventKeter;
 
     public ScpcbRoom(BlitzRandom rng, ScpcbDoor.DoorFactory doorFactory) {
+        this(rng, doorFactory, 1);
+    }
+
+    public ScpcbRoom(BlitzRandom rng, ScpcbDoor.DoorFactory doorFactory, int scp005) {
         this.rng = rng;
         this.doors = doorFactory;
+        this.scp005 = scp005;
     }
 
     public void fill() {
-        switch (roomTemplate.name) {
+        if (roomTemplate.ultimate) {
+            UeClassicRooms.fill(this, rng, scp005);
+            if (roomTemplate.name.startsWith("checkpoint")) shape = ROOM2;
+        } else switch (roomTemplate.name) {
             case "room860":
                 doors.createDoor(false, 0);
                 doors.createDoor(true, 0);
@@ -627,6 +636,17 @@ public class ScpcbRoom {
         // so I have to store this variable to prevent blatant lie in console output
         extentsAngle = angle;
         extents = roomTemplate.extents.copyTransform(ROOM_SCALE, angle);
+        if (roomTemplate.ultimate) {
+            minY = (float) ((float) (roomTemplate.extents.minY * ROOM_SCALE) + 0.05f);
+            maxY = (float) ((float) (roomTemplate.extents.maxY * ROOM_SCALE) - 0.05f);
+            minX = (float) ((float) extents.minX + 0.05f + (float) x);
+            minZ = (float) ((float) extents.minZ + 0.05f + (float) z);
+            maxX = (float) ((float) extents.maxX - 0.05f + (float) x);
+            maxZ = (float) ((float) extents.maxZ - 0.05f + (float) z);
+            if (minX > maxX) { double temp = minX; minX = maxX; maxX = temp; }
+            if (minZ > maxZ) { double temp = minZ; minZ = maxZ; maxZ = temp; }
+            return;
+        }
         // System.out.println("Room template extents: " + roomTemplate.extents);
 
         // adjustments by bounds db dumped from vanilla game
@@ -695,7 +715,7 @@ public class ScpcbRoom {
             overlaps+= "," + add;
     }
 
-    private void genForestGrid() {
+    void genForestGrid() {
         int gridSize = 10;
         int deviationChance = 40;
         int returnChance = 27;
@@ -745,7 +765,8 @@ public class ScpcbRoom {
                 dir = turnIfDeviating(maxDeviationDistance, pathx, center, dir);
                 // VERY suspicious call here in original game - line 926
                 deviated = turnIfDeviatingBool(maxDeviationDistance, pathx, center, dir);
-                if (deviated || chance(returnChance))
+                // Blitz evaluates both sides of Or; UE must consume the draw even when deviated.
+                if (roomTemplate.ultimate ? (chance(returnChance) || deviated) : (deviated || chance(returnChance)))
                     dir = 1;
 
                 pathx = moveForward(dir, pathx, pathy, 0);
@@ -906,7 +927,7 @@ public class ScpcbRoom {
 
                         // place trees and other details
                         // only placed on spots where the value of the heightmap is above 100
-                        BufferedImage img = hmap[tileType];
+                        BufferedImage img = roomTemplate.ultimate ? UeClassicRooms.HEIGHTMAPS[tileType] : hmap[tileType];
                         int width = img.getWidth();
                         for (int lx = 3; lx <= width - 2; lx++) {
                             for (int ly = 3; ly <= width - 2; ly++) {

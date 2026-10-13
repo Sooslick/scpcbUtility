@@ -41,6 +41,11 @@ public class SeedGenerator {
         return new Map(actualSeed);
     }
 
+    /** UE Classic v5.5.4.1, default 18x18 map; SCP-005's pre-seed location is independent of the seed. */
+    public static Map generateUeMap(String randomSeed, int scp005) {
+        return new Map(generateSeedNumber(randomSeed), true, scp005);
+    }
+
     /**
      * Exact function from vanilla SCP:CB that transforms user input to seed number
      *

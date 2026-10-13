@@ -5,7 +5,7 @@
     <meta charset='utf-8'/>
     <meta http-equiv='Content-Type' content='text/html'/>
     <meta name='author' content='Sooslick'/>
-    <meta name='description' content='SCP: Containment Breach v1.3.11 map. Preview SCP:CB seeds on single online webpage without launching the game!'/>
+    <meta name='description' content='Preview SCP: Containment Breach v1.3.11 and Ultimate Edition Classic v5.5.4.1 seeds and rooms without launching the game.'/>
     <meta name='theme-color' content='#202020'/>
     <link rel="stylesheet" href="cb.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -21,6 +21,24 @@
     </div>
     <div id="header" data-nosnippet>
         <div id="inputs" class="map-component">
+            <div class="input-line">
+                <select id="game" aria-label="Game" onchange="updateGame()">
+                    <option value="vanilla">SCP: CB v1.3.11</option>
+                    <option value="ue-classic">SCP: CB UE Classic v5.5.4.1</option>
+                </select>
+            </div>
+            <div id="ue-options" hidden>
+                <div class="input-line">
+                    <label for="scp005">SCP-005 location:</label>
+                    <select id="scp005">
+                        <option value="1">SCP-005 chamber</option>
+                        <option value="2">Maynard's office</option>
+                        <option value="3">SCP-409 chamber</option>
+                    </select>
+                </div>
+                <div class="input-hint">UE chooses this independently of the seed; try each to match your game.</div>
+                <div class="input-hint">Default 18×18 map. Room and door previews; events and maintenance tunnels are not previewed.</div>
+            </div>
             <div class="input-line" id="prompt-container">
                 <span><input id="prompt" autocomplete="off" oninput="updatePrompt()"/></span>
                 <span id="prompt-label">Vanilla game seed</span>
@@ -36,7 +54,7 @@
             <img id="loading-gif" src="load.gif" hidden/>
         </div>
         <div id="page-meta" class="map-component">
-            <div class="page-meta-line">SCP: Containment Breach v1.3.11 map</div>
+            <div class="page-meta-line" id="game-title">SCP: Containment Breach v1.3.11 map</div>
             <div class="page-meta-line">App version: v1.5.2 // 260616</div>
             <div class="page-meta-line">Created by <a id="sooslick-link" href="https://sooslick.art/">@Sooslick</a> for speedrunning community</div>
             <br/>
@@ -92,6 +110,10 @@
                 <div class="info-line" id="room-event-container">
                     <span id="room-event-label">Events:</span>
                     <span id="room-event"></span>
+                </div>
+                <div class="info-line" id="room-description-container" hidden>
+                    <span id="room-description-label">Description:</span>
+                    <span id="room-description"></span>
                 </div>
                 <div class="info-line" id="room-tele-container">
                     <span id="room-tele-label">Teleport command:</span>
