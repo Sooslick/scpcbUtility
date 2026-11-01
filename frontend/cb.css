@@ -147,6 +147,12 @@ button:hover {
     width: 16px;
     height: 16px;
 }
+/* The right column holds the metadata, room info and minimaps. Reserve the width it has in vanilla, where the
+   fixed-width Tunnels minimap pins it. Games without that minimap (UE) would otherwise resize the column to the
+   hovered room's text, and as the row is centered, the whole map would shift on every hover. */
+.info-column {
+    min-width: 505.6px;
+}
 #room-info {
     height: 160px;
 }
