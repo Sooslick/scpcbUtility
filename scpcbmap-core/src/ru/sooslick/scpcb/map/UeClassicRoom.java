@@ -24,16 +24,15 @@ final class UeClassicRoom extends ScpcbRoom {
 
     @Override
     protected void calcBounds() {
-        // UE also tracks the vertical bounds, and the whole calculation is done in 32-bit floats like Blitz3D does
+        // the horizontal bounds depend on the last bit of Blitz3D's float math, see BlitzRoomExtents
+        float[] bounds = BlitzRoomExtents.calculate(roomTemplate.extents, angle, x, z);
+        minX = bounds[0];
+        maxX = bounds[1];
+        minZ = bounds[2];
+        maxZ = bounds[3];
+        // UE also compares the rooms vertically; yaw doesn't change the vertical extent
         minY = (float) ((float) (roomTemplate.extents.minY * ROOM_SCALE) + 0.05f);
         maxY = (float) ((float) (roomTemplate.extents.maxY * ROOM_SCALE) - 0.05f);
-        minX = (float) ((float) extents.minX + 0.05f + (float) x);
-        minZ = (float) ((float) extents.minZ + 0.05f + (float) z);
-        maxX = (float) ((float) extents.maxX - 0.05f + (float) x);
-        maxZ = (float) ((float) extents.maxZ - 0.05f + (float) z);
-        // re-implementing BUG from SCP:CB, see ScpcbRoom
-        if (minX > maxX) { double temp = minX; minX = maxX; maxX = temp; }
-        if (minZ > maxZ) { double temp = minZ; minZ = maxZ; maxZ = temp; }
     }
 
     @Override

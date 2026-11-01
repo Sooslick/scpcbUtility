@@ -56,11 +56,17 @@ Verification from the repository root:
 mvn test-compile
 java -cp "scpcbmap-core/target/classes;scpcbmap-core/target/test-classes" ru.sooslick.scpcb.MapJsonVerifier
 java -ea -cp "scpcbmap-core/target/classes;scpcbmap-core/target/test-classes" ru.sooslick.scpcb.UeClassicVerifier
+java -cp "scpcbmap-core/target/classes;scpcbmap-core/target/test-classes" ru.sooslick.scpcb.map.ExtentsModelVerifier
 node tools/verify-preview.cjs
 ```
 Use `:` instead of `;` in the Java classpath on Linux/macOS. The last command requires the web server
 to be running at localhost:1499 and checks the API and frontend behavior. UE verification covers
-repeatability and source-specific room rules; UE maps have not yet been compared with live-game dumps.
+repeatability and source-specific room rules.
+
+Room overlap prevention depends on the last bit of Blitz3D's 32-bit float math (see `BlitzRoomExtents`).
+`ExtentsModelVerifier` checks that float model against the room bounds dumped from the real 1.3.11 game
+(`scpcbFiles/roomdb.dat`, 48960 values, no mismatches). UE reuses the model, assuming the same engine math,
+but UE maps have not yet been compared with live-game dumps of UE itself.
 
 ### Seed finder
 
