@@ -15,7 +15,7 @@ import static ru.sooslick.scpcb.map.Map.ROOM3;
 import static ru.sooslick.scpcb.map.Map.ROOM4;
 
 public class ScpcbRoom {
-    private static final double ROOM_SCALE = 8d / 2048;
+    protected static final double ROOM_SCALE = 8d / 2048;
     private static final BufferedImage[] hmap = new BufferedImage[ROOM4 + 1];
 
     private static boolean room2gwBrokenDoor = false;
@@ -34,8 +34,8 @@ public class ScpcbRoom {
         }
     }
 
-    private final BlitzRandom rng;
-    private final ScpcbDoor.DoorFactory doors;
+    protected final BlitzRandom rng;
+    protected final ScpcbDoor.DoorFactory doors;
 
     public int zone;
     public double x, z;
@@ -46,8 +46,8 @@ public class ScpcbRoom {
     public ScpcbDoor adjDoorBottom;
     public ScpcbDoor adjDoorRight;
 
-    public double minX, minZ;
-    public double maxX, maxZ;
+    public double minX, minY, minZ;
+    public double maxX, maxY, maxZ;
     int extentsAngle;
     MeshExtents extents;
 
@@ -61,7 +61,25 @@ public class ScpcbRoom {
         this.doors = doorFactory;
     }
 
+    /**
+     * Consumes the random numbers of the room creation: the contents (items, doors, etc.), then the lights.
+     */
     public void fill() {
+        fillContents();
+
+        // Const MaxRoomLights% = 32
+        for (int i = 0; i < Math.min(32, roomTemplate.lightsAmount); i++) {
+            rng.bbRand(1, 360);
+            rng.bbRand(1, 10);
+        }
+
+        // no rnd calls at CreateScreen, CreateWaypoint
+    }
+
+    /**
+     * Random numbers of the room contents, specific to the room template.
+     */
+    protected void fillContents() {
         switch (roomTemplate.name) {
             case "room860":
                 doors.createDoor(false, 0);
@@ -609,14 +627,6 @@ public class ScpcbRoom {
                 createItem();
                 break;
         }
-
-        // Const MaxRoomLights% = 32
-        for (int i = 0; i < Math.min(32, roomTemplate.lightsAmount); i++) {
-            rng.bbRand(1, 360);
-            rng.bbRand(1, 10);
-        }
-
-        // no rnd calls at CreateScreen, CreateWaypoint
     }
 
     public void calcExtents() {
@@ -627,6 +637,14 @@ public class ScpcbRoom {
         // so I have to store this variable to prevent blatant lie in console output
         extentsAngle = angle;
         extents = roomTemplate.extents.copyTransform(ROOM_SCALE, angle);
+        calcBounds();
+    }
+
+    /**
+     * Shrinks the room extents and moves them to the room's position, like the game's CalculateRoomExtents.
+     * Expects {@link #extents} to be already transformed by the room's rotation.
+     */
+    protected void calcBounds() {
         // System.out.println("Room template extents: " + roomTemplate.extents);
 
         // adjustments by bounds db dumped from vanilla game
@@ -695,7 +713,22 @@ public class ScpcbRoom {
             overlaps+= "," + add;
     }
 
-    private void genForestGrid() {
+    /**
+     * Whether the forest path, which is going to the side, turns forward again.
+     * 1.3.11 short-circuits: the random draw is skipped when the path has deviated too far.
+     */
+    protected boolean returnsToForwardPath(boolean deviated, int returnChance) {
+        return deviated || chance(returnChance);
+    }
+
+    /**
+     * Heightmap of the forest tile (by room shape), used to decide where trees are placed.
+     */
+    protected BufferedImage forestHeightmap(int tileType) {
+        return hmap[tileType];
+    }
+
+    void genForestGrid() {
         int gridSize = 10;
         int deviationChance = 40;
         int returnChance = 27;
@@ -745,7 +778,7 @@ public class ScpcbRoom {
                 dir = turnIfDeviating(maxDeviationDistance, pathx, center, dir);
                 // VERY suspicious call here in original game - line 926
                 deviated = turnIfDeviatingBool(maxDeviationDistance, pathx, center, dir);
-                if (deviated || chance(returnChance))
+                if (returnsToForwardPath(deviated, returnChance))
                     dir = 1;
 
                 pathx = moveForward(dir, pathx, pathy, 0);
@@ -906,7 +939,7 @@ public class ScpcbRoom {
 
                         // place trees and other details
                         // only placed on spots where the value of the heightmap is above 100
-                        BufferedImage img = hmap[tileType];
+                        BufferedImage img = forestHeightmap(tileType);
                         int width = img.getWidth();
                         for (int lx = 3; lx <= width - 2; lx++) {
                             for (int ly = 3; ly <= width - 2; ly++) {
@@ -956,7 +989,7 @@ public class ScpcbRoom {
         rndInfo = "forest=" + sb;
     }
 
-    private boolean chance(int prob) {
+    protected boolean chance(int prob) {
         return rng.bbRand(0, 100) <= prob;
     }
 

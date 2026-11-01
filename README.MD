@@ -34,6 +34,41 @@ Server will be available at port 1499 by default (unless other port is specified
 
 Index page: http://localhost:1499/index.html
 
+Choose **SCP: CB UE Classic v5.5.4.1** in the game selector to preview Ultimate Edition Classic
+seed strings, facility rooms, room descriptions, door states, overlaps, and the SCP-860 forest.
+Shared links retain the game and SCP-005 location. Vanilla remains the default.
+
+UE Classic support targets the supplied v5.5.4.1 source and its default 18×18 map, with the intro skipped.
+UE picks SCP-005's location before seeding map generation, so a seed alone does not determine every room.
+Select its chamber, Maynard's office, or SCP-409's chamber to match the run; the chamber is the preview default.
+Custom map sizes, UE events, maintenance tunnels, loading screens and initial NPC/player state are not previewed.
+The speedrun route tools and ranked seed picker continue to target vanilla.
+
+API example: `/api/map?game=ue-classic&prompt=n790&scp005=1`. `scp005` accepts 1, 2 or 3;
+UE accepts the same 1–15 ASCII seed characters as the game. Omit `game` for existing vanilla API behavior.
+
+UE room metadata and forest heightmaps are bundled in `scpcbFiles/ue-classic`; no desktop source folder
+is needed at runtime. To regenerate that data from the game source, run
+`node tools/export-ue-rooms.cjs "C:/path/to/CBUE-Classic-main"` (Node.js required only for this developer tool).
+
+Verification from the repository root:
+```
+mvn test-compile
+java -cp "scpcbmap-core/target/classes;scpcbmap-core/target/test-classes" ru.sooslick.scpcb.MapJsonVerifier
+java -ea -cp "scpcbmap-core/target/classes;scpcbmap-core/target/test-classes" ru.sooslick.scpcb.UeClassicVerifier
+java -cp "scpcbmap-core/target/classes;scpcbmap-core/target/test-classes" ru.sooslick.scpcb.map.ExtentsModelVerifier
+node tools/verify-preview.cjs
+```
+Use `:` instead of `;` in the Java classpath on Linux/macOS. The last command requires the web server
+to be running at localhost:1499 and checks the API and frontend behavior. UE verification covers
+repeatability and source-specific room rules.
+
+Room overlap prevention depends on the last bit of Blitz3D's 32-bit float math (see `BlitzRoomExtents`).
+`ExtentsModelVerifier` checks that float model against the room bounds dumped from the real 1.3.11 game
+(`scpcbFiles/roomdb.dat`, 48960 values, no mismatches). UE's `CalculateRoomExtents` and `PreventRoomOverlap`
+([source](https://github.com/Ultimate-Edition-Team/CBUE-Classic)) have the same steps, so UE reuses the model,
+assuming the same engine math, but UE maps have not yet been compared with live-game dumps of UE itself.
+
 ### Seed finder
 
 SeedFinder is bruteforce script that will generate every possible seed and analyze routes using various pathfinders.

@@ -1,6 +1,7 @@
 package ru.sooslick.scpcb;
 
 import ru.sooslick.scpcb.map.Map;
+import ru.sooslick.scpcb.map.MapUeClassic;
 import ru.sooslick.scpcb.map.ScpcbRoom;
 import ru.sooslick.scpcb.pathfinder.PathFinder;
 import ru.sooslick.scpcb.pathfinder.XY;
@@ -134,14 +135,18 @@ public class MapExplorer {
     }
 
     public String exportJson() {
-        String actualPrompt = prompt.equals(String.valueOf(seed)) ? "" : prompt;
+        MapUeClassic ue = map instanceof MapUeClassic m ? m : null;
+        String actualPrompt = ue == null && prompt.equals(String.valueOf(seed)) ? "" : prompt;
         StringBuilder sb = new StringBuilder()
                 .append("{\"seedString\":\"").append(actualPrompt.replace("\\", "\\\\").replace("\"", "\\\""))
-                .append("\",\"seedValue\":").append(map.seed)
-                .append(",\"state106\":").append(map.state106)
-                .append(",\"angle\":").append(map.playerAngle)
-                .append(",\"loadingScreen\":\"").append(map.loadingScreen)
-                .append("\",\"rooms\":[");
+                .append("\",\"seedValue\":").append(map.seed);
+        if (ue != null)
+            sb.append(",\"game\":\"ue-classic\",\"scp005\":").append(ue.scp005);
+        else
+            sb.append(",\"state106\":").append(map.state106)
+                    .append(",\"angle\":").append(map.playerAngle)
+                    .append(",\"loadingScreen\":\"").append(map.loadingScreen).append("\"");
+        sb.append(",\"rooms\":[");
         boolean comma = false;
         for (int i = 0; i < Map.MAP_WIDTH; i++) {
             for (int j = 0; j < Map.MAP_WIDTH; j++) {
@@ -155,6 +160,10 @@ public class MapExplorer {
                         .append("\"x\":").append(i).append(",")
                         .append("\"y\":").append(j).append(",")
                         .append("\"angle\":").append(r.angle);
+                if (ue != null) {
+                    sb.append(",\"shape\":").append(r.roomTemplate.shape);
+                    sb.append(",\"description\":\"").append(r.roomTemplate.description.replace("\\", "\\\\").replace("\"", "\\\"")).append("\"");
+                }
                 if (r.adjDoorRight != null)
                     sb.append(",\"dh\":").append(r.adjDoorRight.getJsonValue());
                 if (r.adjDoorBottom != null)

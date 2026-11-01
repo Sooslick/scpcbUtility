@@ -23,7 +23,7 @@ mapWrapper.addEventListener('contextmenu', function(evt) {
 }, false);
 addEventListener("popstate", (event) => {
 	nullMap();
-	if (typeof event.state.seedValue !== 'undefined') {
+	if (event.state && typeof event.state.seedValue !== 'undefined') {
 		buildMap(event.state);
 		document.getElementById("prompt").value = currentMap.seedString
 		document.getElementById("seed").value = currentMap.seedValue
@@ -93,12 +93,16 @@ function createMap() {
     if (seed != null)
         seed = seed.match("[0-9]{1,10}");
 
+    const ultimate = document.getElementById("game").value === "ue-classic";
     if (prompt.length > 0)
         query+= "?prompt=" + encodeURIComponent(prompt);
-    else if (seed != null)
+    else if (seed != null && !ultimate)
         query+= "?seed=" + encodeURIComponent(seed);
     else
         query+= "?random";
+
+    if (ultimate)
+        query += "&game=ue-classic&scp005=" + document.getElementById("scp005").value;
 
     let xhr = new XMLHttpRequest();
 	xhr.onload = readMapResponse;
@@ -118,6 +122,7 @@ function unableRequestMap() {
 
 function nullMap() {
     currentMap = null;
+    savedOverlaps = null;
 
     for (let i = 0; i <= 18; i++)
         for (let j = 0; j <= 18; j++) {
@@ -177,17 +182,24 @@ function readMapResponse() {
 
 function buildMap(map) {
 	currentMap = map;
+    const ultimate = map.game === "ue-classic";
+    document.getElementById("game").value = ultimate ? "ue-classic" : "vanilla";
+    document.getElementById("scp005").value = map.scp005 || 1;
+    updateGame();
 
 	// show blocks
     document.getElementById("map").hidden = false;
     document.getElementById("map-share").hidden = false;
-    document.getElementById("map-pd").style.display = 'inline-block';
-    document.getElementById("map-forest").style.display = 'inline-block';
+    document.getElementById("map-pd").style.display = map.rooms.some(r => r.info && r.info.includes("tunnels=")) ? 'inline-block' : 'none';
+    document.getElementById("map-forest").style.display = map.rooms.some(r => r.info && r.info.startsWith("forest=")) ? 'inline-block' : 'none';
     document.getElementById("map-info").hidden = false;
     document.getElementById("room-info").hidden = false;
+    document.getElementById("room-event-container").hidden = ultimate;
+    document.getElementById("room-description-container").hidden = !ultimate;
+    ["loadingScreen", "state106", "statePlayer"].forEach(id => document.getElementById(id + "-container").hidden = ultimate);
 
     // fill meta
-	document.getElementById("seedString").innerHTML = currentMap.seedString
+	document.getElementById("seedString").textContent = currentMap.seedString
 	document.getElementById("seedValue").innerHTML = currentMap.seedValue
 	document.getElementById("state106").innerHTML = currentMap.state106
 	document.getElementById("statePlayer").innerHTML = currentMap.angle
@@ -206,9 +218,9 @@ function buildMap(map) {
 		let td = document.getElementById(cellId);
 		td.innerHTML = svg;
 
-		if (r.name == "room2tunnel")
+		if (r.name == "room2tunnel" && r.info && r.info.includes("tunnels="))
 		    buildTunnel(r.info)
-		else if (r.name == "room860")
+		else if (r.name == "room860" && r.info && r.info.startsWith("forest="))
 		    buildForest(r.info)
 	});
 
@@ -262,6 +274,7 @@ function getRoomInfo(x, y) {
         if (r.x == x && r.y == y) {
         	updateOverlaps(r.overlaps);
 		    document.getElementById("room").innerHTML = r.name;
+            document.getElementById("room-description").textContent = r.description || "";
 		    document.getElementById("room-tele").innerHTML = "tele " + (r.x * 8) + " 1 " + (r.y * 8);
             let en = r.en == null ? "-" : r.en;
             let ek = r.ek == null ? "-" : r.ek;
@@ -315,7 +328,14 @@ function getRoomImage(room) {
 	if (info != null && info.startsWith("Pocket"))
 		return "room2EXIT";
 
+    const ue = currentMap.game === "ue-classic";
 	let name = room.name;
+    if (ue) {
+        const aliases = {room173: "start", room372: "roompj", room914: "914", room008: "008", room895: "coffin", gateb: "exit1", room2testroom: "testroom"};
+        name = aliases[name] || name;
+        const special = {room005: "room1K", room066: "room2C", room650: "room2C", room409: "room2E", room457: "room2E", medibay2: "room2SL"};
+        if (special[name]) return special[name];
+    }
     switch (name) {
         case "tunnel":
         case "tunnel2": return "room2";
@@ -380,6 +400,8 @@ function getRoomImage(room) {
     if (name.startsWith("end") && (en.startsWith("endroom106") || ek.startsWith("endroom106")))
         return "room1PD";
 
+    // UE room names do not encode shape (e.g. room009 is a three-way junction).
+    if (ue) return [null, "room1", "room2", "room2C", "room3", "room4"][room.shape] || "room1";
     if (name.startsWith("room1"))
         return "room1";
     else if (name.startsWith("room2c"))
@@ -398,6 +420,7 @@ function getRoomRotation(name, angle) {
     let a = angle % 180 == 0 ? angle - 180 : angle;
     switch (name) {
         case "medibay":
+        case "medibay2":
         case "room012":
         case "room2_4":
         case "room2cafeteria":
@@ -415,8 +438,9 @@ function getRoomRotation(name, angle) {
 
 function createAnnotation(name, x, y) {
     let text = null;
-
-    switch (name) {
+    const ueLabels = {room173: "173", room372: "372", room914: "914", room008: "008", room895: "895", gateb: "B", gateaentrance: "A", room005: "005", room009: "009", room066: "066", room096: "096", room409: "409", room457: "457", room447: "447", room650: "650", room3scps: "1079", room2scps3: "178", room079: "079", room106: "106", room035: "035", room049: "049", room966: "966", room1123: "1123", room1162: "1162", room012: "012", room2scps: "714", room2scps2: "1499", room860: "860", room2cafeteria: "294", room2closets: "K0", room2storage: "K0", room2posters: "K1", room2testroom2: "K2", room2shaft: "K3", room2sroom: "K5", room2sl: "CAMS", room2toilets: "WC", room2ccont: "EC"};
+    if (currentMap.game === "ue-classic") text = ueLabels[name] || null;
+    else switch (name) {
         case "room2closets": text = "K1"; break;
         case "room2testroom2": text = "K2"; break;
         case "914": text = "914"; break;
@@ -502,6 +526,10 @@ function shareMap() {
 
 function updateShareLink() {
 	let searchParams = new URLSearchParams();
+	if (currentMap.game === "ue-classic") {
+        searchParams.set("game", "ue-classic");
+        searchParams.set("scp005", currentMap.scp005);
+    }
 	if (currentMap.seedString)
        	searchParams.set("prompt", currentMap.seedString)
     else
@@ -510,24 +538,27 @@ function updateShareLink() {
 }
 
 function loadFromQuery() {
-    let params = window.location.search.substr(1);
-    if (!params)
-        return;
-
-    let parts = params.split("&");
-    let kv = parts[0].split("=");
-    if (kv.length != 2)
-        return;
-
-    if ("seed" == kv[0]) {
-        document.getElementById("seed").value = decodeURIComponent(kv[1]);
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("game").value = params.get("game") === "ue-classic" ? "ue-classic" : "vanilla";
+    document.getElementById("scp005").value = ["1", "2", "3"].includes(params.get("scp005")) ? params.get("scp005") : "1";
+    updateGame();
+    if (params.has("prompt")) {
+        document.getElementById("prompt").value = params.get("prompt");
         createMap();
-        return;
-    } else if ("prompt" == kv[0]) {
-        document.getElementById("prompt").value = decodeURIComponent(kv[1].replaceAll("+", "%20"));		// workaround for " " being encoded as "+" which is decoded as "+"
+    } else if (params.has("seed")) {
+        document.getElementById("seed").value = params.get("seed");
         createMap();
-        return;
     }
+}
+
+function updateGame() {
+    const ultimate = document.getElementById("game").value === "ue-classic";
+    if (currentMap && (currentMap.game === "ue-classic") !== ultimate) nullMap();
+    document.getElementById("ue-options").hidden = !ultimate;
+    document.getElementById("seed-container").hidden = ultimate;
+    document.getElementById("seed-hint").hidden = ultimate;
+    document.getElementById("prompt-label").textContent = ultimate ? "UE Classic game seed" : "Vanilla game seed";
+    document.getElementById("game-title").textContent = ultimate ? "SCP: CB UE Classic v5.5.4.1 map" : "SCP: Containment Breach v1.3.11 map";
 }
 
 loadFromQuery();

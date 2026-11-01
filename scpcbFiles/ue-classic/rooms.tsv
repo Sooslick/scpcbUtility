@@ -1,0 +1,115 @@
+# UE Classic v5.5.4.1: name, shape, zones, commonness, disableOverlap, lights, minXYZ/maxXYZ, description (tab separated)
+dimension1499	1	0,0,0,0,0	0	false	0	-7509	-672.0001220703125	-4207.30810546875	7509.28173828125	8928	4207	SCP-1499's dimension. Placed automatically in all maps.
+pocketdimension	1	0,0,0,0,0	0	false	1	-512	-32	-512	512	1024	512	SCP-106's pocket dimension. Placed automatically in all maps.
+room173intro	1	0,0,0,0,0	0	false	35	-8705	-1088	-3808	1792	1016	1536	Class D cells and SCP-173's containment chamber in the intro. Placed automatically in all maps.
+endroom	1	1,0,0,0,0	100	false	3	-720	-1	-1024	784	708	1240	Red-lit dead end room with a large, unopenable gate. LCZ variant.
+room1archive	1	1,0,0,0,0	80	false	2	-768	-16	-1024	288	600.2386474609375	752.0000610351562	An archive room, where various (random) items spawn on shelves.
+room005	1	1,0,0,0,0	0	false	2	-384	0	-1024	384	484.85107421875	-16	SCP-005's containment chamber.
+room173	1	0,0,0,0,0	0	false	9	-672	-28	-1024	5504	1400	2848	SCP-173's containment chamber, after the breach. Placed automatically in all maps.
+room205	1	1,0,0,0,0	0	false	4	-1792	-160	-1024	800	1184	864	SCP-205's containment chamber.
+room372	1	1,0,0,0,0	0	false	8	-1024	-0.5627050399780273	-1024	1024	960	1280	SCP-372's containment chamber.
+room914	1	1,0,0,0,0	0	false	14	-1440.0001220703125	-0.9971733093261719	-1024	608.0001220703125	816	1024.0001220703125	SCP-914's containment chamber.
+medibay2	2	1,0,0,0,0	0	false	6	-1024.000244140625	-0.0218505859375	-1024	320.00030517578125	468.85107421875	1024	A two-door hallway, leading to the medical bay. LCZ variant.
+room2closets	2	1,0,0,0,0	0	false	6	-1972	-416	-1024	816	708	1024	A two-door storage hallway.
+room2	2	1,0,0,0,0	45	false	2	-304	-1	-1024	304.0000915527344	726.83056640625	1024	An empty, two-door hallway.
+room2_2	2	1,0,0,0,0	40	false	4	-800	-1	-1024	304.0000915527344	726.83056640625	1024	An empty, two-door hallway with a large fan/vent in the wall.
+room2_3	2	1,0,0,0,0	35	false	0	-416.0000305175781	-20	-1024	416	596.2386474609375	1024	A larger version of the two-door hallway, with lights in the floor.
+room2_4	2	1,0,0,0,0	30	false	3	-304	-1	-1024	772	706.8681640625	1024	A two-door hallway, with a unopenable door off to the side.
+room2_5	2	1,0,0,0,0	35	false	3	-304	-1	-1024	320	386.8681335449219	1024	A two-door hallway, with lowered ceilings.
+room2doors	2	1,0,0,0,0	30	false	5	-1024	0	-1024	256	640	1024	Red-lit airlock room, in the shape of a T.
+room2elevator	2	1,0,0,0,0	20	false	3	-304.00006103515625	-32	-1024	1056.000244140625	854.83056640625	1024.000244140625	A two-door hallway, with an elevator off to the side.
+room2gw	2	1,0,0,0,0	10	false	2	-544	-18	-1035.999755859375	544	575	1024	A two-door contamination airlock.
+room2gw_b	2	1,0,0,0,0	0	false	2	-482.0000305175781	-18	-1034	485	575	1024	Broken varient of the two-door contamination airlock.
+room2posters	2	1,0,0,0,0	0	false	6	-304	-1	-1024	1056	706.8681640625	1040	A two-door hallway, leading to the storage room.
+room2scps	2	1,0,0,0,0	0	false	6	-816.0001220703125	-1	-1024	816.0001831054688	714	1024	SCP-714, SCP-427, SCP-860 and SCP-1025's containment chambers, in a two-door hallway.
+room2scps2	2	1,0,0,0,0	0	false	6	-304	-9.599998474121094	-1024	1264	706.8681030273438	1025	SCP-1499 and SCP-500's containment chambers, in a two-door hallway.
+room2scps3	2	1,0,0,0,0	0	false	10	-1296	-1	-1024	1280	708	1024	SCP-178, SCP-109, SCP-198 and SCP-215's containment chambers, in a two-door hallway.
+room2sl	2	1,0,0,0,0	0	false	7	-304	-64	-1024.0001220703125	1792	960	1024.0001220703125	The surveillance room in the LCZ. Required for passing into HCZ, if used.
+room2storage	2	1,0,0,0,0	0	false	10	-1328.0001220703125	-1	-1024	1328.0001220703125	708	1024	SCP-970's storage hallway.
+room2tesla_lcz	2	1,0,0,0,0	40	false	8	-304.0001220703125	-64	-1024	304.0000915527344	714.83056640625	1024	Hallway with a tesla gate. LCZ variant.
+room2testroom2	2	1,0,0,0,0	0	false	6	-1024.000244140625	-48	-1024	352	640	1024	Two-door hallway with a small testing room, where SCP-173 shatters the testroom's window.
+room012	2	1,0,0,0,0	0	false	4	-1024	-800	-1024	816.0000610351562	708	1024	SCP-012's containment chamber.
+room447	2	1,0,0,0,0	0	false	12	-2016	-20	-1024	416	628.373779296875	1024	SCP-447's containment chamber.
+room1123	2	1,0,0,0,0	0	false	18	-928	-0.00006103515625	-1024	1024	980.85107421875	1024	SCP-1123's containment chamber.
+lockroom	3	1,0,0,0,0	30	false	4	-864	0	-1024	1024	640	864	A timed airlock room, with two doors.
+lockroom3	3	1,0,0,0,0	15	false	3	-832	0	-1030	1024	384	864	A varient of the timed lockroom, where a seperate path is opened. The airlock itself is broken.
+room2c	3	1,0,0,0,0	40	false	3	-320	0	-1024	1024	726.83056640625	320	An empty, plain corner room.
+room2c2	3	1,0,0,0,0	30	false	3	-320	0	-1024	1024	800.8681030273438	1023.9999389648438	A corner room, with more of a LCZ style.
+room066	3	1,0,0,0,0	0	false	6	-864	-0.056915283203125	-1024	1024	704	320	SCP-066's containment chamber.
+room1162	3	1,0,0,0,0	0	false	4	-320	-1.0000587701797485	-1025	1024	776.85107421875	320.00006103515625	SCP-1162's containment chamber, in a corner room.
+room3	4	1,0,0,0,0	100	false	4	-1024	0	-1024	1024	854.83056640625	1023.9999389648438	Three-door hallway, with a caged off portion in the back wall.
+room3_2	4	1,0,0,0,0	100	false	3	-1024	0	-1024	1024	854.83056640625	448.0000915527344	A three-door hallway, without the caged portion.
+room3_3	4	1,0,0,0,0	20	false	5	-1024	-24	-1024.0682373046875	1024.818115234375	596.2386474609375	416.0000305175781	Another variant of a three-door hallway.
+room3scps	4	1,0,0,0,0	0	false	10	-1024	-0.000018656808606465347	-1024	1024	800.8681030273438	1376	A three-door hallway with SCP-1079, SCP-1033-RU, SCP-402, SCP-357 and SCP-207's containment chamber.
+room3storage	4	1,0,0,0,0	0	true	32	-1024	-6528	-1935.999755859375	6144	880.85107421875	6704	SCP-939's storage area, with various roaming instances of 939.
+room4	5	1,0,0,0,0	100	false	4	-1024	0	-1024	1024	850.4554443359375	1024	A four-door hallway, with a metal walkway hanging above.
+room4_2	5	1,0,0,0,0	80	false	4	-1024	-0.000003814697265625	-1024	1024	784.85107421875	1024	A varient of the four-door hallway, without the metal walkway.
+room4info	5	1,0,0,0,0	0	false	5	-1024	-20	-1024	1024	596.2386474609375	1024.0001220703125	A 4-way hallway containing an info center.
+checkpoint1	2	0,0,0,0,0	0	false	2	-1104	0	-1024.0001220703125	1102	708	1024.0001220703125	The keycarded checkpoint between the LCZ and HCZ.
+endroom2	1	2,0,0,0,0	100	false	4	-480.0000305175781	-0.5627050399780273	-1024	464	1056	376	A small, red-lit, HCZ-styled endroom.
+room035	1	2,0,0,0,0	0	false	5	-736	-32	-1024	1248	528.8510131835938	912	SCP-035's containment chamber.
+room079	1	3,0,0,0,0	0	false	11	-2559.63818359375	-10945	-1024	1120	512	1983.638671875	SCP-079's containment chamber.
+room096	1	2,0,0,0,0	0	false	13	-1472	-64	-1024	399.9996337890625	612.85107421875	719.999755859375	SCP-096's containment chamber.
+room106	1	2,0,0,0,0	0	false	19	-1320	-8624	-1704	2256	512	3056	SCP-106's containment chamber.
+room895	1	2,0,0,0,0	0	false	10	-960	-1537	-1024	484	704	2560	SCP-895's containment chamber.
+tunnel	2	2,0,0,0,0	100	false	4	-288	-0.9999923706054688	-1024	288	449	1024	A two-door hallway, in the shape of a tunnel.
+tunnel2	2	2,0,0,0,0	70	false	5	-336	-0.94927978515625	-1024	528	696	1024	A varient of the tunnel hallway, with a fuse box off to the side.
+room2catwalk	2	2,0,0,0,0	75	false	6	-448	-262	-1026	448	582	1024	A two-door catwalk.
+room2nuke	2	2,0,0,0,0	0	false	14	-1024	-32	-1024	1808	2016	1024.0001220703125	A two-door hallway, with a room on the side which leads to the Omega and Alpha warheads.
+room2pipes	2	2,0,0,0,0	50	false	6	-312.09503173828125	-449	-1026	256	1024	1024	A two-door hallway, with caged floors and ceiling that contain various pipes.
+room2pipes2	2	2,0,0,0,0	70	false	6	-256	-448	-1026	671.5	788	1024	Another variant of the two-door hallway, with caged floors and ceiling that contain various pipes.
+room2pit	2	2,0,0,0,0	50	false	6	-1024.0001220703125	-448	-1024.0001220703125	768.0000610351562	448	1024.0001220703125	A two-door catwalk, where the catwalk spews gas.
+room2servers	2	2,0,0,0,0	0	false	5	-1664	-0.0218505859375	-1024	224.0001220703125	385.00006103515625	1024	The server room.
+room2shaft	2	0,0,0,0,0	0	false	5	-256	-1504	-1024	2016	1775	1024	A two-door hallway, which has a non-functional elevator and the maintenance shaft.
+room2tesla_hcz	2	2,0,0,0,0	70	false	10	-304	-64	-1024	304.0000305175781	708	1024	Hallway with a tesla gate. HCZ variant.
+room2testroom	2	2,0,0,0,0	0	false	23	-1024	-1281	-1216	1024	800	1220	A large testroom.
+room2tunnel	2	2,0,0,0,0	0	false	4	-880	-32	-1024	880	512	1024	A closed gate, and elevators leading to the maintenance tunnels.
+room008	2	2,0,0,0,0	0	false	14	-703.99267578125	-5136.90625	-1042	1408.000244140625	1152	1024.000244140625	SCP-008's containment chamber.
+room049	2	2,0,0,0,0	0	true	26	-3070	-3584	-2097.31201171875	3512	512	2128	SCP-049's containment chamber.
+room409	2	2,0,0,0,0	0	false	17	-5148	-5696	-2016	880	768	2432	SCP-409's containment chamber.
+room457	2	2,0,0,0,0	0	false	32	-1680.000244140625	-3584	-2050	9568	1024	3762.9697265625	A storage area with SCP-457's containment chamber.
+room2cpit	3	2,0,0,0,0	0	false	10	-568.0001220703125	-960.9999389648438	-1024	1024	874.8626708984375	960	A corner room, with a large cube-like stucture in the middle of the room.
+room2ctunnel	3	2,0,0,0,0	40	false	3	-384	-0.00000762939453125	-1024	1024	448.0000305175781	402.4637756347656	A HCZ-styled corner room.
+room650	3	2,0,0,0,0	0	false	10	-1023.999755859375	-64	-1023.9998779296875	1023.9998779296875	738.8681030273438	1023.9998779296875	SCP-650's containment chamber.
+room3pit	4	2,0,0,0,0	100	false	12	-1024	-960.9999389648438	-1024	1024	385	352	A three-door walkway, with a large box-like structure in the back wall.
+room3tunnel	4	2,0,0,0,0	100	false	5	-1024	-0.00000762939453125	-1024	1024	758.83056640625	416.0000305175781	A three-door hallway, shaped after tunnels.
+room3z2	4	2,0,0,0,0	100	false	3	-1024	-32	-1024.000244140625	1024.000244140625	416.0000305175781	255.99984741210938	A T-shaped, three-door hallway.
+room009	4	2,0,0,0,0	0	false	15	-1024	-544	-1024	1024	700.85107421875	800	SCP-009's containment chamber.
+room513	4	2,0,0,0,0	0	false	6	-1024	-1.0000321865081787	-1024	1024	496.85107421875	1024	SCP-513's containment chamber.
+room966	4	2,0,0,0,0	0	true	5	-1663.9998779296875	-3552	-1024	1024	512	928	SCP-966's containment chamber.
+room4pit	5	2,0,0,0,0	100	false	16	-1024	-960.9999389648438	-1024	1024	385	1024.0001220703125	A four-door walkway, with a large cube-like stucture in the middle of the room.
+room4tunnels	5	2,0,0,0,0	100	false	6	-1024	-64	-1024	1024	738.8681030273438	1024	A four-door hallway, shaped after tunnels.
+checkpoint2	2	0,0,0,0,0	0	false	2	-1102	0	-1024.000244140625	1104	708	1026	The keycarded checkpoint which leads from the HCZ to the EZ.
+endroom3	1	3,0,0,0,0	100	false	3	-736	-1	-1024	784	708	1240	Red-lit dead end room with a large gate. EZ variant.
+gatea	1	0,0,0,0,0	0	true	12	-6752	-1792	-1152	6208	2720	7642	The surface of Gate A. Placed automatically in every map.
+gateaentrance	1	3,0,0,0,0	0	false	4	-720	-32	-1024	1360	1344	1240	The room with the elevator to Gate A.
+gateb	1	3,0,0,0,0	0	true	13	-8702	-32	-8097	8450	14752	7104	The entrance room to Gate B, with an elevator to the surface of Gate B.
+room1office	1	3,0,0,0,0	0	true	6	-1312.0001220703125	-1	-1024	1312	768	1552	An entrance to the O5 council office.
+room1lifts	1	3,0,0,0,0	0	false	1	-464	-36.01808166503906	-1024.0001220703125	448	466.85107421875	105.69403076171875	A dead-end room with two elevators.
+medibay	2	3,0,0,0,0	0	false	6	-1024.000244140625	-1.8437232971191406	-1025	288	386.8681335449219	1024	A two-door hallway, leading to the medical bay. EZ variant.
+room2bio	2	3,0,0,0,0	0	false	6	-576.0001220703125	-1	-1024	1024	768	1024	A two-door hallway with botanic office.
+room2cafeteria	2	3,0,0,0,0	0	false	7	-1792	-384.02178955078125	-1040	1952	708	1024.0001220703125	A two-doored walkway, with stairs leading to the cafeteria.
+room2offices	2	3,0,0,0,0	30	false	4	-608	0	-1024	1024	422.4554443359375	1024	A small, plain office room with various deks.
+room2offices2	2	3,0,0,0,0	20	false	6	-1024	-192	-1024	288	386.8681335449219	1024	An office room with stairs that extends downwards.
+room2offices3	2	3,0,0,0,0	20	false	6	-1600.000244140625	-0.000029060416636639275	-1024	768	832	1024.000244140625	A large office with a second floor, and two seperate rooms.
+room2offices4	2	3,0,0,0,0	0	false	5	-1568	-416	-1024	596	708	1024	A variant of the offices.
+room2offices5	2	3,0,0,0,0	0	false	0	-576.0001220703125	-1	-1024.0001220703125	768.0001220703125	416	1024.0001220703125	Another variant of the offices.
+room2poffices	2	3,0,0,0,0	0	false	6	-1504	-0.000030517578125	-1024.0001220703125	976.0001220703125	385.8240966796875	1024.0001220703125	A two-door hallway with three labeled offices (Harp, Maynard, and Gears).
+room2poffices2	2	3,0,0,0,0	0	false	4	-1184	-1.4324226379394531	-1024.000244140625	1216	438.83056640625	1024.0001220703125	A smaller hallway, with two doors leading to Dr. L's office and the conference rooms.
+room2servers2	2	3,0,0,0,0	0	false	4	-1081.500244140625	-800.0218505859375	-1048.99755859375	816.0000610351562	464.85107421875	1024.0001220703125	A server room dedicated to keep the Site-COMmunications up and running (no real value).
+room2sroom	2	3,0,0,0,0	0	false	4	-304	-0.000030517578125	-1024.0001220703125	2304	640	1024.0001220703125	A two-door hallway with an office containing SCP-420-J.
+room2tesla	2	3,0,0,0,0	30	false	8	-304.0001220703125	-64	-1024	304.0000915527344	722.4554443359375	1024	Hallway with a tesla gate. EZ variant.
+room2toilets	2	3,0,0,0,0	30	false	5	-320	0	-1024	1568	386.8681335449219	1024	Hallway containing SCP-789-J.
+room2z3	2	3,0,0,0,0	50	false	0	-256	-1	-1024	256	438.8305358886719	1024.0001220703125	An office-styled two-door hallway.
+room2z3_2	2	3,0,0,0,0	30	false	0	-304	-1	-1024	304.00018310546875	416	1024	A varient of the two-door hallway.
+room860	2	3,0,0,0,0	0	false	4	-304	-32	-1024	1280	752.85107421875	1024	SCP-860-1's containment chamber. Can't be traversed without SCP-860.
+lockroom2	3	3,0,0,0,0	0	false	6	-864	-1	-1024	1024	434.8305358886719	864	The open-doored lockroom, with SCP-096 sitting in the middle.
+room2ccont	3	3,0,0,0,0	0	false	9	-2272	-64	-1024	1024	1344	1824	A corner room, which has the electrical center.
+room2coffices	3	3,0,0,0,0	75	false	6	-576	-1	-1024	1024	464.85107421875	576	A corner offices room.
+room2cz3	3	3,0,0,0,0	50	false	4	-576	-1	-1024	1024	438.8305358886719	576	A corner room, with two benches against the walls.
+room3servers	4	3,0,0,0,0	0	false	6	-1024	-1536	-1024	1024	385.00006103515625	1032	A maze of re-arranced servers.
+room3servers2	4	3,0,0,0,0	0	false	6	-1024	-1536	-1024	1024	385.00006103515625	1032	Another variant of the server room, with a longer catwalk.
+room3offices	4	3,0,0,0,0	0	false	1	-1024	-0.0000019073486328125	-1024	1024	464.85107421875	1036	A office room with three exits.
+room3offices2	4	3,0,0,0,0	0	false	9	-1024	-0.000003814697265625	-1024	1024	464.85107421875	576	Another variatn of the office room with three exits.
+room3z3	4	3,0,0,0,0	100	false	1	-1024	0	-1024	1024	438.8305358886719	576	A three-door hallway.
+room4z3	5	3,0,0,0,0	100	false	2	-1024	-1	-1024	1024	1440	1024	A four-door hallway.
