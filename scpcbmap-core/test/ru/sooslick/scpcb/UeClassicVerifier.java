@@ -1,6 +1,7 @@
 package ru.sooslick.scpcb;
 
 import ru.sooslick.scpcb.map.Map;
+import ru.sooslick.scpcb.map.MapUeClassic;
 
 import java.util.HashSet;
 
@@ -26,7 +27,7 @@ public class UeClassicVerifier {
                 assert snapshot.equals(snapshot(second)) : "Non-deterministic UE map: " + seed;
                 HashSet<String> coords = new HashSet<>();
                 for (var room : first.savedRooms) {
-                    assert room.roomTemplate.ultimate;
+                    assert first instanceof MapUeClassic;
                     assert room.roomTemplate.description != null;
                     assert room.x >= 0 && room.x < Map.MAP_WIDTH * 8;
                     assert room.z >= 0 && room.z < Map.MAP_HEIGHT * 8;

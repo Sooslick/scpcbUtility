@@ -1,6 +1,8 @@
 package ru.sooslick.scpcb;
 
 import ru.sooslick.scpcb.map.Map;
+import ru.sooslick.scpcb.map.Map1311;
+import ru.sooslick.scpcb.map.MapUeClassic;
 
 import java.util.function.Function;
 
@@ -27,7 +29,7 @@ public class SeedGenerator {
      * @param randomSeed seed number
      */
     public static Map generateMap(int randomSeed) {
-        return new Map(randomSeed);
+        return new Map1311(randomSeed);
     }
 
     /**
@@ -38,12 +40,12 @@ public class SeedGenerator {
      */
     public static Map generateMap(String randomSeed, Function<String, Integer> seedConverter) {
         int actualSeed = seedConverter.apply(randomSeed);
-        return new Map(actualSeed);
+        return new Map1311(actualSeed);
     }
 
     /** UE Classic v5.5.4.1, default 18x18 map; SCP-005's pre-seed location is independent of the seed. */
     public static Map generateUeMap(String randomSeed, int scp005) {
-        return new Map(generateSeedNumber(randomSeed), true, scp005);
+        return new MapUeClassic(generateSeedNumber(randomSeed), scp005);
     }
 
     /**

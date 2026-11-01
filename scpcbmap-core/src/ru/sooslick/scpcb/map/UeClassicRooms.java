@@ -31,7 +31,6 @@ final class UeClassicRooms {
             return lines.filter(line -> !line.startsWith("#") && !line.isBlank()).map(line -> {
                 String[] fields = line.split("\t", -1);
                 ScpcbRoomTemplate rt = new ScpcbRoomTemplate();
-                rt.ultimate = true;
                 rt.name = fields[0];
                 rt.shape = Integer.parseInt(fields[1]);
                 String[] zones = fields[2].split(",");

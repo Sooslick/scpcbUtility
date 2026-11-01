@@ -1,6 +1,7 @@
 package ru.sooslick.scpcb;
 
 import ru.sooslick.scpcb.map.Map;
+import ru.sooslick.scpcb.map.MapUeClassic;
 import ru.sooslick.scpcb.map.ScpcbRoom;
 import ru.sooslick.scpcb.pathfinder.PathFinder;
 import ru.sooslick.scpcb.pathfinder.XY;
@@ -134,12 +135,13 @@ public class MapExplorer {
     }
 
     public String exportJson() {
-        String actualPrompt = !map.ultimate && prompt.equals(String.valueOf(seed)) ? "" : prompt;
+        MapUeClassic ue = map instanceof MapUeClassic m ? m : null;
+        String actualPrompt = ue == null && prompt.equals(String.valueOf(seed)) ? "" : prompt;
         StringBuilder sb = new StringBuilder()
                 .append("{\"seedString\":\"").append(actualPrompt.replace("\\", "\\\\").replace("\"", "\\\""))
                 .append("\",\"seedValue\":").append(map.seed);
-        if (map.ultimate)
-            sb.append(",\"game\":\"ue-classic\",\"scp005\":").append(map.scp005);
+        if (ue != null)
+            sb.append(",\"game\":\"ue-classic\",\"scp005\":").append(ue.scp005);
         else
             sb.append(",\"state106\":").append(map.state106)
                     .append(",\"angle\":").append(map.playerAngle)
@@ -158,7 +160,7 @@ public class MapExplorer {
                         .append("\"x\":").append(i).append(",")
                         .append("\"y\":").append(j).append(",")
                         .append("\"angle\":").append(r.angle);
-                if (map.ultimate) {
+                if (ue != null) {
                     sb.append(",\"shape\":").append(r.roomTemplate.shape);
                     sb.append(",\"description\":\"").append(r.roomTemplate.description.replace("\\", "\\\\").replace("\"", "\\\"")).append("\"");
                 }
