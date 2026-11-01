@@ -65,8 +65,9 @@ repeatability and source-specific room rules.
 
 Room overlap prevention depends on the last bit of Blitz3D's 32-bit float math (see `BlitzRoomExtents`).
 `ExtentsModelVerifier` checks that float model against the room bounds dumped from the real 1.3.11 game
-(`scpcbFiles/roomdb.dat`, 48960 values, no mismatches). UE reuses the model, assuming the same engine math,
-but UE maps have not yet been compared with live-game dumps of UE itself.
+(`scpcbFiles/roomdb.dat`, 48960 values, no mismatches). UE's `CalculateRoomExtents` and `PreventRoomOverlap`
+([source](https://github.com/Ultimate-Edition-Team/CBUE-Classic)) have the same steps, so UE reuses the model,
+assuming the same engine math, but UE maps have not yet been compared with live-game dumps of UE itself.
 
 ### Seed finder
 

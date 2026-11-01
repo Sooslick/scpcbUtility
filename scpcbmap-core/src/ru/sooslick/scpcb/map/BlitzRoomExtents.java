@@ -34,8 +34,11 @@ package ru.sooslick.scpcb.map;
  * {@code s} has no other solution (its neighbours give none at all) and {@code c} is bound to a window about 3e-9 wide
  * around {@code -2^-23}. The exact sequence of engine operations behind them is not known.
  * <p>
- * Whether the same holds for another game built with Blitz3D (UE Classic) is an assumption: the matrix is the engine's,
- * the shrink-and-move part is the game's own code.
+ * UE Classic v5.5.4.1 has exactly these steps: its {@code CalculateRoomExtents} ({@code Source Code/Map_System.bb} of
+ * github.com/Ultimate-Edition-Team/CBUE-Classic) transforms the template extents with TFormVector by the room entity,
+ * adds the shrink and the room position, and swaps min and max the same way, and {@code PreventRoomOverlap} re-rotates
+ * rooms with {@code RotateEntity} by the raw angle. So the model above applies to it as is. The one assumption left is
+ * that UE's engine does the same float math as the 1.3.11 one the matrix was fitted on (both are built with Blitz3D).
  */
 final class BlitzRoomExtents {
     private static final float ROOM_SCALE = (float) ScpcbRoom.ROOM_SCALE;   // 8 / 2048, exact in float
